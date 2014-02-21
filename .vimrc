@@ -1,9 +1,12 @@
 " .vimrc
 " Author: Ken Wong <ken.yui.wong@gmail.com
 "
-" Check list for VIM
+" Checklist for VIM
 " 1. git
 " 2. build vimproc.vim
+"
+" Reference vimrc
+" https://bitbucket.org/sjl/dotfiles/src/tip/vim/vimrc
 
 " Preamble ---------------------------------------------------------------- {{{
 
@@ -193,11 +196,6 @@ set autoindent " Copy indent from current line when starting a new line.
 
 set smartindent " Do smart autoindenting when starting a new line.
 
-" Turn backup off, since most stuff is in SVN, git et.c anyway...
-"?set nobackup
-set nowb
-set noswapfile
-
 " always switch to the current file directory
 set autochdir
 
@@ -317,5 +315,26 @@ if has('statusline')
 
 endif
 
+" }}}
+" Backup {{{
+
+set backup " Backup of the original file
+set writebackup " Make a backup before overwriting a file
+set noswapfile " No swapfile
+
+set undodir=~/.vim/tmp/undo// " List of directory names for undo files
+set backupdir=~/.vim/tmp/backup// " List of directories for the backup file
+set directory=~/.vim/tmp/swap// " List of directory names for the swap file
+
+" Create backup folders if not exists
+if !isdirectory(expand(&undodir))
+    call mkdir(expand(&undodir), "p")
+endif
+if !isdirectory(expand(&backupdir))
+    call mkdir(expand(&backupdir), "p")
+endif
+if !isdirectory(expand(&directory))
+    call mkdir(expand(&directory), "p")
+endif
 
 " }}}
