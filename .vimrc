@@ -182,10 +182,6 @@ set encoding=utf8 " Set utf8 as standard encoding and en_US as the standard lang
 
 "set fileformats=unix,dos,mac " Use Unix as the standard file type
 
-set autoindent " Copy indent from current line when starting a new line.
-
-set smartindent " Do smart autoindenting when starting a new line.
-
 " always switch to the current file directory
 set autochdir
 
@@ -208,20 +204,6 @@ set autochdir
 "     " autocmd BufNewFile,BufRead web.config setlocal filetype=xml
 " endif
 
-" Use spaces instead of tabs
-"set expandtab
-set noexpandtab
-
-" Be smart when using tabs ;)
-set smarttab
-
-" Tab setting
-" Reference: http://vimcasts.org/episodes/tabs-and-spaces/
-" If space is prefer over tab, tabstop == softtabstop
-" Set tabstop == softtabstop
-set shiftwidth=4
-set tabstop=4
-set softtabstop=4
 
 " " Reference: http://vimcasts.org/episodes/whitespace-preferences-and-filetypes/
 " " Update specific file type setting.
@@ -245,14 +227,6 @@ set softtabstop=4
 "?set lbr
 "?set tw=500
 
-" " Copy indent from current line when starting a new line.
-" set autoindent
-" 
-" " Do smart autoindenting when starting a new line.
-" set smartindent
-
-" No wrap line
-set nowrap
 
 " Reference: http://vimcasts.org/episodes/show-invisibles/
 " Reference: http://vim.wikia.com/wiki/Highlight_unwanted_spaces 
@@ -269,6 +243,29 @@ highlight SpecialKey ctermfg=LightGreen guifg=LightGreen
 " Shortcut to rapidly toggle 'set list'
 " nmap <leader>l :set list!<CR>
 
+set completeopt=longest,menuone,preview " Completion style
+
+" }}}
+" Indent, Tab, Spacing and Wrap {{{
+
+set autoindent " Copy indent from current line when starting a new line.
+
+set smartindent " Do smart autoindenting when starting a new line.
+
+set nowrap " No wrap line
+
+set expandtab " Use spaces instead of tabs
+"set noexpandtab
+
+set smarttab " Be smart when using tabs ;)
+
+" Tab setting
+" Reference: http://vimcasts.org/episodes/tabs-and-spaces/
+" If space is prefer over tab, tabstop == softtabstop
+" Set tabstop == softtabstop
+set shiftwidth=4
+set tabstop=4
+set softtabstop=4
 " }}}
 " Backup {{{
 
@@ -351,3 +348,4 @@ set wildignore+=*.pyc                            " Python byte code
 set wildignore+=*.orig                           " Merge resolution files
 
 " }}}
+
