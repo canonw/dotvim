@@ -133,12 +133,6 @@ set relativenumber
 " Tell us when anything is changed via :...
 set report=0
 
-" Enable syntax highlighting
-"?syntax enable
-syntax on
-
-colorscheme desert
-
 " Set extra options when running in GUI mode
 if has("gui_running")
 
@@ -336,5 +330,12 @@ endif
 if !isdirectory(expand(&directory))
     call mkdir(expand(&directory), "p")
 endif
+
+" }}}
+" Color Scheme {{{
+
+syntax on " Enable syntax highlighting
+
+colorscheme desert
 
 " }}}
