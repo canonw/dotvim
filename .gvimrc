@@ -1,0 +1,5 @@
+" Color Scheme {{{
+
+call RandomColorScheme()
+
+" }}}

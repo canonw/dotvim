@@ -34,6 +34,8 @@ NeoBundle 'Shougo/vimproc.vim', {
       \     'unix' : 'make -f make_unix.mak',
       \    },
       \ } " Recommand by NeoBundle
+NeoBundle 'flazz/vim-colorschemes' " Tons of color schemes
+NeoBundle 'vim-scripts/changeColorScheme.vim' " Randomize color scheme
 
 filetype plugin indent on " Enable filetype plugins
 
@@ -207,8 +209,8 @@ set autochdir
 "     autocmd FileType c set omnifunc=ccomplete#Complete
 "     "?autocmd FileType sql set omnifunc=sqlcomplete#Complete
 " 
-" 	" Reset file type
-" 	" Reference: http://stackoverflow.com/questions/8413781/automatically-set-multiple-file-types-in-filetype-if-a-file-has-multiple-exten
+"   " Reset file type
+"   " Reference: http://stackoverflow.com/questions/8413781/automatically-set-multiple-file-types-in-filetype-if-a-file-has-multiple-exten
 "     " autocmd BufNewFile,BufRead web.config setlocal filetype=xml
 " endif
 
@@ -273,42 +275,6 @@ highlight SpecialKey ctermfg=LightGreen guifg=LightGreen
 " Shortcut to rapidly toggle 'set list'
 " nmap <leader>l :set list!<CR>
 
-""""""""""""""""""""""""""""""
-" => Status line
-""""""""""""""""""""""""""""""
-
-if has('statusline')
-    " Always show the status line
-    set laststatus=2 " always show the status line
-
-    " Format the status line
-	set statusline=
-	set statusline +=%3*%n%*                "buffer number
-	set statusline +=%3*%r%*                "readonly flag in square brackets
-	set statusline +=%3*%h%*                "help flag in square brackets
-	set statusline +=%3*%w%*                "preview window flag in square brackets
-	set statusline +=%4*\[%{&ff}%*\]        "file format
-	set statusline +=%4*%y%*                "file type
-	set statusline+=%4*\[%{(&fenc!=''?&fenc:&enc)}      "encoding
-	set statusline+=%4*%{(&bomb?\",BOM\":\"\")}\]       "encoding2
-	set statusline +=%2*%<%F%*              "full path
-	set statusline +=%1*%m%*                "modified flag in square brackets
-	set statusline +=%1*%=                  "seperate between right- and left-aligned
-	set statusline +=%1*%c%V%*              "column number and virtual column number
-	set statusline +=%2*,                   "seperataor
-	set statusline +=%1*%04l%*              "current line
-	set statusline +=%2*/%04L%*             "total lines
-	set statusline +=%2*(%03p%%)%*          "percent through file
-	set statusline +=%1*\ %{v:register}%*   "last register
-	set statusline +=%4*\ 0x%04B\ %*        "character under cursor
-
-	hi User1 guifg=#ffff73 guibg=#222222 " gui=bold
-	hi User2 guifg=#67e667 guibg=#222222
-	hi User3 guifg=#ff7373 guibg=#222222
-	hi User4 guifg=#ad66d5 guibg=#222222
-
-endif
-
 " }}}
 " Backup {{{
 
@@ -336,6 +302,40 @@ endif
 
 syntax on " Enable syntax highlighting
 
-colorscheme desert
+" colorscheme desert
+
+" }}}
+" Status Line {{{
+if has('statusline')
+    " Always show the status line
+    set laststatus=2 " always show the status line
+
+    " Format the status line
+    set statusline=
+    set statusline +=%3*%n%*                "buffer number
+    set statusline +=%3*%r%*                "readonly flag in square brackets
+    set statusline +=%3*%h%*                "help flag in square brackets
+    set statusline +=%3*%w%*                "preview window flag in square brackets
+    set statusline +=%4*\[%{&ff}%*\]        "file format
+    set statusline +=%4*%y%*                "file type
+    set statusline+=%4*\[%{(&fenc!=''?&fenc:&enc)}      "encoding
+    set statusline+=%4*%{(&bomb?\",BOM\":\"\")}\]       "encoding2
+    set statusline +=%2*%<%F%*              "full path
+    set statusline +=%1*%m%*                "modified flag in square brackets
+    set statusline +=%1*%=                  "seperate between right- and left-aligned
+    set statusline +=%1*%c%V%*              "column number and virtual column number
+    set statusline +=%2*,                   "seperataor
+    set statusline +=%1*%04l%*              "current line
+    set statusline +=%2*/%04L%*             "total lines
+    set statusline +=%2*(%03p%%)%*          "percent through file
+    set statusline +=%1*\ %{v:register}%*   "last register
+    set statusline +=%4*\ 0x%04B\ %*        "character under cursor
+
+    hi User1 guifg=#ffff73 guibg=#222222 " gui=bold
+    hi User2 guifg=#67e667 guibg=#222222
+    hi User3 guifg=#ff7373 guibg=#222222
+    hi User4 guifg=#ad66d5 guibg=#222222
+
+endif
 
 " }}}
