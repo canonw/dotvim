@@ -113,15 +113,6 @@ set novisualbell
 set t_vb=
 set tm=500
 
-" Highlight the current column
-set cursorcolumn
-
-" Highlight current line
-set cursorline
-
-" leave my cursor where it was
-"?set nostartofline
-
 " Tell us when anything is changed via :...
 set report=0
 
@@ -240,6 +231,18 @@ highlight SpecialKey ctermfg=LightGreen guifg=LightGreen
 " nmap <leader>l :set list!<CR>
 
 set completeopt=longest,menuone,preview " Completion style
+
+" }}}
+" Cursors {{{
+
+" Show cursor only in normal mode
+augroup cline
+    au!
+    au WinLeave,InsertEnter * set nocursorline nocursorcolumn
+    au WinEnter,InsertLeave * set cursorline cursorcolumn
+augroup END
+
+"?set nostartofline " leave my cursor where it was
 
 " }}}
 " Indent, Tab, Spacing and Wrap {{{
@@ -364,9 +367,10 @@ set wildignore+=*.orig                           " Merge resolution files
 " }}}
 " Plugin setting {{{
 
-" mru.vim
+" mru.vim {{{
 " let MRU_Exclude_Files = '^/tmp/.*\|^/var/tmp/.*'  " For Unix
 " let MRU_Exclude_Files = '^c:\\temp\\.*'           " For MS-Windows
+" }}}
 
 " }}}
 " Key binding {{{
@@ -374,4 +378,8 @@ set wildignore+=*.orig                           " Merge resolution files
 nmap <leader>ln :call ToggleNumbers()<CR><CR>
 vmap <leader>ln :call ToggleNumbers()<CR><CR>
 
+" Quick file editing {{{
+nnoremap <leader>ev :vsplit $MYVIMRC<cr>
+
+" }}}
 " }}}
