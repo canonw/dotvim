@@ -121,11 +121,6 @@ set cursorline
 " leave my cursor where it was
 "?set nostartofline
 
-" Turn on relative line number
-set relativenumber
-" We are good up to 99999 lines
-"set numberwidth=5
-
 " Tell us when anything is changed via :...
 set report=0
 
@@ -330,6 +325,24 @@ if has('statusline')
 endif
 
 " }}}
+" Line number {{{
+
+set relativenumber " Turn on relative line number
+
+" Toggler line number
+function! ToggleNumbers()
+    if &relativenumber
+        set number
+        set norelativenumber
+    elseif &number
+        set nonumber
+        set norelativenumber
+    else
+        set relativenumber
+    endif
+endfunction
+
+" }}}
 " Wildmenu completion {{{
 
 set wildmenu " Turn on the WiLd menu
@@ -348,4 +361,9 @@ set wildignore+=*.pyc                            " Python byte code
 set wildignore+=*.orig                           " Merge resolution files
 
 " }}}
+" Key binding {{{
 
+nmap <leader>ln :call ToggleNumbers()<CR><CR>
+vmap <leader>ln :call ToggleNumbers()<CR><CR>
+
+" }}}
