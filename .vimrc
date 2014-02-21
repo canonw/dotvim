@@ -65,12 +65,6 @@ set scrolloff=10
 " Shortens messages
 set shortmess=aOstT
 
-" Turn on the WiLd menu
-set wildmenu
-
-" Ignore these list file
-set wildignore=*.dll,*.o,*.obj,*.bak,*.exe,*.pyc,*.jpg,*.gif,*.png
-
 if has('cmdline_info')
     "Always show current position
     set ruler
@@ -337,5 +331,23 @@ if has('statusline')
     hi User4 guifg=#ad66d5 guibg=#222222
 
 endif
+
+" }}}
+" Wildmenu completion {{{
+
+set wildmenu " Turn on the WiLd menu
+set wildmode=list:longest,full
+
+set wildignore+=.hg,.git,.svn                    " Version control
+set wildignore+=*.aux,*.out,*.toc                " LaTeX intermediate files
+set wildignore+=*.jpg,*.bmp,*.gif,*.png,*.jpeg,*.tif    " binary images
+set wildignore+=*.o,*.obj,*.exe,*.dll,*.manifest " compiled object files
+set wildignore+=*.spl                            " compiled spelling word lists
+set wildignore+=*.sw?                            " Vim swap files
+set wildignore+=*.DS_Store                       " OSX
+set wildignore+=*.luac                           " Lua byte code
+set wildignore+=migrations                       " Django migrations
+set wildignore+=*.pyc                            " Python byte code
+set wildignore+=*.orig                           " Merge resolution files
 
 " }}}
