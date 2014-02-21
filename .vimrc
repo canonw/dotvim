@@ -36,6 +36,7 @@ NeoBundle 'Shougo/vimproc.vim', {
       \ } " Recommand by NeoBundle
 NeoBundle 'flazz/vim-colorschemes' " Tons of color schemes
 NeoBundle 'vim-scripts/changeColorScheme.vim' " Randomize color scheme
+NeoBundle 'vim-scripts/mru.vim.git' " Save file history
 
 filetype plugin indent on " Enable filetype plugins
 
@@ -332,13 +333,13 @@ set relativenumber " Turn on relative line number
 " Toggler line number
 function! ToggleNumbers()
     if &relativenumber
-        set number
-        set norelativenumber
+        setlocal number
+        setlocal norelativenumber
     elseif &number
-        set nonumber
-        set norelativenumber
+        setlocal nonumber
+        setlocal norelativenumber
     else
-        set relativenumber
+        setlocal relativenumber
     endif
 endfunction
 
@@ -359,6 +360,13 @@ set wildignore+=*.luac                           " Lua byte code
 set wildignore+=migrations                       " Django migrations
 set wildignore+=*.pyc                            " Python byte code
 set wildignore+=*.orig                           " Merge resolution files
+
+" }}}
+" Plugin setting {{{
+
+" mru.vim
+" let MRU_Exclude_Files = '^/tmp/.*\|^/var/tmp/.*'  " For Unix
+" let MRU_Exclude_Files = '^c:\\temp\\.*'           " For MS-Windows
 
 " }}}
 " Key binding {{{
