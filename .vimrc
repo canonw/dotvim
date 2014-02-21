@@ -1,6 +1,9 @@
 " .vimrc
 " Author: Ken Wong <ken.yui.wong@gmail.com
 "
+" Check list for VIM
+" 1. git
+" 2. build vimproc.vim
 
 " Preamble ---------------------------------------------------------------- {{{
 
@@ -20,7 +23,14 @@ call neobundle#rc(expand('~/.vim/bundle/'))
 NeoBundleFetch 'Shougo/neobundle.vim'
 
 " My bundles here
-NeoBundle 'Shougo/vimproc.vim'  " Recommand by NeoBundle
+NeoBundle 'Shougo/vimproc.vim', {
+      \ 'build' : {
+      \     'windows' : 'make -f make_mingw32.mak',
+      \     'cygwin' : 'make -f make_cygwin.mak',
+      \     'mac' : 'make -f make_mac.mak',
+      \     'unix' : 'make -f make_unix.mak',
+      \    },
+      \ } " Recommand by NeoBundle
 
 filetype plugin indent on " Enable filetype plugins
 
@@ -175,9 +185,7 @@ if has("gui_running")
 
 endif
 
-" Set utf8 as standard encoding and en_US as the standard language
-set encoding=utf8
-
+set encoding=utf8 " Set utf8 as standard encoding and en_US as the standard language
 
 "set fileformats=unix,dos,mac " Use Unix as the standard file type
 
