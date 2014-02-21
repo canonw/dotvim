@@ -1,2 +1,5 @@
 # Ignore my own backup directory.
-tmp/
+.vim/tmp/
+
+# Ignore bundle 
+.vim/bundle
