@@ -21,7 +21,7 @@ call neobundle#rc(expand('~/.vim/bundle/'))
 NeoBundleFetch 'Shougo/neobundle.vim'
 
 " My bundles here
-" NeoBundle 'tpope/vim-fugitive'
+NeoBundle 'Shougo/vimproc.vim'  " Recommand by NeoBundle
 
 filetype plugin indent on
 
