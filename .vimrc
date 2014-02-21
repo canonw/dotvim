@@ -38,6 +38,7 @@ NeoBundle 'flazz/vim-colorschemes' " Tons of color schemes
 NeoBundle 'vim-scripts/changeColorScheme.vim' " Randomize color scheme
 NeoBundle 'vim-scripts/mru.vim.git' " Save file history
 
+
 filetype plugin indent on " Enable filetype plugins
 
 NeoBundleCheck
@@ -390,15 +391,36 @@ augroup END
 " }}}
 " Key binding {{{
 
+
 " Line Number
 nmap <leader>ln :call ToggleNumbers()<CR><CR>
 vmap <leader>ln :call ToggleNumbers()<CR><CR>
 
+
 " Color Scheme
 nmap nc :call NextColorScheme()<CR>
 
-" Quick file editing {{{
+
+" Quick file editing
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 
-" }}}
+
+" Treat long lines as break lines (useful in wrapped text)
+map j gj
+map k gk
+
+
+" Smart way to move between windows
+" Need upper case becuase it doesn't behave well in Windows.
+map <C-j> <C-W>j
+map <C-k> <C-W>k
+map <C-h> <C-W>h
+map <C-l> <C-W>l
+
+" Useful mappings for managing tabs
+map <leader>tn :tabnew<cr>
+map <leader>to :tabonly<cr>
+map <leader>tc :tabclose<cr>
+map <leader>tm :tabmove<Space>
+
 " }}}
