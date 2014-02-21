@@ -373,10 +373,29 @@ set wildignore+=*.orig                           " Merge resolution files
 " }}}
 
 " }}}
+" Filetype setting {{{
+" VIM {{{
+
+augroup ft_vim
+  au!
+
+  au FileType vim setlocal foldmethod=marker ts=2 sts=2 sw=2 expandtab
+  au FileType help setlocal textwidth=78
+  au BufWinEnter *.txt if &ft == 'help' | wincmd L | endif
+  au BufEnter * highlight OverLength ctermbg=darkgrey guibg=#592929
+  au BufEnter * match OverLength /\%78v.*/
+augroup END
+
+" }}}
+" }}}
 " Key binding {{{
 
+" Line Number
 nmap <leader>ln :call ToggleNumbers()<CR><CR>
 vmap <leader>ln :call ToggleNumbers()<CR><CR>
+
+" Color Scheme
+nmap nc :call NextColorScheme()<CR>
 
 " Quick file editing {{{
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
