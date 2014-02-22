@@ -386,6 +386,13 @@ set wildignore+=*.orig                           " Merge resolution files
 let g:airline_theme="molokai"
 
 " }}}
+
+" VimFiler {{{
+
+" Replace netrw
+let g:vimfiler_as_default_explorer = 1
+
+" }}}
 " }}}
 " Filetype setting {{{
 
