@@ -5,7 +5,7 @@
 " 1. git
 " 2. build vimproc.vim
 "
-" Reference vimrc
+" Give credit where credit is due.
 " https://bitbucket.org/sjl/dotfiles/src/tip/vim/vimrc
 
 " Preamble ---------------------------------------------------------------- {{{
@@ -298,7 +298,7 @@ syntax on " Enable syntax highlighting
 " }}}
 " Status Line {{{
 "if has('statusline')
-if 0 " Use vim-airine plug-in
+if 0 " Use vim-airine plug-in instead
     " Always show the status line
     set laststatus=2 " always show the status line
 
@@ -335,7 +335,7 @@ endif
 
 set relativenumber " Turn on relative line number
 
-" Toggler line number
+" Toggle line number, relative number or off
 function! ToggleNumbers()
     if &relativenumber
         setlocal number
@@ -357,7 +357,7 @@ set wildmode=list:longest,full
 set wildignore+=.hg,.git,.svn                    " Version control
 set wildignore+=*.aux,*.out,*.toc                " LaTeX intermediate files
 set wildignore+=*.jpg,*.bmp,*.gif,*.png,*.jpeg,*.tif    " binary images
-set wildignore+=*.o,*.obj,*.exe,*.dll,*.manifest " compiled object files
+set wildignore+=*.o,*.obj,*.exe,*.pdb,*.dll,*.manifest " compiled object files
 set wildignore+=*.spl                            " compiled spelling word lists
 set wildignore+=*.sw?                            " Vim swap files
 set wildignore+=*.DS_Store                       " OSX
