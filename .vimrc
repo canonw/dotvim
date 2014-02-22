@@ -40,7 +40,8 @@ NeoBundle 'Shougo/vimproc.vim', {
 NeoBundle 'flazz/vim-colorschemes' " Tons of color schemes
 NeoBundle 'vim-scripts/changeColorScheme.vim' " Randomize color scheme
 NeoBundle 'vim-scripts/mru.vim.git' " Save file history
-NeoBundle 'bling/vim-airline'
+NeoBundle 'bling/vim-airline' " Status line
+NeoBundle 'tpope/vim-fugitive' " Git
 
 filetype plugin indent on " Enable filetype plugins
 
