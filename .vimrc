@@ -37,7 +37,7 @@ NeoBundle 'Shougo/vimproc.vim', {
 NeoBundle 'flazz/vim-colorschemes' " Tons of color schemes
 NeoBundle 'vim-scripts/changeColorScheme.vim' " Randomize color scheme
 NeoBundle 'vim-scripts/mru.vim.git' " Save file history
-
+NeoBundle 'bling/vim-airline'
 
 filetype plugin indent on " Enable filetype plugins
 
@@ -297,7 +297,8 @@ syntax on " Enable syntax highlighting
 
 " }}}
 " Status Line {{{
-if has('statusline')
+"if has('statusline')
+if 0 " Use vim-airine plug-in
     " Always show the status line
     set laststatus=2 " always show the status line
 
@@ -372,6 +373,11 @@ set wildignore+=*.orig                           " Merge resolution files
 " let MRU_Exclude_Files = '^/tmp/.*\|^/var/tmp/.*'  " For Unix
 " let MRU_Exclude_Files = '^c:\\temp\\.*'           " For MS-Windows
 " }}}
+
+" vim-airline {{{
+
+" Set theme
+let g:airline_theme="molokai"
 
 " }}}
 " Filetype setting {{{
