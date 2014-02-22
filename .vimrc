@@ -1,5 +1,5 @@
 " .vimrc
-" Author: Ken Wong <ken.yui.wong@gmail.com
+" Author: Ken Wong <ken.yui.wong@gmail.com>
 "
 " Checklist for VIM
 " 1. git
@@ -42,6 +42,8 @@ NeoBundle 'vim-scripts/changeColorScheme.vim' " Randomize color scheme
 NeoBundle 'vim-scripts/mru.vim.git' " Save file history
 NeoBundle 'bling/vim-airline' " Status line
 NeoBundle 'tpope/vim-fugitive' " Git
+NeoBundle 'Shougo/unite.vim'
+NeoBundle 'Shougo/vimfiler.vim' " File Explorer
 
 filetype plugin indent on " Enable filetype plugins
 
