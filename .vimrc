@@ -5,8 +5,11 @@
 " 1. git
 " 2. build vimproc.vim
 "
-" Give credit where credit is due.
+" Give credit where credits are due.
+" http://amix.dk/vim/vimrc.html
+" http://spf13.com/post/perfect-vimrc-vim-config-file
 " https://bitbucket.org/sjl/dotfiles/src/tip/vim/vimrc
+" http://www.pythonclub.org/vim/gui-font
 
 " Preamble ---------------------------------------------------------------- {{{
 
@@ -380,6 +383,7 @@ set wildignore+=*.orig                           " Merge resolution files
 let g:airline_theme="molokai"
 
 " }}}
+" }}}
 " Filetype setting {{{
 " VIM {{{
 
@@ -428,5 +432,8 @@ map <leader>tn :tabnew<cr>
 map <leader>to :tabonly<cr>
 map <leader>tc :tabclose<cr>
 map <leader>tm :tabmove<Space>
+
+" Beauty XML
+nmap <leader>x <ESC>:.,+1!xmllint --format --recover - 2>/dev/null<Home><Right>
 
 " }}}
