@@ -385,6 +385,7 @@ let g:airline_theme="molokai"
 " }}}
 " }}}
 " Filetype setting {{{
+
 " VIM {{{
 
 augroup ft_vim
@@ -399,8 +400,37 @@ augroup END
 
 " }}}
 " }}}
-" Key binding {{{
+" Helper Functions {{{
 
+" Reference: https://gist.github.com/rkumar/4166881
+"autocmd! BufWritePre * :call s:timestamp()
+" auto-update "Last update: " if present whenever saving file
+" to update timestamp when saving if its in the first 5 lines of a file
+function! s:timestamp()
+  let pat = '\(Last update\s*:\s*\).*'
+  let rep = '\1' . strftime("%Y-%m-%d %H:%M")
+  call s:subst(1, 5, pat, rep)
+endfunction
+" subst taken from timestamp.vim
+" subst( start, end, pat, rep): substitute on range start - end.
+function! s:subst(start, end, pat, rep)
+  let lineno = a:start
+  while lineno <= a:end
+    let curline = getline(lineno)
+    if match(curline, a:pat) != -1
+    let newline = substitute( curline, a:pat, a:rep, '' )
+      if( newline != curline )
+        " Only substitute if we made a change
+        "silent! undojoin
+        keepjumps call setline(lineno, newline)
+      endif
+    endif
+    let lineno = lineno + 1
+  endwhile
+endfunction
+
+" }}}
+" Key binding {{{
 
 " Line Number
 nmap <leader>ln :call ToggleNumbers()<CR><CR>
@@ -435,5 +465,4 @@ map <leader>tm :tabmove<Space>
 
 " Beauty XML
 nmap <leader>x <ESC>:.,+1!xmllint --format --recover - 2>/dev/null<Home><Right>
-
 " }}}
