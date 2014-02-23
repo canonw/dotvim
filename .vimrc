@@ -37,6 +37,7 @@ NeoBundle 'Shougo/vimproc.vim', {
       \     'unix' : 'make -f make_unix.mak',
       \    },
       \ } " Recommand by NeoBundle
+NeoBundle 'tpope/vim-unimpaired'
 NeoBundle 'flazz/vim-colorschemes' " Tons of color schemes
 NeoBundle 'vim-scripts/changeColorScheme.vim' " Randomize color scheme
 NeoBundle 'vim-scripts/mru.vim.git' " Save file history
@@ -44,6 +45,8 @@ NeoBundle 'bling/vim-airline' " Status line
 NeoBundle 'tpope/vim-fugitive' " Git
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/vimfiler.vim' " File Explorer
+
+NeoBundle 'vim-ruby/vim-ruby' " Ruby
 
 filetype plugin indent on " Enable filetype plugins
 
@@ -405,7 +408,17 @@ augroup ft_vim
   au FileType help setlocal textwidth=78
   au BufWinEnter *.txt if &ft == 'help' | wincmd L | endif
   au BufEnter * highlight OverLength ctermbg=darkgrey guibg=#592929
-  au BufEnter * match OverLength /\%78v.*/
+"  au BufEnter * match OverLength /\%78v.*/
+augroup END
+
+" }}}
+
+" Ruby {{{
+
+augroup ft_ruby
+  au!
+  au Filetype ruby setlocal foldmethod=syntax
+  au BufRead,BufNewFile Capfile setlocal filetype=ruby
 augroup END
 
 " }}}
