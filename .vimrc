@@ -37,16 +37,22 @@ NeoBundle 'Shougo/vimproc.vim', {
       \     'unix' : 'make -f make_unix.mak',
       \    },
       \ } " Recommand by NeoBundle
-NeoBundle 'tpope/vim-unimpaired'
+NeoBundle 'tpope/vim-unimpaired' " Easy key binding movement.
+NeoBundle 'jakar/vim-AnsiEsc' " ANSI color
+" NeoBundle 'vim-scripts/AnsiEsc.vim' " Display ANSI color in log files
 NeoBundle 'flazz/vim-colorschemes' " Tons of color schemes
 NeoBundle 'vim-scripts/changeColorScheme.vim' " Randomize color scheme
 NeoBundle 'vim-scripts/mru.vim.git' " Save file history
 NeoBundle 'bling/vim-airline' " Status line
+
 NeoBundle 'tpope/vim-fugitive' " Git
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/vimfiler.vim' " File Explorer
 
 NeoBundle 'vim-ruby/vim-ruby' " Ruby
+
+" NeoBundle 'vim-scripts/DrawIt' 
+NeoBundle 'hsitz/VimOrganizer' " For note taking
 
 filetype plugin indent on " Enable filetype plugins
 
@@ -179,8 +185,7 @@ set encoding=utf8 " Set utf8 as standard encoding and en_US as the standard lang
 
 "set fileformats=unix,dos,mac " Use Unix as the standard file type
 
-" always switch to the current file directory
-set autochdir
+set autochdir " always switch to the current file directory
 
 " if has("autocmd")
 "     " Remove trailing whitespaces and ^M chars
@@ -242,6 +247,17 @@ highlight SpecialKey ctermfg=LightGreen guifg=LightGreen
 
 set completeopt=longest,menuone,preview " Completion style
 
+" Use grep even in Windows
+if has('win32') || has('win64')
+  set grepprg=C:\cygwin64\bin\grep.exe\ -nir\ $*
+endif
+
+" }}}
+" Quickfix {{{
+augroup QFixToggle
+"  autocmd!
+  autocmd BufWinEnter quickfix setlocal norelativenumber
+augroup END
 " }}}
 " Cursors {{{
 
@@ -253,6 +269,7 @@ augroup cline
 augroup END
 
 "?set nostartofline " leave my cursor where it was
+
 
 " }}}
 " Indent, Tab, Spacing and Wrap {{{
@@ -302,7 +319,7 @@ endif
 
 syntax on " Enable syntax highlighting
 
-" colorscheme desert
+colorscheme desert
 
 " }}}
 " Status Line {{{
@@ -342,19 +359,21 @@ endif
 " }}}
 " Line number {{{
 
+set number
 set relativenumber " Turn on relative line number
 
 " Toggle line number, relative number or off
 function! ToggleNumbers()
-    if &relativenumber
-        setlocal number
-        setlocal norelativenumber
-    elseif &number
-        setlocal nonumber
-        setlocal norelativenumber
-    else
-        setlocal relativenumber
-    endif
+  if &relativenumber
+    setlocal number
+    setlocal norelativenumber
+  elseif &number
+    setlocal nonumber
+    setlocal norelativenumber
+  else
+    setlocal number
+    setlocal relativenumber
+  endif
 endfunction
 
 " }}}
@@ -466,7 +485,6 @@ nmap nc :call NextColorScheme()<CR>
 
 " Quick file editing
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
-
 
 " Treat long lines as break lines (useful in wrapped text)
 map j gj
