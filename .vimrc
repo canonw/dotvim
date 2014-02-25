@@ -53,6 +53,9 @@ NeoBundle 'vim-ruby/vim-ruby' " Ruby
 
 " NeoBundle 'vim-scripts/DrawIt' 
 NeoBundle 'hsitz/VimOrganizer' " For note taking
+NeoBundle 'mattn/calendar-vim' " Required by VimOrganizer
+NeoBundle 'vim-scripts/utl.vim' " Optional for VimOrganizer
+NeoBundle 'chrisbra/NrrwRgn' " Optional for VimOrganizer
 
 filetype plugin indent on " Enable filetype plugins
 
@@ -67,8 +70,9 @@ set autoread " Set to auto read when a file is changed from the outside
 
 " With a map leader it's possible to do extra key combinations
 " like <leader>w saves the current file
-let mapleader = ","
-let g:mapleader = ","
+let mapleader = ";"
+let maplocalleader = "'"
+" let g:mapleader = ","
 
 " Share windows clipboard
 " Reference: http://vimcasts.org/episodes/accessing-the-system-clipboard-from-vim/
@@ -250,6 +254,11 @@ set completeopt=longest,menuone,preview " Completion style
 " Use grep even in Windows
 if has('win32') || has('win64')
   set grepprg=C:\cygwin64\bin\grep.exe\ -nir\ $*
+endif
+
+" Source setting specific to this machine
+if filereadable(expand("~/my.vim"))
+  exec "source ~/my.vim"
 endif
 
 " }}}
@@ -441,6 +450,14 @@ augroup ft_ruby
 augroup END
 
 " }}}
+
+" Org {{{
+augroup ft_org
+  " au! BufRead,BufWrite,BufWritePost,BufNewFile *.org 
+  au BufEnter *.org            call org#SetOrgFileType()
+augroup END
+" }}}
+
 " }}}
 " Helper Functions {{{
 
@@ -506,4 +523,5 @@ map <leader>tm :tabmove<Space>
 
 " Beauty XML
 nmap <leader>x <ESC>:.,+1!xmllint --format --recover - 2>/dev/null<Home><Right>
+
 " }}}
