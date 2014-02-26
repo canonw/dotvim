@@ -5,7 +5,7 @@
 " 1. git
 " 2. build vimproc.vim
 "
-" Give credit where credits are due.
+" Give credit where credit is due.
 " http://amix.dk/vim/vimrc.html
 " http://spf13.com/post/perfect-vimrc-vim-config-file
 " https://bitbucket.org/sjl/dotfiles/src/tip/vim/vimrc
@@ -455,6 +455,23 @@ augroup END
 augroup ft_org
   " au! BufRead,BufWrite,BufWritePost,BufNewFile *.org 
   au BufEnter *.org            call org#SetOrgFileType()
+augroup END
+" }}}
+
+" CSS and Less {{{
+augroup ft_css
+
+  au!
+  au BufNewFile,BufRead *.less setlocal filetype=less.css
+
+  au Filetype less,css setlocal foldmethod=marker
+  au Filetype less,css setlocal foldmarker={,}
+  "au Filetype less,css setlocal omnifunc=csscomplete#CompleteCSS
+  "au Filetype less,css setlocal iskeyword+=-
+
+  " Sort properties
+  au BufNewFile,BufRead *.less,*.css nnoremap <buffer> <localleader>S ?{<CR>jV/\v^\s*\}?$<CR>k:sort<CR>:noh<CR>
+
 augroup END
 " }}}
 
