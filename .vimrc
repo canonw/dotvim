@@ -9,7 +9,9 @@
 "    - Check if the binary is compiled.
 "      Note: Windows version has precompiled binary in https://github.com/Shougo/vimproc.vim/downloads
 " 3. xmllint
-"
+" 4. Setup fonts
+"    - Inconsolata.  http://www.fontsquirrel.com/fonts/Inconsolata
+"    - ProFont.  http://tobiasjung.name/profont/
 "
 " Give credit where credit is due.
 " http://amix.dk/vim/vimrc.html
@@ -197,23 +199,19 @@ if has("gui_running")
                 set guifont=Monospace\ 11
         endif
     endif
-    if has('win32') || has('win64')
-        " Graceful degration http://stackoverflow.com/a/12856063
+  if has('win32') || has('win64')
 
-        " Font URL http://www.tobias-jung.de/seekingprofont/
-        "?silent! set guifont=ProFontWindows:h11
-        "?if &guifont != 'ProFontWindows:h11'
+    " Graceful degration http://stackoverflow.com/a/12856063
+    " This tricks does not work at all in Windows
+    "silent! set guifont=Inconsolata:h11
+    "if &guifont != 'Inconsolata:h11'
+    "    set guifont=Consolas:h11
+    "endif
 
-        "? Not work
-        " Font URL http://www.levien.com/type/myfonts/inconsolata.html
-        "silent! set guifont=Inconsolata:h11
-        "if &guifont != 'Inconsolata:h11'
-            set guifont=Consolas:h11
-        "endif
+    silent! set guifont=Inconsolata:h11
 
-        set guifontwide=MingLiU:h11
-        "?map <F10> <ESC>:set guifont=MingLiU:h10<CR>
-    endif
+    set guifontwide=MingLiU:h11
+  endif
 
 endif
 
@@ -420,6 +418,24 @@ function! ToggleNumbers()
   endif
 endfunction
 
+function! ToggleFonts()
+
+  if has('win32') || has('win64')
+
+    if &guifont ==? 'ProFontWindows:h11'
+      set guifont=Inconsolata:h11
+    elseif &guifont ==? 'Inconsolata:h11'
+      set guifont=Consolas:h11
+    elseif &guifont ==? 'Consolas:h11'
+      set guifont=ProFontWindows:h11
+    else
+      echoerr "Unknown font" . &guifont
+    endif
+
+  endif
+
+endfunction
+
 " }}}
 " Wildmenu completion {{{
 
@@ -624,13 +640,14 @@ endfunc
 " }}}
 " Key binding {{{
 
-" Line Number
-nmap <leader>ln :call ToggleNumbers()<CR><CR>
-vmap <leader>ln :call ToggleNumbers()<CR><CR>
+" Next Line Number
+nmap <leader>nn :call ToggleNumbers()<CR><CR>
 
+" Next Color Scheme
+nmap <leader>nc :call NextColorScheme()<CR>
 
-" Color Scheme
-nmap nc :call NextColorScheme()<CR>
+" Next Font
+nmap <leader>nf :call ToggleFonts()<CR>
 
 
 " Quick file editing
