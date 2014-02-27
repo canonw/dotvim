@@ -282,9 +282,9 @@ set completeopt=longest,menuone,preview " Completion style
 
 " Use grep even in Windows
 if has('win32') || has('win64')
-  if isdirectory("c:\cygwin64\bin")
+  if isdirectory("c:/cygwin64/bin")
     set grepprg=c:\cygwin64\bin\grep.exe\ -nir\ $*
-  elseif isdirectory("c:\cygwin\bin")
+  elseif isdirectory("c:/cygwin/bin")
     set grepprg=c:\cygwin\bin\grep.exe\ -nir\ $*
   endif
 endif
