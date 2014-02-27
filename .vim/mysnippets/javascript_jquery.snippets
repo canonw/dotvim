@@ -1,0 +1,22 @@
+#
+# JavaScript versions -- jQuery
+#
+extends javascript
+
+##########################
+# Document ready         #
+##########################
+# http://learn.jquery.com/using-jquery-core/document-ready/
+snippet drn "jQuery Document ready as named function (js)" b
+function $1(jQuery) {
+	${0:console.log( "ready!" );}
+}
+
+jQuery(document).ready( ${1:readyFn} );
+endsnippet
+
+snippet dr "jQuery Document ready as anonymous function (js)" b
+jQuery(document).ready(function($){
+	${0:console.log( "ready!" );}
+});
+endsnippet

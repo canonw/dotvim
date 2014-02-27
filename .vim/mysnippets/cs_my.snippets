@@ -1,0 +1,43 @@
+#######################################################################
+#                      C# Snippets for UltiSnips                      #
+#######################################################################
+
+
+#########################
+#      nunit class      #
+#########################
+
+snippet nunit "nunit class" b
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Text;
+using NUnit.Framework;
+
+namespace ${1:MyNamespace}
+{
+    [TestFixture]
+    public class ${2:MyClass}
+    {
+        [TestFixtureSetUp] public void TestFixtureSetUp()
+        {
+        }
+
+        [TestFixtureTearDown] public void TestFixtureTearDown()
+        {
+        }
+
+        [SetUp] public void Setup()
+        {
+        }
+
+        [TearDown] public void TearDown()
+        {
+        }
+
+        [Test] public void ${3:MyTest}()
+        {
+        }
+    }
+}
+endsnippet

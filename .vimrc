@@ -51,6 +51,8 @@ NeoBundle 'vim-scripts/changeColorScheme.vim' " Randomize color scheme
 NeoBundle 'vim-scripts/mru.vim.git' " Save file history
 NeoBundle 'bling/vim-airline' " Status line
 
+NeoBundle 'SirVer/ultisnips' " Code Snippet
+
 NeoBundle 'tpope/vim-fugitive' " Git
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/vimfiler.vim' " File Explorer
@@ -443,6 +445,11 @@ let g:vimfiler_as_default_explorer = 1
 
 " }}}
 " }}}
+
+" UltiSnips {{{
+" Add my own snippet directory
+let g:UltiSnipsSnippetDirectories=["UltiSnips", "mysnippets"]
+" }}}
 " Filetype setting {{{
 
 " VIM {{{
@@ -549,7 +556,9 @@ nmap nc :call NextColorScheme()<CR>
 
 
 " Quick file editing
-nnoremap <leader>ev :vsplit $MYVIMRC<cr>
+nnoremap <leader>ev :e $MYVIMRC<cr>
+"nnoremap <leader>ev :vsplit $MYVIMRC<cr>
+nnoremap <leader>es :e ~/.vim/mysnippets<cr>
 
 " Treat long lines as break lines (useful in wrapped text)
 map j gj

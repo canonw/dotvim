@@ -1,0 +1,383 @@
+###########################################################################
+#                             SQL SNIPPETS                                #
+###########################################################################
+
+# Information Schema Views (Transact-SQL) http://technet.microsoft.com/en-us/library/ms186778.aspx
+
+##########################
+# Table Variable         #
+##########################
+snippet tv "table variable" b
+DECLARE @${1:tableVar} TABLE
+(
+	${VISUAL}$0
+)
+endsnippet
+
+##########################
+# Temp Table Exist       #
+##########################
+snippet tte "temp table exist" b
+IF(OBJECT_ID('tempdb..#${1:tempTable}') IS NOT NULL)
+BEGIN
+	${VISUAL}$0
+END
+endsnippet
+
+##########################
+# Create Table           #
+##########################
+snippet tablec "create table" b
+IF EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = N'$2' AND TABLE_NAME = N'$1' AND TABLE_TYPE = N'BASE TABLE')
+BEGIN PRINT 'Create table $2.$1 skipped' END
+ELSE
+BEGIN
+	-- Table schema
+	CREATE TABLE ${2:dbo}.[${1:tbl}]
+	(
+		$1ID INT NOT NULL,
+		CONSTRAINT PK_$1 PRIMARY KEY ($1ID)
+	)
+
+	-- Table comment
+	-- EXEC sys.sp_addextendedproperty @name=N'Comment', @value=N'${3}', @level0name=N'$2', @level1name=N'$1', @level0type=N'SCHEMA', @level1type=N'TABLE'
+
+	IF EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = N'$2' AND TABLE_NAME = N'$1' AND TABLE_TYPE = N'BASE TABLE')
+	BEGIN PRINT 'Create table $2.$1 completed' END
+	ELSE
+	BEGIN RAISERROR ('Create table $2.$1 failed', 16, 1) END
+END
+endsnippet
+
+##########################
+# Drop Table             #
+##########################
+snippet tabled "drop table" b
+IF NOT EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = N'$2' AND TABLE_NAME = N'$1' AND TABLE_TYPE = N'BASE TABLE')
+BEGIN PRINT 'Drop table $2.$1 skipped' END
+ELSE
+BEGIN
+	DROP TABLE ${2:dbo}.[${1:tbl}]
+
+	IF NOT EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = N'$2' AND TABLE_NAME = N'$1' AND TABLE_TYPE = N'BASE TABLE')
+	BEGIN PRINT 'Drop table $2.$1 completed' END
+	ELSE
+	BEGIN RAISERROR ('Drop table $2.$1 failed', 16, 1) END
+END
+endsnippet
+
+##########################
+# Create Table Column    #
+##########################
+snippet tcolc "create table column" b
+IF NOT EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = N'$2' AND TABLE_NAME = N'$1' AND TABLE_TYPE = N'BASE TABLE')
+BEGIN RAISERROR (N'Create column $3 failed.  Table $2.$1 does not exist', 16, 1) END
+ELSE
+BEGIN
+	IF EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = N'$2' AND TABLE_NAME = N'$1' AND COLUMN_NAME = N'$3')
+	BEGIN PRINT N'Create column $3 on table $2.$1 skipped' END
+	ELSE
+	BEGIN
+		-- http://technet.microsoft.com/en-us/library/ms190273.aspx
+		-- Table column
+		ALTER TABLE ${2:dbo}.[${1:tbl}] ADD ${3:col} ${4:INT} NULL
+	
+		IF EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = N'$2' AND TABLE_NAME = N'$1' AND COLUMN_NAME = N'$3')
+		BEGIN PRINT N'Create column $3 on table $2.$1 completed' END
+		ELSE
+		BEGIN RAISERROR (N'Create column %s on table %s.%s failed', 16, 1, N'$3', N'$2', N'$1') END
+	END
+END
+endsnippet
+
+##########################
+# Drop Table Column      #
+##########################
+snippet tcold "drop table column" b
+IF NOT EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = N'$2' AND TABLE_NAME = N'$1' AND TABLE_TYPE = N'BASE TABLE')
+BEGIN RAISERROR (N'Drop column $3 failed.  Table $2.$1 does not exist', 16, 1) END
+ELSE
+BEGIN
+	IF NOT EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = N'$2' AND TABLE_NAME = N'$1' AND COLUMN_NAME = N'$3')
+	BEGIN PRINT N'Drop column $3 on table $2.$1 skipped' END
+	ELSE
+	BEGIN
+		-- http://technet.microsoft.com/en-us/library/ms190273.aspx
+		-- Table column
+		ALTER TABLE ${2:dbo}.[${1:tbl}] DROP COLUMN ${3:col}
+	
+		IF NOT EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = N'$2' AND TABLE_NAME = N'$1' AND COLUMN_NAME = N'$3')
+		BEGIN PRINT N'Drop column $3 on table $2.$1 completed' END
+		ELSE
+		BEGIN RAISERROR (N'Drop column %s on table %s.%s failed', 16, 1, N'$3', N'$2', N'$1') END
+	END
+END
+endsnippet
+
+##########################
+# Rename Table Column    #
+##########################
+snippet tcolr "rename table column" b
+IF NOT EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = N'$2' AND TABLE_NAME = N'$1' AND TABLE_TYPE = N'BASE TABLE')
+BEGIN RAISERROR (N'Rename column $3 to $4 failed.  Table $2.$1 does not exist', 16, 1) END
+ELSE
+BEGIN
+	IF NOT EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = N'$2' AND TABLE_NAME = N'$1' AND COLUMN_NAME = N'$3')
+	BEGIN PRINT N'Rename column $3 to $4 on table $2.$1 skipped' END
+	ELSE
+	BEGIN
+		EXEC sp_rename '${2:dbo}.${1:tbl}.${3:oldcol}' , '${4:newcol}', 'COLUMN'
+
+	IF EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = N'$2' AND TABLE_NAME = N'$1' AND COLUMN_NAME = N'$4')
+		BEGIN PRINT N'Rename column $3 to $4 on table $2.$1 completed' END
+		ELSE
+		BEGIN RAISERROR (N'Rename column %s to %s on table %s.%s failed', 16, 1, N'$3', N'$4', N'$2', N'$1') END
+	END
+END
+endsnippet
+
+##########################
+# Create Primary Key     #
+##########################
+snippet pkeyc "create primary key constraint" b
+IF EXISTS (SELECT 1 FROM sys.key_constraints WHERE name = N'$3' AND parent_object_id = OBJECT_ID('$1.$2') AND type='PK')
+BEGIN PRINT N'Create primary key constraint $3 on table $1.$2 skipped' END
+ELSE
+BEGIN
+	-- http://technet.microsoft.com/en-us/library/ms189039.aspx
+	-- Table Schema: ${1:dbo}
+	-- Table Name: ${2:tbl}
+	-- Constraint Name: ${3:PK_$2}
+	-- Table columns: ${4:col}
+	ALTER TABLE $1.$2
+	ADD CONSTRAINT $3 PRIMARY KEY CLUSTERED ($4)
+	;
+
+	IF EXISTS (SELECT 1 FROM sys.key_constraints WHERE name = N'$3' AND parent_object_id = OBJECT_ID('$1.$2') AND type='PK')
+	BEGIN PRINT N'Create primary key constraint $3 on table $1.$2 completed' END
+	ELSE
+	BEGIN RAISERROR (N'Create primary key constraint %s on table %s.%s failed', 16, 1, N'$3', N'$1', N'$2') END
+END
+endsnippet
+
+##########################
+# Drop Primary Key       #
+##########################
+snippet pkeyd "drop primary key constraint" b
+IF NOT EXISTS (SELECT 1 FROM sys.key_constraints WHERE name = N'$3' AND parent_object_id = OBJECT_ID('$1.$2') AND type='PK')
+BEGIN PRINT N'Drop primary key constraint $3 on table $1.$2 skipped' END
+ELSE
+BEGIN
+	-- http://technet.microsoft.com/en-us/library/ms190621.aspx
+	-- Table Schema: ${1:dbo}
+	-- Table Name: ${2:tbl}
+	-- Constraint Name: ${3:PK_$2}
+	ALTER TABLE $1.$2 DROP CONSTRAINT $3
+	;
+
+	IF NOT EXISTS (SELECT 1 FROM sys.key_constraints WHERE name = N'$3' AND parent_object_id = OBJECT_ID('$1.$2') AND type='PK')
+	BEGIN PRINT N'Drop primary key constraint $3 on table $1.$2 completed' END
+	ELSE
+	BEGIN RAISERROR (N'Drop primary key constraint %s on table %s.%s failed', 16, 1, N'$3', N'$1', N'$2') END
+END
+endsnippet
+
+##########################
+# Rename Primary Key     #
+##########################
+snippet pkeyr "rename primary key constraint" b
+IF EXISTS (SELECT 1 FROM sys.key_constraints WHERE name = N'$4' AND parent_object_id = OBJECT_ID('$1.$2') AND type='PK')
+BEGIN PRINT N'Rename primary key constraint from $3 to $4 on table $1.$2 skipped' END
+ELSE
+BEGIN
+	-- http://technet.microsoft.com/en-us/library/ms188351.aspx
+	-- Table Schema: ${1:dbo}
+	-- Table Name: ${2:tbl}
+	-- Old Constraint Name: ${3:PK_oldName}
+	-- New Constraint Name: ${4:PK_newName}
+	EXEC sp_rename @objname=N'$1.$3', @newname=N'$4', @objtype=N'OBJECT'
+
+	IF EXISTS (SELECT 1 FROM sys.key_constraints WHERE name = N'$4' AND parent_object_id = OBJECT_ID('$1.$2') AND type='PK')
+	BEGIN PRINT N'Rename primary key constraint from $3 to $4 on table $1.$2 completed' END
+	ELSE
+	BEGIN RAISERROR (N'Rename primary key constraint from %s to %s on table %s.%s failed', 16, 1, N'$3', N'$4', N'$1', N'$2') END
+END
+endsnippet
+
+##########################
+# Create Unique Key     #
+##########################
+snippet ukeyc "create unique key constraint" b
+IF EXISTS (SELECT 1 FROM sys.key_constraints WHERE name = N'$3' AND parent_object_id = OBJECT_ID('$1.$2') AND type='UQ')
+BEGIN PRINT N'Create unique key constraint $3 on table $1.$2 skipped' END
+ELSE
+BEGIN
+	-- http://technet.microsoft.com/en-us/library/ms190024.aspx
+	-- Table Schema: ${1:dbo}
+	-- Table Name: ${2:tbl}
+	-- Constraint Name: ${3:UQ_$2}
+	-- Table columns: ${4:col}
+	ALTER TABLE $1.$2
+	ADD CONSTRAINT $3 UNIQUE ($4)
+	;
+
+	IF EXISTS (SELECT 1 FROM sys.key_constraints WHERE name = N'$3' AND parent_object_id = OBJECT_ID('$1.$2') AND type='UQ')
+	BEGIN PRINT N'Create unique key constraint $3 on table $1.$2 completed' END
+	ELSE
+	BEGIN RAISERROR (N'Create unique key constraint %s on table %s.%s failed', 16, 1, N'$3', N'$1', N'$2') END
+END
+endsnippet
+
+##########################
+# Drop Unique Key       #
+##########################
+snippet ukeyd "drop unique key constraint" b
+IF NOT EXISTS (SELECT 1 FROM sys.key_constraints WHERE name = N'$3' AND parent_object_id = OBJECT_ID('$1.$2') AND type='UQ')
+BEGIN PRINT N'Drop unique key constraint $3 on table $1.$2 skipped' END
+ELSE
+BEGIN
+	-- http://technet.microsoft.com/en-us/library/ms188260.aspx
+	-- Table Schema: ${1:dbo}
+	-- Table Name: ${2:tbl}
+	-- Constraint Name: ${3:UQ_$2}
+	ALTER TABLE $1.$2 DROP CONSTRAINT $3
+	;
+
+	IF NOT EXISTS (SELECT 1 FROM sys.key_constraints WHERE name = N'$3' AND parent_object_id = OBJECT_ID('$1.$2') AND type='UQ')
+	BEGIN PRINT N'Drop unique key constraint $3 on table $1.$2 completed' END
+	ELSE
+	BEGIN RAISERROR (N'Drop unique key constraint %s on table %s.%s failed', 16, 1, N'$3', N'$1', N'$2') END
+END
+endsnippet
+
+##########################
+# Rename Unique Key     #
+##########################
+snippet ukeyr "rename unique key constraint" b
+IF EXISTS (SELECT 1 FROM sys.key_constraints WHERE name = N'$4' AND parent_object_id = OBJECT_ID('$1.$2') AND type='UQ')
+BEGIN PRINT N'Rename unique key constraint from $3 to $4 on table $1.$2 skipped' END
+ELSE
+BEGIN
+	-- http://technet.microsoft.com/en-us/library/ms188351.aspx
+	-- Table Schema: ${1:dbo}
+	-- Table Name: ${2:tbl}
+	-- Old Constraint Name: ${3:UQ_oldName}
+	-- New Constraint Name: ${4:UQ_newName}
+	EXEC sp_rename @objname=N'$1.$3', @newname=N'$4', @objtype=N'OBJECT'
+
+	IF EXISTS (SELECT 1 FROM sys.key_constraints WHERE name = N'$4' AND parent_object_id = OBJECT_ID('$1.$2') AND type='UQ')
+	BEGIN PRINT N'Rename unique key constraint from $3 to $4 on table $1.$2 completed' END
+	ELSE
+	BEGIN RAISERROR (N'Rename unique key constraint from %s to %s on table %s.%s failed', 16, 1, N'$3', N'$4', N'$1', N'$2') END
+END
+endsnippet
+
+##########################
+# Create Foreign Key     #
+##########################
+# http://blog.sqlauthority.com/2006/11/01/sql-server-query-to-display-foreign-key-relationships-and-name-of-the-constraint-for-each-table-in-database/
+snippet fkeyc "create foreign key constraint" b
+IF EXISTS (
+	SELECT 1 FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS C
+	INNER JOIN INFORMATION_SCHEMA.TABLE_CONSTRAINTS FK ON C.CONSTRAINT_NAME = FK.CONSTRAINT_NAME
+	INNER JOIN INFORMATION_SCHEMA.TABLE_CONSTRAINTS PK ON C.UNIQUE_CONSTRAINT_NAME = PK.CONSTRAINT_NAME
+	INNER JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE CU ON C.CONSTRAINT_NAME = CU.CONSTRAINT_NAME
+	WHERE PK.TABLE_SCHEMA = N'$4'
+	  AND PK.TABLE_NAME = N'$3'
+	  AND FK.TABLE_SCHEMA = N'$2'
+	  AND FK.TABLE_NAME = N'$1'
+	  AND CU.CONSTRAINT_NAME = N'$6'
+)
+BEGIN PRINT 'Create foreign key $6 skipped' END
+ELSE
+BEGIN
+	-- Table schema
+	ALTER TABLE ${2:dbo}.[${1:childTbl}] WITH CHECK
+	ADD CONSTRAINT [${6:FK_$3_$1}]
+	FOREIGN KEY (${5:ID})
+	REFERENCES ${4:dbo}.[${3:parentTbl}] ($5)
+
+	IF EXISTS (
+		SELECT 1 FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS C
+		INNER JOIN INFORMATION_SCHEMA.TABLE_CONSTRAINTS FK ON C.CONSTRAINT_NAME = FK.CONSTRAINT_NAME
+		INNER JOIN INFORMATION_SCHEMA.TABLE_CONSTRAINTS PK ON C.UNIQUE_CONSTRAINT_NAME = PK.CONSTRAINT_NAME
+		INNER JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE CU ON C.CONSTRAINT_NAME = CU.CONSTRAINT_NAME
+		WHERE PK.TABLE_SCHEMA = N'$4'
+		  AND PK.TABLE_NAME = N'$3'
+		  AND FK.TABLE_SCHEMA = N'$2'
+		  AND FK.TABLE_NAME = N'$1'
+		  AND CU.CONSTRAINT_NAME = N'$6'
+	)
+	BEGIN PRINT 'Create foreign key $6 completed' END
+	ELSE
+	BEGIN RAISERROR ('Create foreign key $6 failed', 16, 1) END
+END
+endsnippet
+
+##########################
+# Create Index           #
+##########################
+snippet indexc "create index" b
+IF EXISTS (SELECT 1 FROM sys.indexes WHERE Name = N'$1' AND object_id = OBJECT_ID('$3.$2'))
+BEGIN PRINT N'Create index $1 on table $3.$2 skipped' END
+ELSE
+BEGIN
+	-- http://technet.microsoft.com/en-us/library/ms188783.aspx
+	-- Index
+	CREATE /* UNIQUE | CLUSTERED | NONCLUSTERED */ INDEX [${1:idx}]
+	    ON ${3:dbo}.${2:tbl}
+	(
+		${0:col}
+		-- INCLUDE (col)
+		-- WHERE
+		-- WITH
+	)
+
+	IF EXISTS (SELECT 1 FROM sys.indexes WHERE Name = N'$1' AND object_id = OBJECT_ID('$3.$2'))
+	BEGIN PRINT N'Create index $1 on table $3.$2 completed' END
+	ELSE
+	BEGIN RAISERROR (N'Create index %s on table %s.%s failed', 16, 1, N'$1', N'$3', N'$2') END
+END
+endsnippet
+
+##########################
+# Drop Index             #
+##########################
+snippet indexd "create index" b
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE Name = N'$1' AND object_id = OBJECT_ID('$3.$2'))
+BEGIN PRINT N'Drop index $1 on table $3.$2 skipped' END
+ELSE
+BEGIN
+	-- http://technet.microsoft.com/en-us/library/ms176118.aspx
+	DROP INDEX [${1:idx}]
+	  ON ${3:dbo}.${2:tbl}
+
+	IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE Name = N'$1' AND object_id = OBJECT_ID('$3.$2'))
+	BEGIN PRINT N'Drop index $1 on table $3.$2 completed' END
+	ELSE
+	BEGIN RAISERROR (N'Drop index %s on table %s.%s failed', 16, 1, N'$1', N'$3', N'$2') END
+END
+endsnippet
+
+##########################
+# Try Catch              #
+##########################
+snippet trycatch "try catch" b
+BEGIN TRY
+	${VISUAL}$0
+END TRY
+BEGIN CATCH
+
+	DECLARE @ErrorMessage NVARCHAR(4000);
+	DECLARE @ErrorSeverity INT;
+	DECLARE @ErrorState INT;
+
+	SELECT @ErrorMessage = ERROR_MESSAGE(), @ErrorSeverity = ERROR_SEVERITY(), @ErrorState = ERROR_STATE();
+
+	-- Has string format http://msdn.microsoft.com/en-us/library/ms178592.aspx
+	RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
+
+END CATCH;
+endsnippet
+
+# vim:ft=snippets:
