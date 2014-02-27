@@ -55,8 +55,15 @@ NeoBundle 'SirVer/ultisnips' " Code Snippet
 
 NeoBundle 'tpope/vim-fugitive' " Git
 NeoBundle 'Shougo/unite.vim'
-NeoBundle 'Shougo/vimfiler.vim' " File Explorer
 NeoBundle 'Shougo/neomru.vim' " Prefer integration with unite
+
+" File Explorer
+NeoBundle 'Shougo/vimfiler.vim' " Use unite bookmark to track specific issues
+NeoBundle 'scrooloose/nerdtree' " Bookmark well on directories
+
+" SQL
+NeoBundle 'vim-scripts/SQLComplete.vim'
+NeoBundle 'vim-scripts/dbext.vim'
 
 " Ruby/Rails
 " http://www.vimninjas.com/2012/08/28/vim-for-rubyists-part-1/
@@ -352,8 +359,8 @@ colorscheme desert
 
 " }}}
 " Status Line {{{
-"if has('statusline')
-if 0 " Use vim-airine plug-in instead
+" Hidden when vim-airline is active
+if has('statusline')
     " Always show the status line
     set laststatus=2 " always show the status line
 
@@ -444,11 +451,42 @@ let g:airline_theme="molokai"
 let g:vimfiler_as_default_explorer = 1
 
 " }}}
-" }}}
 
 " UltiSnips {{{
 " Add my own snippet directory
 let g:UltiSnipsSnippetDirectories=["UltiSnips", "mysnippets"]
+" }}}
+
+" NERDTree {{{
+" Display bookmark in NERD tree
+let NERDTreeShowBookmarks = 1
+" }}}
+
+" SQLComplete {{{
+" }}}
+
+" dbext {{{
+" Reference: https://mutelight.org/dbext-the-last-sql-client-youll-ever-need
+
+" Don't ask input parameters
+let g:dbext_default_prompt_for_parameters = 1
+" Set prefer profile to skip prompting
+let g:dbext_default_profile = 'sqlserver_instorecard'
+" Discard temp files
+let g:dbext_default_delete_temp_file = 1
+" Specify history file location.  In Windows, it keeps in system path.
+let g:dbext_default_history_file = $HOME.'/.dbext_sql_history'
+"
+" Example configuration
+" SQLite
+" let g:dbext_default_profile_sqlite_for_rails = 'type=SQLITE:dbname=/path/to/my/sqlite.db'
+" Microsoft SQL Server
+" let g:dbext_default_profile_sqlserver_mydb = 'type=SQLSRV:host=localhost:dbname=mydb:integratedlogin=1'
+" @ask will prompt for password
+" let g:dbext_default_profile_sqlserver_mydb = 'type=SQLSRV:host=localhost:dbname=mydb:user=sa:passwd=@ask'
+
+" }}}
+
 " }}}
 " Filetype setting {{{
 
@@ -514,6 +552,7 @@ augroup ft_markdown
 
 augroup END
 " }}}
+" }}}
 " Helper Functions {{{
 
 " Reference: https://gist.github.com/rkumar/4166881
@@ -558,12 +597,12 @@ nmap nc :call NextColorScheme()<CR>
 " Quick file editing
 nnoremap <leader>ev :e $MYVIMRC<cr>
 "nnoremap <leader>ev :vsplit $MYVIMRC<cr>
+" Access to snippet
 nnoremap <leader>es :e ~/.vim/mysnippets<cr>
 
 " Treat long lines as break lines (useful in wrapped text)
 map j gj
 map k gk
-
 
 " Smart way to move between windows
 " Need upper case becuase it doesn't behave well in Windows.
@@ -582,3 +621,4 @@ map <leader>tm :tabmove<Space>
 nmap <leader>x <ESC>:.,+1!xmllint --format --recover - 2>/dev/null<Home><Right>
 
 " }}}
+
