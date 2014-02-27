@@ -563,7 +563,7 @@ augroup END
 
 augroup ft_ruby
   au!
-  au Filetype ruby setlocal foldmethod=syntax foldlevel=1
+  au Filetype ruby setlocal foldmethod=syntax foldlevel=1 shiftwidth=2
   au BufRead,BufNewFile Capfile setlocal filetype=ruby
 augroup END
 
