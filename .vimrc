@@ -56,7 +56,14 @@ NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/vimfiler.vim' " File Explorer
 NeoBundle 'Shougo/neomru.vim' " Prefer integration with unite
 
-NeoBundle 'vim-ruby/vim-ruby' " Ruby
+" Ruby/Rails
+" http://www.vimninjas.com/2012/08/28/vim-for-rubyists-part-1/
+NeoBundle 'vim-ruby/vim-ruby'
+NeoBundle 'tpope/vim-rails'
+NeoBundle 'ecomba/vim-ruby-refactoring'
+NeoBundle 'tpope/vim-cucumber'
+NeoBundle 'tpope/vim-haml'
+NeoBundle 'groenewege/vim-less'
 
 " NeoBundle 'vim-scripts/DrawIt' 
 NeoBundle 'hsitz/VimOrganizer' " For note taking
