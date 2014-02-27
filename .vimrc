@@ -1,9 +1,15 @@
 " .vimrc
 " Author: Ken Wong <ken.yui.wong@gmail.com>
 "
-" Checklist for VIM
+" Checklist for VIM.  Confirm these exeucutable are installed.
 " 1. git
 " 2. build vimproc.vim
+"    - Check the value using the command.  It has the exact dll value.
+"      :echo g:vimproc#dll_path
+"    - Check if the binary is compiled.
+"      Note: Windows version has precompiled binary in https://github.com/Shougo/vimproc.vim/downloads
+" 3. xmllint
+"
 "
 " Give credit where credit is due.
 " http://amix.dk/vim/vimrc.html
@@ -48,6 +54,7 @@ NeoBundle 'bling/vim-airline' " Status line
 NeoBundle 'tpope/vim-fugitive' " Git
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/vimfiler.vim' " File Explorer
+NeoBundle 'Shougo/neomru.vim' " Prefer integration with unite
 
 NeoBundle 'vim-ruby/vim-ruby' " Ruby
 
@@ -253,7 +260,11 @@ set completeopt=longest,menuone,preview " Completion style
 
 " Use grep even in Windows
 if has('win32') || has('win64')
-  set grepprg=C:\cygwin64\bin\grep.exe\ -nir\ $*
+  if isdirectory("c:\cygwin64\bin")
+    set grepprg=c:\cygwin64\bin\grep.exe\ -nir\ $*
+  elseif isdirectory("c:\cygwin\bin")
+    set grepprg=c:\cygwin\bin\grep.exe\ -nir\ $*
+  endif
 endif
 
 " Source setting specific to this machine
