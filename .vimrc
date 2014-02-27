@@ -50,6 +50,14 @@ NeoBundle 'flazz/vim-colorschemes' " Tons of color schemes
 NeoBundle 'vim-scripts/changeColorScheme.vim' " Randomize color scheme
 NeoBundle 'vim-scripts/mru.vim.git' " Save file history
 NeoBundle 'bling/vim-airline' " Status line
+NeoBundle 'tsaleh/vim-matchit'
+NeoBundle 'tomtom/tcomment_vim'
+NeoBundle 'godlygeek/tabular'
+NeoBundle 't9md/vim-quickhl'
+NeoBundle 'vim-scripts/Align'
+NeoBundle 'mattn/emmet-vim'
+NeoBundle 'vim-scripts/DrawIt'
+NeoBundle 'tpope/vim-abolish'
 
 NeoBundle 'SirVer/ultisnips' " Code Snippet
 
@@ -64,6 +72,7 @@ NeoBundle 'scrooloose/nerdtree' " Bookmark well on directories
 " SQL
 NeoBundle 'vim-scripts/SQLComplete.vim'
 NeoBundle 'vim-scripts/dbext.vim'
+NeoBundle 'vim-scripts/SQLUtilities'
 
 " Ruby/Rails
 " http://www.vimninjas.com/2012/08/28/vim-for-rubyists-part-1/
@@ -485,6 +494,15 @@ let g:dbext_default_history_file = $HOME.'/.dbext_sql_history'
 " @ask will prompt for password
 " let g:dbext_default_profile_sqlserver_mydb = 'type=SQLSRV:host=localhost:dbname=mydb:user=sa:passwd=@ask'
 
+" }}}
+
+" SQLUtilities {{{
+" Delimit comma as seperate line
+let g:sqlutil_align_comma = 1
+" Disable default key map
+" let g:sqlutil_load_default_maps = 0
+" Set GO as SQL delimiter
+let g:sqlutil_cmd_terminator = "\ngo\n"
 " }}}
 
 " }}}
