@@ -231,7 +231,6 @@ set autochdir " always switch to the current file directory
 "     autocmd FileType python set omnifunc=pythoncomplete#Complete
 "     autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
 "     autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
-"     autocmd FileType css set omnifunc=csscomplete#CompleteCSS
 "     autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
 "     autocmd FileType php set omnifunc=phpcomplete#CompletePHP
 "     autocmd FileType c set omnifunc=ccomplete#Complete
@@ -543,15 +542,11 @@ augroup END
 augroup ft_css
 
   au!
-  au BufNewFile,BufRead *.less setlocal filetype=less.css
 
   au Filetype less,css setlocal foldmethod=marker
   au Filetype less,css setlocal foldmarker={,}
   "au Filetype less,css setlocal omnifunc=csscomplete#CompleteCSS
   "au Filetype less,css setlocal iskeyword+=-
-
-  " Sort properties
-  au BufNewFile,BufRead *.less,*.css nnoremap <buffer> <localleader>S ?{<CR>jV/\v^\s*\}?$<CR>k:sort<CR>:noh<CR>
 
 augroup END
 " }}}
@@ -600,6 +595,32 @@ function! s:subst(start, end, pat, rep)
   endwhile
 endfunction
 
+" Open current file in File Explorer
+" Reference: http://vim.wikia.com/wiki/Open_the_directory_for_the_current_file_in_Windows
+func! OpenCWD()
+  if has("gui_running")
+    if has("win32") || has("win64")
+      let s:stored_shellslash = &shellslash
+      set noshellslash
+      !start explorer.exe %:p:h
+      let &shellslash = s:stored_shellslash
+    elseif has("gui_kde")
+      !konqueror %:p:h &
+    elseif has("gui_gtk") " TODO: test!
+	  if len(expand('%')) == 0
+		!nautilus "%:p:h" &
+	  else
+		!nautilus "%:p" &
+	  endif
+	  " !nautilus %:p:h &
+    elseif has("mac") && has("unix") " TODO: test!
+      let s:macpath = expand("%:p:h")
+      let s:macpath = substitute(s:macpath," ","\\\\ ","g")
+      execute '!open ' .s:macpath
+    endif
+  endif
+endfunc
+
 " }}}
 " Key binding {{{
 
@@ -613,10 +634,21 @@ nmap nc :call NextColorScheme()<CR>
 
 
 " Quick file editing
-nnoremap <leader>ev :e $MYVIMRC<cr>
+nnoremap <leader>ffv :e $MYVIMRC<cr>
 "nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 " Access to snippet
-nnoremap <leader>es :e ~/.vim/mysnippets<cr>
+nnoremap <leader>fds :e ~/.vim/mysnippets<cr>
+
+" Open files in various mode
+" Reference: http://vimcasts.org/episodes/the-edit-command/
+cnoremap %% <C-R>=fnameescape(expand('%:p:h')).'/'<cr>
+map <leader>fw :e %%
+map <leader>fs :sp %%
+map <leader>fv :vsp %%
+map <leader>ft :tabe %%
+
+" Open file explorer, etc.
+map <leader>oe :call OpenCWD()<CR><CR>
 
 " Treat long lines as break lines (useful in wrapped text)
 map j gj
@@ -637,6 +669,9 @@ map <leader>tm :tabmove<Space>
 
 " Beauty XML
 nmap <leader>x <ESC>:.,+1!xmllint --format --recover - 2>/dev/null<Home><Right>
+
+" Sort properties
+au BufNewFile,BufRead *.less,*.css nnoremap <buffer> <localleader>S ?{<CR>jV/\v^\s*\}?$<CR>k:sort<CR>:noh<CR>
 
 " }}}
 
