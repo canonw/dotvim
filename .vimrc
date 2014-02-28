@@ -60,6 +60,7 @@ NeoBundle 'vim-scripts/Align'
 NeoBundle 'mattn/emmet-vim'
 NeoBundle 'vim-scripts/DrawIt'
 NeoBundle 'tpope/vim-abolish'
+NeoBundle 'tpope/vim-surround'
 
 NeoBundle 'SirVer/ultisnips' " Code Snippet
 
@@ -557,7 +558,7 @@ augroup END
 
 augroup ft_ruby
   au!
-  au Filetype ruby setlocal foldmethod=syntax
+  au Filetype ruby setlocal foldmethod=syntax foldlevel=1
   au BufRead,BufNewFile Capfile setlocal filetype=ruby
 augroup END
 
