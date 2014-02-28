@@ -520,6 +520,22 @@ let g:sqlutil_align_comma = 1
 let g:sqlutil_cmd_terminator = "\ngo\n"
 " }}}
 
+" tComment {{{
+
+" g:tcommentMapLeader1 should be a shortcut that can be used with map, imap, vmap.
+" let g:tcommentMapLeader1 = '<c-_>'
+
+" g:tcommentMapLeader2 should be a shortcut that can be used with  map, xmap.
+" let g:tcommentMapLeader2 = '<Leader>_'
+
+" See |tcomment-operator|.
+" let g:tcommentMapLeaderOp1 = 'gc'
+
+" See |tcomment-operator|.
+" let g:tcommentMapLeaderOp2 = 'gC'
+
+" }}}
+
 " }}}
 " Filetype setting {{{
 
