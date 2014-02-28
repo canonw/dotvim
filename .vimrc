@@ -12,6 +12,7 @@
 " 4. Setup fonts
 "    - Inconsolata.  http://www.fontsquirrel.com/fonts/Inconsolata
 "    - ProFont.  http://tobiasjung.name/profont/
+"    - Source Code Pro.  http://sourceforge.net/projects/sourcecodepro.adobe/
 "
 " Give credit where credit is due.
 " http://amix.dk/vim/vimrc.html
@@ -209,9 +210,9 @@ if has("gui_running")
     "    set guifont=Consolas:h11
     "endif
 
-    silent! set guifont=Inconsolata:h11
+    silent! set guifont=Source_Code_Pro:h11:cANSI
 
-    set guifontwide=MingLiU:h11
+    silent! set guifontwide=MingLiU:h11:cANSI
   endif
 
 endif
@@ -422,18 +423,22 @@ endfunction
 function! ToggleFonts()
 
   if has('win32') || has('win64')
-
-    if &guifont ==? 'ProFontWindows:h11'
-      set guifont=Inconsolata:h11
-    elseif &guifont ==? 'Inconsolata:h11'
-      set guifont=Consolas:h11
-    elseif &guifont ==? 'Consolas:h11'
-      set guifont=ProFontWindows:h11
+    if &guifont ==? 'Consolas:h11:cANSI'
+      set guifont=Source_Code_Pro:h11:cANSI
+    elseif &guifont ==? 'Source_Code_Pro:h11:cANSI'
+      set guifont=Inconsolata:h11:cANSI
+    elseif &guifont ==? 'Inconsolata:h11:cANSI'
+      set guifont=ProFontWindows:h11:cANSI
+    elseif &guifont ==? 'ProFontWindows:h11:cANSI'
+      silent! set guifont=Consolas:h11:cANSI
+    elseif &guifont ==? 'Consolas:h11:cANSI'
+      set guifont=ProFontWindows:h11:cANSI
     else
-      echoerr "Unknown font" . &guifont
+      set guifont=Source_Code_Pro:h11:cANSI
     endif
-
   endif
+
+  echo &guifont
 
 endfunction
 
@@ -496,7 +501,7 @@ let NERDTreeShowBookmarks = 1
 " Don't ask input parameters
 let g:dbext_default_prompt_for_parameters = 1
 " Set prefer profile to skip prompting
-let g:dbext_default_profile = 'sqlserver_instorecard'
+let g:dbext_default_profile = 'sqlserver_'
 " Discard temp files
 let g:dbext_default_delete_temp_file = 1
 " Specify history file location.  In Windows, it keeps in system path.
