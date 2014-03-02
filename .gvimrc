@@ -2,4 +2,6 @@
 
 call RandomColorScheme()
 
+call ToggleFonts()
+
 " }}}

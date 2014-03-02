@@ -80,7 +80,9 @@ function! s:hooks.on_source(bundle)
   let showmarks_ignore_type = 'hmpq'
 endfunction
 
-NeoBundle 'vim-scripts/restore_view.vim' " Remember file cursor and folding position
+if !has('win32') && !has('win64') " TODO: fix Windows view path
+  NeoBundle 'vim-scripts/restore_view.vim' " Remember file cursor and folding position
+endif
 
 NeoBundle 'SirVer/ultisnips' " Code Snippet
 
@@ -347,30 +349,6 @@ if has("gui_running")
 
   " set lines=50
 
-  " Font Switching Binds {
-  if has('unix')
-
-    set guifont=Source\ Code\ Pro\ Medium\ 11
-    " if (match(system("cat /etc/issue"), "Ubuntu") != -1)
-    "   set guifont=Ubuntu\ Mono\ 11
-    " else
-    "   set guifont=Monospace\ 11
-    " endif
-  endif
-  if has('win32') || has('win64')
-
-    " Graceful degration http://stackoverflow.com/a/12856063
-    " This tricks does not work at all in Windows
-    "silent! set guifont=Inconsolata:h11
-    "if &guifont != 'Inconsolata:h11'
-    "    set guifont=Consolas:h11
-    "endif
-
-    silent! set guifont=Source_Code_Pro:h11:cANSI
-
-    silent! set guifontwide=MingLiU:h11:cANSI
-  endif
-
 endif
 
 set encoding=utf8 " Set utf8 as standard encoding and en_US as the standard language
@@ -515,11 +493,19 @@ if !isdirectory(expand(&directory))
 endif
 
 " }}}
-" Color Scheme {{{
+" Color Scheme and Font {{{
 
 syntax on " Enable syntax highlighting
 
 colorscheme desert
+
+if has("gui_running")
+
+  " Font Switching Binds {
+ if has('win32') || has('win64')
+   silent! set guifontwide=MingLiU:h11:cANSI
+  endif
+endif
 
 " }}}
 " Status Line {{{
@@ -574,60 +560,6 @@ function! ToggleNumbers()
     setlocal number
     setlocal relativenumber
   endif
-endfunction
-
-
-
-function! ToggleFonts()
-
-  if has('win32') || has('win64')
-    if &guifont ==? 'Consolas:h11:cANSI'
-      set guifont=Source_Code_Pro:h11:cANSI
-    elseif &guifont ==? 'Source_Code_Pro:h11:cANSI'
-      set guifont=Inconsolata:h11:cANSI
-    elseif &guifont ==? 'Inconsolata:h11:cANSI'
-      set guifont=ProFontWindows:h11:cANSI
-    elseif &guifont ==? 'ProFontWindows:h11:cANSI'
-      silent! set guifont=Consolas:h11:cANSI
-    elseif &guifont ==? 'Consolas:h11:cANSI'
-      set guifont=ProFontWindows:h11:cANSI
-    else
-      set guifont=Source_Code_Pro:h11:cANSI
-    endif
-  elseif has('unix')
-    " My favorite editor fonts
-    let s:myfonts = ['Source Code Pro Medium 11']
-    call add(s:myfonts, 'Ubuntu Mono 11')
-    call add(s:myfonts, 'Monospace 11')
-
-    let s:at = -1
-    let s:index = 0
-    let s:size = len(s:myfonts)
-
-    while s:index < s:size
-      if &guifont==?s:myfonts[s:index]
-        let s:at = s:index
-        break
-      endif
-      let s:index += 1
-    endwhile
-
-    if s:index >= s:size
-      let s:at = 0
-    else
-      let s:at += 1
-    endif
-
-    " echo s:at
-    if s:at >= s:size
-      let s:at = 0
-    endif
-
-    let &guifont=get(s:myfonts, s:at)
-  endif
-
-  echom "guifont " . &guifont . " is set."
-
 endfunction
 
 " }}}
@@ -731,8 +663,7 @@ let g:sqlutil_cmd_terminator = "\ngo\n"
 " }}}
 
 " restore-view {{{
-
-"let g:loaded_restore_view = 1
+" let g:loaded_restore_view = 1
 
 set viewoptions=cursor,folds,slash,unix
 " let g:skipview_files = ['*\.vim']
@@ -821,6 +752,53 @@ augroup END
 " }}}
 " }}}
 " Helper Functions {{{
+
+function! ToggleFonts()
+
+  " My favorite editor fonts
+  if has('win32') || has('win64')
+    let s:myfonts = ['Source_Code_Pro:h11:cANSI']
+    call add(s:myfonts, 'Inconsolata:h11:cANSI')
+    call add(s:myfonts, 'ProFontWindows:h11:cANSI')
+    call add(s:myfonts, 'Consolas:h11:cANSI')
+  elseif has('unix')
+    let s:myfonts = ['Source Code Pro Medium 11']
+    call add(s:myfonts, 'Ubuntu Mono 11')
+    call add(s:myfonts, 'Monospace 11')
+  endif
+
+  let s:at = -1
+  let s:index = 0
+  let s:size = len(s:myfonts)
+
+  if s:size<=0
+    return
+  endif
+
+  while s:index < s:size
+    if &guifont==?s:myfonts[s:index]
+      let s:at = s:index
+      break
+    endif
+    let s:index += 1
+  endwhile
+
+  if s:index >= s:size
+    let s:at = 0
+  else
+    let s:at += 1
+  endif
+
+  " echo s:at
+  if s:at >= s:size
+    let s:at = 0
+  endif
+
+  let &guifont=get(s:myfonts, s:at)
+
+  " echom "guifont " . &guifont . " is set."
+
+endfunction
 
 " Reference: https://gist.github.com/rkumar/4166881
 "autocmd! BufWritePre * :call s:timestamp()
