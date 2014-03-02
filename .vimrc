@@ -349,11 +349,13 @@ if has("gui_running")
 
   " Font Switching Binds {
   if has('unix')
-    if (match(system("cat /etc/issue"), "Ubuntu") != -1)
-      set guifont=Ubuntu\ Mono\ 11
-    else
-      set guifont=Monospace\ 11
-    endif
+
+    set guifont=Source\ Code\ Pro\ Medium\ 11
+    " if (match(system("cat /etc/issue"), "Ubuntu") != -1)
+    "   set guifont=Ubuntu\ Mono\ 11
+    " else
+    "   set guifont=Monospace\ 11
+    " endif
   endif
   if has('win32') || has('win64')
 
@@ -574,6 +576,8 @@ function! ToggleNumbers()
   endif
 endfunction
 
+
+
 function! ToggleFonts()
 
   if has('win32') || has('win64')
@@ -590,9 +594,39 @@ function! ToggleFonts()
     else
       set guifont=Source_Code_Pro:h11:cANSI
     endif
+  elseif has('unix')
+    " My favorite editor fonts
+    let s:myfonts = ['Source Code Pro Medium 11']
+    call add(s:myfonts, 'Ubuntu Mono 11')
+    call add(s:myfonts, 'Monospace 11')
+
+    let s:at = -1
+    let s:index = 0
+    let s:size = len(s:myfonts)
+
+    while s:index < s:size
+      if &guifont==?s:myfonts[s:index]
+        let s:at = s:index
+        break
+      endif
+      let s:index += 1
+    endwhile
+
+    if s:index >= s:size
+      let s:at = 0
+    else
+      let s:at += 1
+    endif
+
+    " echo s:at
+    if s:at >= s:size
+      let s:at = 0
+    endif
+
+    let &guifont=get(s:myfonts, s:at)
   endif
 
-  echo &guifont
+  echom "guifont " . &guifont . " is set."
 
 endfunction
 
@@ -713,6 +747,15 @@ let g:unite_source_history_yank_enable = 1
 
 " Prevent from loading
 " let loaded_showmarks = 1
+
+" }}}
+
+" Utl {{{
+
+if has("unix")
+  let utl_cfg_hdl_scm_http="silent !firefox -remote 'ping()' && firefox -remote 'openURL( %u )' || firefox '%u#%f' &"
+
+endif
 
 " }}}
 
@@ -845,16 +888,6 @@ nnoremap <silent> [toggle]w :<C-u>setl wrap!<CR>:setl wrap?<CR>
 nnoremap <silent> [toggle]n :call ToggleNumbers()<CR><CR>
 nnoremap <silent> [toggle]c :call NextColorScheme()<CR>
 nnoremap <silent> [toggle]f :call ToggleFonts()<CR>
-
-" Next Line Number
-" nmap <leader>nn :call ToggleNumbers()<CR><CR>
-
-" Next Color Scheme
-" nmap <leader>nc :call NextColorScheme()<CR>
-
-" Next Font
-"nmap <leader>nf :call ToggleFonts()<CR>
-
 
 " Quick file editing
 nnoremap <leader>ffv :e $MYVIMRC<cr>
