@@ -54,7 +54,6 @@ NeoBundle 'flazz/vim-colorschemes' " Tons of color schemes
 NeoBundle 'vim-scripts/changeColorScheme.vim' " Randomize color scheme
 NeoBundle 'vim-scripts/mru.vim.git' " Save file history
 NeoBundle 'bling/vim-airline' " Status line
-NeoBundle 'tsaleh/vim-matchit'
 NeoBundle 'tomtom/tcomment_vim'
 NeoBundle 'godlygeek/tabular'
 NeoBundle 't9md/vim-quickhl'
@@ -63,18 +62,21 @@ NeoBundle 'mattn/emmet-vim'
 NeoBundle 'vim-scripts/DrawIt'
 NeoBundle 'tpope/vim-abolish'
 NeoBundle 'tpope/vim-surround'
+NeoBundle 'vim-scripts/YankRing.vim'
+
+" filetytpes
+NeoBundleLazy 'tpope/vim-git', {'autoload': { 'filetypes': 'git' }}
+NeoBundleLazy 'tpope/vim-markdown', {'autoload': { 'filetypes': 'markdown' }}
+NeoBundleLazy 'groenewege/vim-less.git', {'autoload': { 'filetypes': 'less' }}
 
 NeoBundleLazy "vim-scripts/ShowMarks", {
-  \ "autoload": {
-  \ "commands": ["ShowMarksPlaceMark", "ShowMarksToggle"],
-  \ }}
+      \ "autoload": {
+      \ "commands": ["ShowMarksPlaceMark", "ShowMarksToggle"],
+      \ }}
 let s:hooks = neobundle#get_hooks("ShowMarks")
 function! s:hooks.on_source(bundle)
-  let showmarks_text = '>>'
-  let showmarks_textupper = '>>'
-  let showmarks_textother = '>>'
-" ignore ShowMarks on buffer type of
-" Help, Non-modifiable, Preview, Quickfix
+  " ignore ShowMarks on buffer type of
+  " Help, Non-modifiable, Preview, Quickfix
   let showmarks_ignore_type = 'hmpq'
 endfunction
 
@@ -82,43 +84,67 @@ NeoBundle 'vim-scripts/restore_view.vim' " Remember file cursor and folding posi
 
 NeoBundle 'SirVer/ultisnips' " Code Snippet
 
-NeoBundle 'tpope/vim-fugitive' " Git
+" Git
+NeoBundle 'tpope/vim-fugitive'
+NeoBundleLazy "gregsexton/gitv", {
+      \ "depends": ["tpope/vim-fugitive"],
+      \ "autoload": {
+      \ "commands": ["Gitv"],
+      \ }}
 
 NeoBundleLazy "Shougo/unite.vim", {
-  \ "autoload": {
-  \ "commands": ["Unite", "UniteWithBufferDir"]
-  \ }}
-let s:hooks = neobundle#get_hooks("unite.vim")
-function! s:hooks.on_source(bundle)
-" start unite in insert mode
-  let g:unite_enable_start_insert = 1
-" use vimfiler to open directory
-  call unite#custom_default_action("source/bookmark/directory", "vimfiler")
-  call unite#custom_default_action("directory", "vimfiler")
-  call unite#custom_default_action("directory_mru", "vimfiler")
-  " autocmd MyAutoCmd FileType unite call s:unite_settings()
-  " function! s:unite_settings()
-  "   imap <buffer> <Esc><Esc> <Plug>(unite_exit)
-  "   nmap <buffer> <Esc> <Plug>(unite_exit)
-  "   nmap <buffer> <C-n> <Plug>(unite_select_next_line)
-  "   nmap <buffer> <C-p> <Plug>(unite_select_previous_line)
-  " endfunction
-endfunction
+      \ "autoload": {
+      \ "commands": ["Unite", "UniteWithBufferDir"]
+      \ }}
+" let s:hooks = neobundle#get_hooks("unite.vim")
+" function! s:hooks.on_source(bundle)
+" " start unite in insert mode
+"   let g:unite_enable_start_insert = 1
+" " use vimfiler to open directory
+"   call unite#custom_default_action("source/bookmark/directory", "vimfiler")
+"   call unite#custom_default_action("directory", "vimfiler")
+"   call unite#custom_default_action("directory_mru", "vimfiler")
+"   autocmd MyAutoCmd FileType unite call s:unite_settings()
+"   function! s:unite_settings()
+"     imap <buffer> <Esc><Esc> <Plug>(unite_exit)
+"     nmap <buffer> <Esc> <Plug>(unite_exit)
+"     nmap <buffer> <C-n> <Plug>(unite_select_next_line)
+"     nmap <buffer> <C-p> <Plug>(unite_select_previous_line)
+"   endfunction
+" endfunction
 NeoBundleLazy 'h1mesuke/unite-outline', {
-  \ "autoload": {
-  \ "unite_sources": ["outline"],
-  \ }}
+      \ "autoload": {
+      \ "unite_sources": ["outline"],
+      \ }}
 NeoBundle 'Shougo/neomru.vim' " Prefer integration with unite
 NeoBundle 'moznion/unite-git-conflict.vim'
 
 " File Explorer
 NeoBundleLazy "Shougo/vimfiler", {
-  \ "depends": ["Shougo/unite.vim"],
-  \ "autoload": {
-  \ "commands": ["VimFilerTab", "VimFiler", "VimFilerExplorer"],
-  \ "mappings": ['<Plug>(vimfiler_switch)'],
-  \ "explorer": 1,
-  \ }} " Use unite bookmark to track specific issues
+      \ "depends": ["Shougo/unite.vim"],
+      \ "autoload": {
+      \ "commands": ["VimFilerTab", "VimFiler", "VimFilerExplorer"],
+      \ "mappings": ['<Plug>(vimfiler_switch)'],
+      \ "explorer": 1,
+      \ }} " Use unite bookmark to track specific issues
+" " close vimfiler automatically when there are only vimfiler open
+" autocmd MyAutoCmd BufEnter * if (winnr('$') == 1 && &filetype ==# 'vimfiler') | q | endif
+" let s:hooks = neobundle#get_hooks("vimfiler")
+" function! s:hooks.on_source(bundle)
+"   let g:vimfiler_as_default_explorer = 1
+"   let g:vimfiler_enable_auto_cd = 1
+"
+" " vimfiler specific key mappings
+"   autocmd MyAutoCmd FileType vimfiler call s:vimfiler_settings()
+"   function! s:vimfiler_settings()
+" " ^^ to go up
+"     nmap <buffer> ^^ <Plug>(vimfiler_switch_to_parent_directory)
+" " use R to refresh
+"     nmap <buffer> R <Plug>(vimfiler_redraw_screen)
+" " overwrite C-l
+"     nmap <buffer> <C-l> <C-w>l
+"   endfunction
+" endfunction
 NeoBundle 'scrooloose/nerdtree' " Bookmark well on directories
 
 " SQL
@@ -141,9 +167,86 @@ NeoBundle 'mattn/calendar-vim' " Required by VimOrganizer
 NeoBundle 'vim-scripts/utl.vim' " Optional for VimOrganizer
 NeoBundle 'chrisbra/NrrwRgn' " Optional for VimOrganizer
 
-filetype plugin indent on " Enable filetype plugins
+" NeoBundle "thinca/vim-template"
+" autocmd MyAutoCmd User plugin-template-loaded call s:template_keywords()
+" function! s:template_keywords()
+"   silent! %s/<+DATE+>/\=strftime('%Y-%m-%d')/g
+"   silent! %s/<+FILENAME+>/\=expand('%')/g
+" endfunction
+" autocmd MyAutoCmd User plugin-template-loaded
+"   \ if search('<+CURSOR+>')
+"   \ | silent! execute 'normal! "_da>'
+"   \ | endif
+
+" NeoBundleLazy "mattn/gist-vim", {
+"   \ "depends": ["mattn/webapi-vim"],
+"   \ "autoload": {
+"   \ "commands": ["Gist"],
+"   \ }}
+
+" NeoBundleLazy "sjl/gundo.vim", {
+"   \ "autoload": {
+"   \ "commands": ['GundoToggle'],
+"   \}}
+" nnoremap <Leader>g :GundoToggle<CR>
+
+" vim-quickrun
+" NeoBundleLazy "thinca/vim-quickrun", {
+"   \ "autoload": {
+"   \ "mappings": [['nxo', '<Plug>(quickrun)']]
+"   \ }}
+" nmap <Leader>r <Plug>(quickrun)
+" let s:hooks = neobundle#get_hooks("vim-quickrun")
+" function! s:hooks.on_source(bundle)
+"   let g:quickrun_config = {
+"     \ "*": {"runmode": "async:remote:vimproc"},
+"     \ "_": {"runner": "vimproc", "runner/vimproc/updatetime": 60},
+"     \ }
+"   let g:quickrun_config['markdown'] = {
+"     \ 'outputter': 'browser',
+"     \ }
+" " Syntax Check
+"   let g:quickrun_config['syntax/mast'] = {
+"         \ 'runner': 'vimproc',
+"         \ 'command': 'mast',
+"         \ 'cmdopt': '-c',
+"         \ 'exec': '%c %o %s:p',
+"         \}
+"   autocmd MyAutoCmd BufWritePost *.sin QuickRun -outputer quickfix -type syntax/mast
+" endfunction
+
+" NeoBundleLazy 'majutsushi/tagbar', {
+"   \ "autload": {
+"   \ "commands": ["TagbarToggle"],
+"   \ },
+"   \ "build": {
+"   \ "mac": "brew install ctags",
+"   \ }}
+" nmap <Leader>t :TagbarToggle<CR>
+
+" NeoBundle "scrooloose/syntastic", {
+"   \ "build": {
+"   \ "mac": ["pip install pyflake", "npm -g install coffeelint"],
+"   \ "unix": ["pip install pyflake", "npm -g install coffeelint"],
+"   \ }}
+" let g:syntastic_mode_map = {
+"       \ 'mode': 'active',
+"       \ 'passive_filetypes': ['python']
+"       \ }
+
+" NeoBundleLazy 'Shougo/vimshell.git', {
+"       \ "autoload": {
+"       \ "commands": ["VimShell"],
+"       \ }}
+" nnoremap <silent> <Leader>is :VimShell<CR>
+" nnoremap <silent> <Leader>ipy :VimShellInteractive python3<CR>
+" vmap <silent> <Leader>ss: VimShellSendString
 
 NeoBundleCheck
+
+unlet s:hooks
+
+filetype plugin indent on " Enable filetype plugins
 
 " }}}
 " General Options {{{
@@ -161,7 +264,7 @@ let maplocalleader = "'"
 " Share windows clipboard
 " Reference: http://vimcasts.org/episodes/accessing-the-system-clipboard-from-vim/
 if has("clipboard")
-    set clipboard+=unnamed,unnamedplus
+  set clipboard+=unnamed,unnamedplus
 endif
 
 " Set 10 lines to the cursor - when moving vertically using j/k
@@ -171,12 +274,12 @@ set scrolloff=10
 set shortmess=aOstT
 
 if has('cmdline_info')
-    "Always show current position
-    set ruler
-    set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%)
+  "Always show current position
+  set ruler
+  set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%)
 
-    " Show the command being typed
-    set showcmd
+  " Show the command being typed
+  set showcmd
 endif
 
 " Height of the command bar
@@ -206,6 +309,9 @@ set lazyredraw
 " For regular expressions turn magic on
 "^"set magic
 
+
+set ttyfast
+
 " Show matching brackets when text indicator is over them
 set showmatch
 " How many tenths of a second to blink when matching brackets
@@ -223,32 +329,32 @@ set report=0
 " Set extra options when running in GUI mode
 if has("gui_running")
 
-    set guioptions=ceTm
-    "              ||||
-    "              |||+-- Menu bar is present
-    "              ||+-- Include Toolbar
-    "              |+-- Use simple dialogs rather than pop-ups
-    "              +-- Use console dialogs not popup dialogs for simple choice
+  set guioptions=ceTm
+  "              ||||
+  "              |||+-- Menu bar is present
+  "              ||+-- Include Toolbar
+  "              |+-- Use simple dialogs rather than pop-ups
+  "              +-- Use console dialogs not popup dialogs for simple choice
 
-    set t_Co=256
+  set t_Co=256
 
-    set guitablabel=%M\ %t
+  set guitablabel=%M\ %t
 
-    " Hide the mouse cursor when typing
-    set mousehide
+  " Hide the mouse cursor when typing
+  set mousehide
 
-    set columns=120
+  set columns=120
 
-    " set lines=50
+  " set lines=50
 
-    " Font Switching Binds {
-    if has('unix')
-        if (match(system("cat /etc/issue"), "Ubuntu") != -1)
-                set guifont=Ubuntu\ Mono\ 11
-            else
-                set guifont=Monospace\ 11
-        endif
+  " Font Switching Binds {
+  if has('unix')
+    if (match(system("cat /etc/issue"), "Ubuntu") != -1)
+      set guifont=Ubuntu\ Mono\ 11
+    else
+      set guifont=Monospace\ 11
     endif
+  endif
   if has('win32') || has('win64')
 
     " Graceful degration http://stackoverflow.com/a/12856063
@@ -347,7 +453,7 @@ endif
 " }}}
 " Quickfix {{{
 augroup QFixToggle
-"  autocmd!
+  "  autocmd!
   autocmd BufWinEnter quickfix setlocal norelativenumber
 augroup END
 " }}}
@@ -355,9 +461,9 @@ augroup END
 
 " Show cursor only in normal mode
 augroup cline
-    au!
-    au WinLeave,InsertEnter * set nocursorline nocursorcolumn
-    au WinEnter,InsertLeave * set cursorline cursorcolumn
+  au!
+  au WinLeave,InsertEnter * set nocursorline nocursorcolumn
+  au WinEnter,InsertLeave * set cursorline cursorcolumn
 augroup END
 
 "?set nostartofline " leave my cursor where it was
@@ -381,9 +487,9 @@ set smarttab " Be smart when using tabs ;)
 " Reference: http://vimcasts.org/episodes/tabs-and-spaces/
 " If space is prefer over tab, tabstop == softtabstop
 " Set tabstop == softtabstop
-set shiftwidth=4
-set tabstop=4
-set softtabstop=4
+set shiftwidth=2
+set tabstop=2
+set softtabstop=2
 " }}}
 " Backup {{{
 
@@ -397,13 +503,13 @@ set directory=~/.vim/tmp/swap// " List of directory names for the swap file
 
 " Create backup folders if not exists
 if !isdirectory(expand(&undodir))
-    call mkdir(expand(&undodir), "p")
+  call mkdir(expand(&undodir), "p")
 endif
 if !isdirectory(expand(&backupdir))
-    call mkdir(expand(&backupdir), "p")
+  call mkdir(expand(&backupdir), "p")
 endif
 if !isdirectory(expand(&directory))
-    call mkdir(expand(&directory), "p")
+  call mkdir(expand(&directory), "p")
 endif
 
 " }}}
@@ -417,34 +523,34 @@ colorscheme desert
 " Status Line {{{
 " Hidden when vim-airline is active
 if has('statusline')
-    " Always show the status line
-    set laststatus=2 " always show the status line
+  " Always show the status line
+  set laststatus=2 " always show the status line
 
-    " Format the status line
-    set statusline=
-    set statusline +=%3*%n%*                "buffer number
-    set statusline +=%3*%r%*                "readonly flag in square brackets
-    set statusline +=%3*%h%*                "help flag in square brackets
-    set statusline +=%3*%w%*                "preview window flag in square brackets
-    set statusline +=%4*\[%{&ff}%*\]        "file format
-    set statusline +=%4*%y%*                "file type
-    set statusline+=%4*\[%{(&fenc!=''?&fenc:&enc)}      "encoding
-    set statusline+=%4*%{(&bomb?\",BOM\":\"\")}\]       "encoding2
-    set statusline +=%2*%<%F%*              "full path
-    set statusline +=%1*%m%*                "modified flag in square brackets
-    set statusline +=%1*%=                  "seperate between right- and left-aligned
-    set statusline +=%1*%c%V%*              "column number and virtual column number
-    set statusline +=%2*,                   "seperataor
-    set statusline +=%1*%04l%*              "current line
-    set statusline +=%2*/%04L%*             "total lines
-    set statusline +=%2*(%03p%%)%*          "percent through file
-    set statusline +=%1*\ %{v:register}%*   "last register
-    set statusline +=%4*\ 0x%04B\ %*        "character under cursor
+  " Format the status line
+  set statusline=
+  set statusline +=%3*%n%*                "buffer number
+  set statusline +=%3*%r%*                "readonly flag in square brackets
+  set statusline +=%3*%h%*                "help flag in square brackets
+  set statusline +=%3*%w%*                "preview window flag in square brackets
+  set statusline +=%4*\[%{&ff}%*\]        "file format
+  set statusline +=%4*%y%*                "file type
+  set statusline+=%4*\[%{(&fenc!=''?&fenc:&enc)}      "encoding
+  set statusline+=%4*%{(&bomb?\",BOM\":\"\")}\]       "encoding2
+  set statusline +=%2*%<%F%*              "full path
+  set statusline +=%1*%m%*                "modified flag in square brackets
+  set statusline +=%1*%=                  "seperate between right- and left-aligned
+  set statusline +=%1*%c%V%*              "column number and virtual column number
+  set statusline +=%2*,                   "seperataor
+  set statusline +=%1*%04l%*              "current line
+  set statusline +=%2*/%04L%*             "total lines
+  set statusline +=%2*(%03p%%)%*          "percent through file
+  set statusline +=%1*\ %{v:register}%*   "last register
+  set statusline +=%4*\ 0x%04B\ %*        "character under cursor
 
-    hi User1 guifg=#ffff73 guibg=#222222 " gui=bold
-    hi User2 guifg=#67e667 guibg=#222222
-    hi User3 guifg=#ff7373 guibg=#222222
-    hi User4 guifg=#ad66d5 guibg=#222222
+  hi User1 guifg=#ffff73 guibg=#222222 " gui=bold
+  hi User2 guifg=#67e667 guibg=#222222
+  hi User3 guifg=#ff7373 guibg=#222222
+  hi User4 guifg=#ad66d5 guibg=#222222
 
 endif
 
@@ -621,7 +727,7 @@ augroup ft_vim
   au FileType help setlocal textwidth=78
   au BufWinEnter *.txt if &ft == 'help' | wincmd L | endif
   au BufEnter * highlight OverLength ctermbg=darkgrey guibg=#592929
-"  au BufEnter * match OverLength /\%78v.*/
+  "  au BufEnter * match OverLength /\%78v.*/
 augroup END
 
 " }}}
@@ -630,7 +736,7 @@ augroup END
 
 augroup ft_ruby
   au!
-  au Filetype ruby setlocal foldmethod=syntax foldlevel=1 shiftwidth=2
+  au Filetype ruby setlocal foldmethod=syntax foldlevel=1
   au BufRead,BufNewFile Capfile setlocal filetype=ruby
 augroup END
 
@@ -689,7 +795,7 @@ function! s:subst(start, end, pat, rep)
   while lineno <= a:end
     let curline = getline(lineno)
     if match(curline, a:pat) != -1
-    let newline = substitute( curline, a:pat, a:rep, '' )
+      let newline = substitute( curline, a:pat, a:rep, '' )
       if( newline != curline )
         " Only substitute if we made a change
         "silent! undojoin
@@ -712,12 +818,12 @@ func! OpenCWD()
     elseif has("gui_kde")
       !konqueror %:p:h &
     elseif has("gui_gtk") " TODO: test!
-	  if len(expand('%')) == 0
-		!nautilus "%:p:h" &
-	  else
-		!nautilus "%:p" &
-	  endif
-	  " !nautilus %:p:h &
+      if len(expand('%')) == 0
+        !nautilus "%:p:h" &
+      else
+        !nautilus "%:p" &
+      endif
+      " !nautilus %:p:h &
     elseif has("mac") && has("unix") " TODO: test!
       let s:macpath = expand("%:p:h")
       let s:macpath = substitute(s:macpath," ","\\\\ ","g")
@@ -729,14 +835,25 @@ endfunc
 " }}}
 " Key binding {{{
 
+" Toggle
+nnoremap [toggle] <Nop>
+nmap T [toggle]
+nnoremap <silent> [toggle]s :<C-u>setl spell!<CR>:setl spell?<CR>
+nnoremap <silent> [toggle]l :<C-u>setl list!<CR>:setl list?<CR>
+nnoremap <silent> [toggle]t :<C-u>setl expandtab!<CR>:setl expandtab?<CR>
+nnoremap <silent> [toggle]w :<C-u>setl wrap!<CR>:setl wrap?<CR>
+nnoremap <silent> [toggle]n :call ToggleNumbers()<CR><CR>
+nnoremap <silent> [toggle]c :call NextColorScheme()<CR>
+nnoremap <silent> [toggle]f :call ToggleFonts()<CR>
+
 " Next Line Number
-nmap <leader>nn :call ToggleNumbers()<CR><CR>
+" nmap <leader>nn :call ToggleNumbers()<CR><CR>
 
 " Next Color Scheme
-nmap <leader>nc :call NextColorScheme()<CR>
+" nmap <leader>nc :call NextColorScheme()<CR>
 
 " Next Font
-nmap <leader>nf :call ToggleFonts()<CR>
+"nmap <leader>nf :call ToggleFonts()<CR>
 
 
 " Quick file editing
@@ -806,6 +923,14 @@ nnoremap <silent> ugy :<C-u>Unite history/yank<CR>
 
 "VimFiler
 nnoremap <Leader>e :VimFilerExplorer<CR>
+
+" yankround.vim
+" nmap p <Plug>(yankround-p)
+" nmap P <Plug>(yankround-P)
+" nmap gp <Plug>(yankround-gp)
+" nmap gP <Plug>(yankround-gP)
+" nmap <C-p> <Plug>(yankround-prev)
+" nmap <C-n> <Plug>(yankround-next)
 
 " }}}
 
