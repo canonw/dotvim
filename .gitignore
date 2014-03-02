@@ -3,3 +3,6 @@
 
 # Ignore bundle 
 .vim/bundle
+
+# Ignore restore_view.vim
+.vim/view

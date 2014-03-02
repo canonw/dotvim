@@ -1,5 +1,5 @@
 " .vimrc
-" Author: Ken Wong <ken.yui.wong@gmail.com>
+" Author: Ken Wong <ken dot yui dot wong at gmail dot com>
 "
 " Checklist for VIM.  Confirm these exeucutable are installed.
 " 1. git
@@ -15,6 +15,7 @@
 "    - Source Code Pro.  http://sourceforge.net/projects/sourcecodepro.adobe/
 "
 " Give credit where credit is due.
+" https://github.com/mizutomo/dotfiles/blob/master/vimrc
 " http://amix.dk/vim/vimrc.html
 " http://spf13.com/post/perfect-vimrc-vim-config-file
 " https://bitbucket.org/sjl/dotfiles/src/tip/vim/vimrc
@@ -63,14 +64,61 @@ NeoBundle 'vim-scripts/DrawIt'
 NeoBundle 'tpope/vim-abolish'
 NeoBundle 'tpope/vim-surround'
 
+NeoBundleLazy "vim-scripts/ShowMarks", {
+  \ "autoload": {
+  \ "commands": ["ShowMarksPlaceMark", "ShowMarksToggle"],
+  \ }}
+let s:hooks = neobundle#get_hooks("ShowMarks")
+function! s:hooks.on_source(bundle)
+  let showmarks_text = '>>'
+  let showmarks_textupper = '>>'
+  let showmarks_textother = '>>'
+" ignore ShowMarks on buffer type of
+" Help, Non-modifiable, Preview, Quickfix
+  let showmarks_ignore_type = 'hmpq'
+endfunction
+
+NeoBundle 'vim-scripts/restore_view.vim' " Remember file cursor and folding position
+
 NeoBundle 'SirVer/ultisnips' " Code Snippet
 
 NeoBundle 'tpope/vim-fugitive' " Git
-NeoBundle 'Shougo/unite.vim'
+
+NeoBundleLazy "Shougo/unite.vim", {
+  \ "autoload": {
+  \ "commands": ["Unite", "UniteWithBufferDir"]
+  \ }}
+let s:hooks = neobundle#get_hooks("unite.vim")
+function! s:hooks.on_source(bundle)
+" start unite in insert mode
+  let g:unite_enable_start_insert = 1
+" use vimfiler to open directory
+  call unite#custom_default_action("source/bookmark/directory", "vimfiler")
+  call unite#custom_default_action("directory", "vimfiler")
+  call unite#custom_default_action("directory_mru", "vimfiler")
+  " autocmd MyAutoCmd FileType unite call s:unite_settings()
+  " function! s:unite_settings()
+  "   imap <buffer> <Esc><Esc> <Plug>(unite_exit)
+  "   nmap <buffer> <Esc> <Plug>(unite_exit)
+  "   nmap <buffer> <C-n> <Plug>(unite_select_next_line)
+  "   nmap <buffer> <C-p> <Plug>(unite_select_previous_line)
+  " endfunction
+endfunction
+NeoBundleLazy 'h1mesuke/unite-outline', {
+  \ "autoload": {
+  \ "unite_sources": ["outline"],
+  \ }}
 NeoBundle 'Shougo/neomru.vim' " Prefer integration with unite
+NeoBundle 'moznion/unite-git-conflict.vim'
 
 " File Explorer
-NeoBundle 'Shougo/vimfiler.vim' " Use unite bookmark to track specific issues
+NeoBundleLazy "Shougo/vimfiler", {
+  \ "depends": ["Shougo/unite.vim"],
+  \ "autoload": {
+  \ "commands": ["VimFilerTab", "VimFiler", "VimFilerExplorer"],
+  \ "mappings": ['<Plug>(vimfiler_switch)'],
+  \ "explorer": 1,
+  \ }} " Use unite bookmark to track specific issues
 NeoBundle 'scrooloose/nerdtree' " Bookmark well on directories
 
 " SQL
@@ -542,9 +590,28 @@ let g:sqlutil_cmd_terminator = "\ngo\n"
 
 " }}}
 
+" restore-view {{{
+
+"let g:loaded_restore_view = 1
+
+set viewoptions=cursor,folds,slash,unix
+" let g:skipview_files = ['*\.vim']
+
+" }}}
+
+" Unite {{{
+let g:unite_source_history_yank_enable = 1
+" }}}
+
+" ShowMarks {{{
+
+" Prevent from loading
+" let loaded_showmarks = 1
+
+" }}}
+
 " }}}
 " Filetype setting {{{
-
 " VIM {{{
 
 augroup ft_vim
@@ -711,6 +778,34 @@ nmap <leader>x <ESC>:.,+1!xmllint --format --recover - 2>/dev/null<Home><Right>
 
 " Sort properties
 au BufNewFile,BufRead *.less,*.css nnoremap <buffer> <localleader>S ?{<CR>jV/\v^\s*\}?$<CR>k:sort<CR>:noh<CR>
+
+" ShowMarks
+" default key bingings
+" <Leader>mt  - Toggles ShowMarks on and off.
+" <Leader>mo  - Turns ShowMarks on, and displays marks.
+" <Leader>mh  - Clears a mark.
+" <Leader>ma  - Clears all marks.
+" <Leader>mm  - Places the next available mark.
+nnoremap [showmarks] <Nop>
+nmap M [showmarks]
+nnoremap [showmarks]m :ShowMarksPlaceMark<CR>
+nnoremap [showmarks]t :ShowMarksToggle<CR>
+
+" Unite
+nnoremap [unite] <Nop>
+nmap U [unite]
+nnoremap <silent> [unite]f :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
+nnoremap <silent> [unite]b :<C-u>Unite buffer<CR>
+nnoremap <silent> [unite]r :<C-u>Unite register<CR>
+nnoremap <silent> [unite]m :<C-u>Unite file_mru<CR>
+nnoremap <silent> [unite]c :<C-u>Unite bookmark<CR>
+nnoremap <silent> [unite]o :<C-u>Unite outline<CR>
+nnoremap <silent> [unite]t :<C-u>Unite tab<CR>
+nnoremap <silent> [unite]w :<C-u>Unite window<CR>
+nnoremap <silent> ugy :<C-u>Unite history/yank<CR>
+
+"VimFiler
+nnoremap <Leader>e :VimFilerExplorer<CR>
 
 " }}}
 
