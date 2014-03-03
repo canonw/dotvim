@@ -69,6 +69,7 @@ NeoBundleLazy 'tpope/vim-git', {'autoload': { 'filetypes': 'git' }}
 NeoBundleLazy 'tpope/vim-markdown', {'autoload': { 'filetypes': 'markdown' }}
 NeoBundleLazy 'groenewege/vim-less.git', {'autoload': { 'filetypes': 'less' }}
 
+" Display marks
 NeoBundleLazy "vim-scripts/ShowMarks", {
       \ "autoload": {
       \ "commands": ["ShowMarksPlaceMark", "ShowMarksToggle"],
@@ -79,6 +80,54 @@ function! s:hooks.on_source(bundle)
   " Help, Non-modifiable, Preview, Quickfix
   let showmarks_ignore_type = 'hmpq'
 endfunction
+
+" Jog down thought and idea
+" NeoBundle 'glidenote/memolist.vim'
+NeoBundleLazy "glidenote/memolist.vim", {
+      \ "autoload": {
+      \ "commands": ["MemoList", "MemoNew", "MemoGrep"],
+      \ }}
+" memolist.vim {{{
+let s:hooks = neobundle#get_hooks("memolist.vim")
+function! s:hooks.on_source(bundle)
+  let g:memolist_path = "~/memo"
+
+  " let g:memolist_memo_suffix = "txt"
+
+  " date format (default %Y-%m-%d %H:%M)
+  let g:memolist_memo_date = "%Y-%m-%d %H:%M:%S %Z"
+
+  " tags prompt (default 0)
+  let g:memolist_prompt_tags = 1
+
+  " categories prompt (default 0)
+  let g:memolist_prompt_categories = 1
+
+  " use qfixgrep (default 0)
+  let g:memolist_qfixgrep = 1
+
+  " use vimfler (default 0)
+  let g:memolist_vimfiler = 1
+
+  " use arbitrary vimfler option (default -split -winwidth=50)
+  let g:memolist_vimfiler_option = "-split -winwidth=50 -simple"
+
+  " use unite (default 0)
+  let g:memolist_unite = 1
+
+  " use arbitrary unite option (default is empty)
+  let g:memolist_unite_option = "-auto-preview -start-insert"
+
+  " use arbitrary unite source (default is 'file')
+  let g:memolist_unite_source = "file_rec"
+
+  " use template
+  let g:memolist_template_dir_path = "~/.vim/template/memolist"
+
+  " remove filename prefix (default 0)
+  " let g:memolist_filename_prefix_none = 1
+endfunction
+" }}}
 
 if !has('win32') && !has('win64') " TODO: fix Windows view path
   NeoBundle 'vim-scripts/restore_view.vim' " Remember file cursor and folding position
@@ -748,6 +797,7 @@ augroup ft_markdown
   au!
 
   au BufNewFile,BufRead *.m*down setlocal filetype=markdown foldlevel=1
+  au! BufWritePre *.m*down :call s:timestamp()
 
   " Use <localleader>1/2/3 to add headings.
   au Filetype markdown nnoremap <buffer> <localleader>1 yypVr=:redraw<cr>
@@ -812,8 +862,8 @@ endfunction
 " auto-update "Last update: " if present whenever saving file
 " to update timestamp when saving if its in the first 5 lines of a file
 function! s:timestamp()
-  let pat = '\(Last update\s*:\s*\).*'
-  let rep = '\1' . strftime("%Y-%m-%d %H:%M")
+  let pat = '\(updated_at:\s*\).*'
+  let rep = '\1' . strftime("%Y-%m-%d %H:%M:%S %Z")
   call s:subst(1, 5, pat, rep)
 endfunction
 " subst taken from timestamp.vim
@@ -833,6 +883,30 @@ function! s:subst(start, end, pat, rep)
     let lineno = lineno + 1
   endwhile
 endfunction
+
+function! s:GetMyTimeFormat()
+  if has("win32") || has("win64")
+    return "%Y-%m-%d %H:%M:%S " . s:GetTimeZoneOffset()
+  else
+    return "%Y-%m-%d %H:%M:%S %Z"
+  endif
+endfunction
+
+if has("win32") || has("win64")
+  " Windows %z does not offer time zone difference
+  " https://gist.github.com/mattn/1593343
+  let s:reg_path = 'HKLM\System\CurrentControlSet\Control\TimeZoneInformation'
+
+  function! s:GetTimeZoneName()
+    let res = system(printf("reg query %s /v StandardName | findstr REG_SZ", s:reg_path))
+    return split(substitute(res, '\n', '', 'g'), '\s')[2]
+  endfunction
+
+  function! s:GetTimeZoneOffset()
+    let res = system(printf("reg query %s /v Bias | findstr REG_DWORD", s:reg_path))
+    return -(split(res, '[ \t\n]\+')[2] / 60)
+  endfunction
+endif
 
 " Open current file in File Explorer
 " Reference: http://vim.wikia.com/wiki/Open_the_directory_for_the_current_file_in_Windows
@@ -870,7 +944,8 @@ nnoremap <silent> [toggle]s :<C-u>setl spell!<CR>:setl spell?<CR>
 nnoremap <silent> [toggle]l :<C-u>setl list!<CR>:setl list?<CR>
 nnoremap <silent> [toggle]t :<C-u>setl expandtab!<CR>:setl expandtab?<CR>
 nnoremap <silent> [toggle]w :<C-u>setl wrap!<CR>:setl wrap?<CR>
-nnoremap <silent> [toggle]n :call ToggleNumbers()<CR><CR>
+nnoremap <silent> [toggle]m :ShowMarksToggle<CR>
+nnoremap <silent> [toggle]n :call ToggleNumbers()<CR>
 nnoremap <silent> [toggle]c :call NextColorScheme()<CR>:AirlineRefresh<CR>
 nnoremap <silent> [toggle]f :call ToggleFonts()<CR>
 
@@ -942,13 +1017,35 @@ nnoremap <silent> ugy :<C-u>Unite history/yank<CR>
 "VimFiler
 nnoremap <Leader>e :VimFilerExplorer<CR>
 
-" yankround.vim
-" nmap p <Plug>(yankround-p)
-" nmap P <Plug>(yankround-P)
-" nmap gp <Plug>(yankround-gp)
-" nmap gP <Plug>(yankround-gP)
-" nmap <C-p> <Plug>(yankround-prev)
-" nmap <C-n> <Plug>(yankround-next)
+" memolist.vim
+map <Leader>mn  :MemoNew<CR>
+map <Leader>ml  :MemoList<CR>
+  
+  " yankround.vim
+ " nmap p <Plug>(yankround-p)
+  " nmap P <Plug>(yankround-P)
+  " nmap gp <Plug>(yankround-gp)
+ " nmap gP <Plug>(yankround-gP)
+  " nmap <C-p> <Plug>(yankround-prev)
+  " nmap <C-n> <Plug>(yankround-next)
 
-" }}}
+  " }}}
+  
 
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
