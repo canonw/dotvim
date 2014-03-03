@@ -62,7 +62,7 @@ NeoBundle 'mattn/emmet-vim'
 NeoBundle 'vim-scripts/DrawIt'
 NeoBundle 'tpope/vim-abolish'
 NeoBundle 'tpope/vim-surround'
-NeoBundle 'vim-scripts/YankRing.vim'
+" NeoBundle 'vim-scripts/YankRing.vim'
 
 " filetytpes
 NeoBundleLazy 'tpope/vim-git', {'autoload': { 'filetypes': 'git' }}
@@ -98,22 +98,22 @@ NeoBundleLazy "Shougo/unite.vim", {
       \ "autoload": {
       \ "commands": ["Unite", "UniteWithBufferDir"]
       \ }}
-" let s:hooks = neobundle#get_hooks("unite.vim")
-" function! s:hooks.on_source(bundle)
-" " start unite in insert mode
-"   let g:unite_enable_start_insert = 1
-" " use vimfiler to open directory
-"   call unite#custom_default_action("source/bookmark/directory", "vimfiler")
-"   call unite#custom_default_action("directory", "vimfiler")
-"   call unite#custom_default_action("directory_mru", "vimfiler")
-"   autocmd MyAutoCmd FileType unite call s:unite_settings()
-"   function! s:unite_settings()
+let s:hooks = neobundle#get_hooks("unite.vim")
+function! s:hooks.on_source(bundle)
+" start unite in insert mode
+ let g:unite_enable_start_insert = 1
+" use vimfiler to open directory
+"  call unite#custom_default_action("source/bookmark/directory", "vimfiler")
+  call unite#custom_default_action("directory", "vimfiler")
+"  call unite#custom_default_action("directory_mru", "vimfiler")
+"  autocmd MyAutoCmd FileType unite call s:unite_settings()
+"  function! s:unite_settings()
 "     imap <buffer> <Esc><Esc> <Plug>(unite_exit)
 "     nmap <buffer> <Esc> <Plug>(unite_exit)
 "     nmap <buffer> <C-n> <Plug>(unite_select_next_line)
 "     nmap <buffer> <C-p> <Plug>(unite_select_previous_line)
 "   endfunction
-" endfunction
+endfunction
 NeoBundleLazy 'h1mesuke/unite-outline', {
       \ "autoload": {
       \ "unite_sources": ["outline"],
@@ -129,24 +129,26 @@ NeoBundleLazy "Shougo/vimfiler", {
       \ "mappings": ['<Plug>(vimfiler_switch)'],
       \ "explorer": 1,
       \ }} " Use unite bookmark to track specific issues
-" " close vimfiler automatically when there are only vimfiler open
+" close vimfiler automatically when there are only vimfiler open
 " autocmd MyAutoCmd BufEnter * if (winnr('$') == 1 && &filetype ==# 'vimfiler') | q | endif
-" let s:hooks = neobundle#get_hooks("vimfiler")
-" function! s:hooks.on_source(bundle)
-"   let g:vimfiler_as_default_explorer = 1
-"   let g:vimfiler_enable_auto_cd = 1
+let s:hooks = neobundle#get_hooks("vimfiler")
+function! s:hooks.on_source(bundle)
+   let g:vimfiler_as_default_explorer = 1
+   let g:vimfiler_enable_auto_cd = 1
+   let g:vimfiler_ignore_pattern = '^\%(.git\|.DS_Store\)$'
 "
 " " vimfiler specific key mappings
-"   autocmd MyAutoCmd FileType vimfiler call s:vimfiler_settings()
-"   function! s:vimfiler_settings()
+  autocmd MyAutoCmd FileType vimfiler call s:vimfiler_settings()
+  function! s:vimfiler_settings()
 " " ^^ to go up
 "     nmap <buffer> ^^ <Plug>(vimfiler_switch_to_parent_directory)
 " " use R to refresh
 "     nmap <buffer> R <Plug>(vimfiler_redraw_screen)
 " " overwrite C-l
-"     nmap <buffer> <C-l> <C-w>l
-"   endfunction
-" endfunction
+"     nmap <buffer> ^^ <Plug>(vimfiler_switch_to_parent_directory)
+    nmap <buffer> , <Plug>(vimfiler_toggle_visible_dot_files)
+  endfunction
+endfunction
 NeoBundle 'scrooloose/nerdtree' " Bookmark well on directories
 
 " SQL
@@ -245,6 +247,11 @@ NeoBundle 'chrisbra/NrrwRgn' " Optional for VimOrganizer
 " vmap <silent> <Leader>ss: VimShellSendString
 
 NeoBundleCheck
+
+" release autogroup in MyAutoCmd
+augroup MyAutoCmd
+  autocmd!
+augroup END
 
 unlet s:hooks
 
@@ -591,7 +598,7 @@ set wildignore+=*.orig                           " Merge resolution files
 " vim-airline {{{
 
 " Set theme
-let g:airline_theme="molokai"
+" let g:airline_theme="molokai"
 
 " }}}
 
@@ -864,7 +871,7 @@ nnoremap <silent> [toggle]l :<C-u>setl list!<CR>:setl list?<CR>
 nnoremap <silent> [toggle]t :<C-u>setl expandtab!<CR>:setl expandtab?<CR>
 nnoremap <silent> [toggle]w :<C-u>setl wrap!<CR>:setl wrap?<CR>
 nnoremap <silent> [toggle]n :call ToggleNumbers()<CR><CR>
-nnoremap <silent> [toggle]c :call NextColorScheme()<CR>
+nnoremap <silent> [toggle]c :call NextColorScheme()<CR>:AirlineRefresh<CR>
 nnoremap <silent> [toggle]f :call ToggleFonts()<CR>
 
 " Quick file editing

@@ -1,7 +1,9 @@
 " Color Scheme {{{
 
-call RandomColorScheme()
-
 call ToggleFonts()
+
+call RandomColorScheme()
+AirlineRefresh
+
 
 " }}}
