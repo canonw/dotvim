@@ -81,13 +81,11 @@ function! s:hooks.on_source(bundle)
   let showmarks_ignore_type = 'hmpq'
 endfunction
 
-" Jog down thought and idea
-" NeoBundle 'glidenote/memolist.vim'
+" memolist.vim - Jog down thought and idea {{{
 NeoBundleLazy "glidenote/memolist.vim", {
       \ "autoload": {
       \ "commands": ["MemoList", "MemoNew", "MemoGrep"],
       \ }}
-" memolist.vim {{{
 let s:hooks = neobundle#get_hooks("memolist.vim")
 function! s:hooks.on_source(bundle)
   let g:memolist_path = "~/memo"
@@ -129,6 +127,23 @@ function! s:hooks.on_source(bundle)
 endfunction
 " }}}
 
+" required by easytags
+NeoBundle 'xolox/vim-misc'
+
+" easytags.vim - for tagging {{{
+NeoBundle 'xolox/vim-easytags'
+
+" ensure it checks the project specific tags file
+let g:easytags_dynamic_files = 1
+" configure easytags to run ctags after saving the buffer
+let g:easytags_events = ['BufWritePost']
+
+" }}}
+
+" tagbar {{{
+NeoBundle 'majutsushi/tagbar'
+" }}}
+
 if !has('win32') && !has('win64') " TODO: fix Windows view path
   NeoBundle 'vim-scripts/restore_view.vim' " Remember file cursor and folding position
 endif
@@ -143,6 +158,7 @@ NeoBundleLazy "gregsexton/gitv", {
       \ "commands": ["Gitv"],
       \ }}
 
+" NeoBundle "Shougo/unite.vim"
 NeoBundleLazy "Shougo/unite.vim", {
       \ "autoload": {
       \ "commands": ["Unite", "UniteWithBufferDir"]
@@ -267,15 +283,6 @@ NeoBundle 'chrisbra/NrrwRgn' " Optional for VimOrganizer
 "         \}
 "   autocmd MyAutoCmd BufWritePost *.sin QuickRun -outputer quickfix -type syntax/mast
 " endfunction
-
-" NeoBundleLazy 'majutsushi/tagbar', {
-"   \ "autload": {
-"   \ "commands": ["TagbarToggle"],
-"   \ },
-"   \ "build": {
-"   \ "mac": "brew install ctags",
-"   \ }}
-" nmap <Leader>t :TagbarToggle<CR>
 
 " NeoBundle "scrooloose/syntastic", {
 "   \ "build": {
@@ -820,6 +827,7 @@ function! ToggleFonts()
     call add(s:myfonts, 'Consolas:h11:cANSI')
   elseif has('unix')
     let s:myfonts = ['Source Code Pro Medium 11']
+    call add(s:myfonts, 'DejaVu Sans Mono 11')
     call add(s:myfonts, 'Ubuntu Mono 11')
     call add(s:myfonts, 'Monospace 11')
   endif
@@ -943,6 +951,7 @@ nmap T [toggle]
 nnoremap <silent> [toggle]s :<C-u>setl spell!<CR>:setl spell?<CR>
 nnoremap <silent> [toggle]l :<C-u>setl list!<CR>:setl list?<CR>
 nnoremap <silent> [toggle]t :<C-u>setl expandtab!<CR>:setl expandtab?<CR>
+nnoremap <silent> [toggle]T :TagbarToggle<CR>
 nnoremap <silent> [toggle]w :<C-u>setl wrap!<CR>:setl wrap?<CR>
 nnoremap <silent> [toggle]m :ShowMarksToggle<CR>
 nnoremap <silent> [toggle]n :call ToggleNumbers()<CR>
@@ -1020,32 +1029,15 @@ nnoremap <Leader>e :VimFilerExplorer<CR>
 " memolist.vim
 map <Leader>mn  :MemoNew<CR>
 map <Leader>ml  :MemoList<CR>
-  
-  " yankround.vim
- " nmap p <Plug>(yankround-p)
-  " nmap P <Plug>(yankround-P)
-  " nmap gp <Plug>(yankround-gp)
- " nmap gP <Plug>(yankround-gP)
-  " nmap <C-p> <Plug>(yankround-prev)
-  " nmap <C-n> <Plug>(yankround-next)
 
-  " }}}
-  
+" yankround.vim
+" nmap p <Plug>(yankround-p)
+" nmap P <Plug>(yankround-P)
+" nmap gp <Plug>(yankround-gp)
+" nmap gP <Plug>(yankround-gP)
+" nmap <C-p> <Plug>(yankround-prev)
+" nmap <C-n> <Plug>(yankround-next)
 
-  
-  
+" }}}
 
-  
-  
 
-  
-  
-
-  
-  
-
-  
-  
-
-  
-  
