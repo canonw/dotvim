@@ -144,11 +144,31 @@ let g:easytags_events = ['BufWritePost']
 NeoBundle 'majutsushi/tagbar'
 " }}}
 
+" required by SnipMate
+" NeoBundle 'marcweber/vim-addon-mw-utils'
+" NeoBundle 'tomtom/tlib_vim'
+
+" SnipMate {{{
+
+" NeoBundle 'garbas/vim-snipmate'
+" }}}
+
+" required by Neosnippet for context-type feature
+NeoBundle 'Shougo/context_filetype.vim'
+
+" Neosnippet {{{
+NeoBundle 'Shougo/neosnippet.vim'
+
+" Custom directory
+let g:neosnippet#snippets_directory='~/.vim/neosnippets'
+" }}}
+
+
 if !has('win32') && !has('win64') " TODO: fix Windows view path
   NeoBundle 'vim-scripts/restore_view.vim' " Remember file cursor and folding position
 endif
 
-NeoBundle 'SirVer/ultisnips' " Code Snippet
+" NeoBundle 'SirVer/ultisnips' " Code Snippet
 
 " Git
 NeoBundle 'tpope/vim-fugitive'
@@ -165,19 +185,19 @@ NeoBundleLazy "Shougo/unite.vim", {
       \ }}
 let s:hooks = neobundle#get_hooks("unite.vim")
 function! s:hooks.on_source(bundle)
-" start unite in insert mode
- let g:unite_enable_start_insert = 1
-" use vimfiler to open directory
-"  call unite#custom_default_action("source/bookmark/directory", "vimfiler")
+  " start unite in insert mode
+  let g:unite_enable_start_insert = 1
+  " use vimfiler to open directory
+  "  call unite#custom_default_action("source/bookmark/directory", "vimfiler")
   call unite#custom_default_action("directory", "vimfiler")
-"  call unite#custom_default_action("directory_mru", "vimfiler")
-"  autocmd MyAutoCmd FileType unite call s:unite_settings()
-"  function! s:unite_settings()
-"     imap <buffer> <Esc><Esc> <Plug>(unite_exit)
-"     nmap <buffer> <Esc> <Plug>(unite_exit)
-"     nmap <buffer> <C-n> <Plug>(unite_select_next_line)
-"     nmap <buffer> <C-p> <Plug>(unite_select_previous_line)
-"   endfunction
+  "  call unite#custom_default_action("directory_mru", "vimfiler")
+  "  autocmd MyAutoCmd FileType unite call s:unite_settings()
+  "  function! s:unite_settings()
+  "     imap <buffer> <Esc><Esc> <Plug>(unite_exit)
+  "     nmap <buffer> <Esc> <Plug>(unite_exit)
+  "     nmap <buffer> <C-n> <Plug>(unite_select_next_line)
+  "     nmap <buffer> <C-p> <Plug>(unite_select_previous_line)
+  "   endfunction
 endfunction
 NeoBundleLazy 'h1mesuke/unite-outline', {
       \ "autoload": {
@@ -198,19 +218,19 @@ NeoBundleLazy "Shougo/vimfiler", {
 " autocmd MyAutoCmd BufEnter * if (winnr('$') == 1 && &filetype ==# 'vimfiler') | q | endif
 let s:hooks = neobundle#get_hooks("vimfiler")
 function! s:hooks.on_source(bundle)
-   let g:vimfiler_as_default_explorer = 1
-   let g:vimfiler_enable_auto_cd = 1
-   let g:vimfiler_ignore_pattern = '^\%(.git\|.DS_Store\)$'
-"
-" " vimfiler specific key mappings
+  let g:vimfiler_as_default_explorer = 1
+  let g:vimfiler_enable_auto_cd = 1
+  let g:vimfiler_ignore_pattern = '^\%(.git\|.DS_Store\)$'
+  "
+  " " vimfiler specific key mappings
   autocmd MyAutoCmd FileType vimfiler call s:vimfiler_settings()
   function! s:vimfiler_settings()
-" " ^^ to go up
-"     nmap <buffer> ^^ <Plug>(vimfiler_switch_to_parent_directory)
-" " use R to refresh
-"     nmap <buffer> R <Plug>(vimfiler_redraw_screen)
-" " overwrite C-l
-"     nmap <buffer> ^^ <Plug>(vimfiler_switch_to_parent_directory)
+    " " ^^ to go up
+    "     nmap <buffer> ^^ <Plug>(vimfiler_switch_to_parent_directory)
+    " " use R to refresh
+    "     nmap <buffer> R <Plug>(vimfiler_redraw_screen)
+    " " overwrite C-l
+    "     nmap <buffer> ^^ <Plug>(vimfiler_switch_to_parent_directory)
     nmap <buffer> , <Plug>(vimfiler_toggle_visible_dot_files)
   endfunction
 endfunction
@@ -565,8 +585,8 @@ colorscheme desert
 if has("gui_running")
 
   " Font Switching Binds {
- if has('win32') || has('win64')
-   silent! set guifontwide=MingLiU:h11:cANSI
+  if has('win32') || has('win64')
+    silent! set guifontwide=MingLiU:h11:cANSI
   endif
 endif
 
@@ -1029,6 +1049,19 @@ nnoremap <Leader>e :VimFilerExplorer<CR>
 " memolist.vim
 map <Leader>mn  :MemoNew<CR>
 map <Leader>ml  :MemoList<CR>
+
+" Neosnippet
+imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+xmap <C-k>     <Plug>(neosnippet_expand_target)
+xmap <C-l>     <Plug>(neosnippet_start_unite_snippet_target)
+" For snippet_complete marker.
+if has('conceal')
+  set conceallevel=2 concealcursor=i
+endif
+" Enable snipMate compatibility feature.
+" let g:neosnippet#enable_snipmate_compatibility = 1
+
 
 " yankround.vim
 " nmap p <Plug>(yankround-p)
