@@ -13,6 +13,7 @@
 "    - Inconsolata.  http://www.fontsquirrel.com/fonts/Inconsolata
 "    - ProFont.  http://tobiasjung.name/profont/
 "    - Source Code Pro.  http://sourceforge.net/projects/sourcecodepro.adobe/
+"    - Anonymous Pro
 "
 " Give credit where credit is due.
 " https://github.com/mizutomo/dotfiles/blob/master/vimrc
@@ -20,6 +21,9 @@
 " http://spf13.com/post/perfect-vimrc-vim-config-file
 " https://bitbucket.org/sjl/dotfiles/src/tip/vim/vimrc
 " http://www.pythonclub.org/vim/gui-font
+"
+" Snippet respository
+" https://github.com/Shougo/neosnippet-snippets
 
 " Preamble ---------------------------------------------------------------- {{{
 
@@ -69,7 +73,7 @@ NeoBundleLazy 'tpope/vim-git', {'autoload': { 'filetypes': 'git' }}
 NeoBundleLazy 'tpope/vim-markdown', {'autoload': { 'filetypes': 'markdown' }}
 NeoBundleLazy 'groenewege/vim-less.git', {'autoload': { 'filetypes': 'less' }}
 
-" Display marks
+" ShowMarks - Display marks {{{
 NeoBundleLazy "vim-scripts/ShowMarks", {
       \ "autoload": {
       \ "commands": ["ShowMarksPlaceMark", "ShowMarksToggle"],
@@ -80,6 +84,7 @@ function! s:hooks.on_source(bundle)
   " Help, Non-modifiable, Preview, Quickfix
   let showmarks_ignore_type = 'hmpq'
 endfunction
+" }}}
 
 " memolist.vim - Jog down thought and idea {{{
 NeoBundleLazy "glidenote/memolist.vim", {
@@ -163,6 +168,38 @@ NeoBundle 'Shougo/neosnippet.vim'
 let g:neosnippet#snippets_directory='~/.vim/neosnippets'
 " }}}
 
+" neocomplcache {{{
+NeoBundle 'Shougo/neocomplcache.vim'
+
+" Disable AutoComplPop.
+let g:acp_enableAtStartup = 0
+" Use neocomplcache.
+let g:neocomplcache_enable_at_startup = 1
+" Use smartcase.
+let g:neocomplcache_enable_smart_case = 1
+" Set minimum syntax keyword length.
+let g:neocomplcache_min_syntax_length = 3
+let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
+
+" Enable heavy features.
+" Use camel case completion.
+"let g:neocomplcache_enable_camel_case_completion = 1
+" Use underbar completion.
+"let g:neocomplcache_enable_underbar_completion = 1
+
+" Define dictionary.
+let g:neocomplcache_dictionary_filetype_lists = {
+    \ 'default' : '',
+    \ 'vimshell' : $HOME.'/.vimshell_hist',
+    \ 'scheme' : $HOME.'/.gosh_completions'
+        \ }
+
+" Define keyword.
+if !exists('g:neocomplcache_keyword_patterns')
+    let g:neocomplcache_keyword_patterns = {}
+endif
+let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
+" }}}
 
 if !has('win32') && !has('win64') " TODO: fix Windows view path
   NeoBundle 'vim-scripts/restore_view.vim' " Remember file cursor and folding position
@@ -446,13 +483,15 @@ set autochdir " always switch to the current file directory
 " 
 "     " CTRL-X CTRL-O Omni completion
 "     autocmd FileType python set omnifunc=pythoncomplete#Complete
-"     autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
-"     autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
-"     autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
+"     autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+"     autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+"     autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 "     autocmd FileType php set omnifunc=phpcomplete#CompletePHP
 "     autocmd FileType c set omnifunc=ccomplete#Complete
 "     "?autocmd FileType sql set omnifunc=sqlcomplete#Complete
-" 
+"     autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+"     autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+
 "   " Reset file type
 "   " Reference: http://stackoverflow.com/questions/8413781/automatically-set-multiple-file-types-in-filetype-if-a-file-has-multiple-exten
 "     " autocmd BufNewFile,BufRead web.config setlocal filetype=xml
@@ -847,6 +886,7 @@ function! ToggleFonts()
     call add(s:myfonts, 'Consolas:h11:cANSI')
   elseif has('unix')
     let s:myfonts = ['Source Code Pro Medium 11']
+    call add(s:myfonts, 'Anonymous Pro 11')
     call add(s:myfonts, 'DejaVu Sans Mono 11')
     call add(s:myfonts, 'Ubuntu Mono 11')
     call add(s:myfonts, 'Monospace 11')
@@ -982,7 +1022,7 @@ nnoremap <silent> [toggle]f :call ToggleFonts()<CR>
 nnoremap <leader>ffv :e $MYVIMRC<cr>
 "nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 " Access to snippet
-nnoremap <leader>fds :e ~/.vim/mysnippets<cr>
+nnoremap <leader>fds :VimFiler ~/.vim/neosnippets<cr>
 
 " Open files in various mode
 " Reference: http://vimcasts.org/episodes/the-edit-command/
@@ -1018,17 +1058,14 @@ nmap <leader>x <ESC>:.,+1!xmllint --format --recover - 2>/dev/null<Home><Right>
 " Sort properties
 au BufNewFile,BufRead *.less,*.css nnoremap <buffer> <localleader>S ?{<CR>jV/\v^\s*\}?$<CR>k:sort<CR>:noh<CR>
 
-" ShowMarks
-" default key bingings
-" <Leader>mt  - Toggles ShowMarks on and off.
-" <Leader>mo  - Turns ShowMarks on, and displays marks.
-" <Leader>mh  - Clears a mark.
-" <Leader>ma  - Clears all marks.
-" <Leader>mm  - Places the next available mark.
+" ShowMarks {{{
 nnoremap [showmarks] <Nop>
 nmap M [showmarks]
 nnoremap [showmarks]m :ShowMarksPlaceMark<CR>
 nnoremap [showmarks]t :ShowMarksToggle<CR>
+nnoremap [showmarks]a :ShowMarksClearAll<CR>
+nnoremap [showmarks]h :ShowMarksClearMark<CR>
+" }}}
 
 " Unite
 nnoremap [unite] <Nop>
@@ -1050,7 +1087,7 @@ nnoremap <Leader>e :VimFilerExplorer<CR>
 map <Leader>mn  :MemoNew<CR>
 map <Leader>ml  :MemoList<CR>
 
-" Neosnippet
+" Neosnippet {{{
 imap <C-k>     <Plug>(neosnippet_expand_or_jump)
 smap <C-k>     <Plug>(neosnippet_expand_or_jump)
 xmap <C-k>     <Plug>(neosnippet_expand_target)
@@ -1061,7 +1098,61 @@ if has('conceal')
 endif
 " Enable snipMate compatibility feature.
 " let g:neosnippet#enable_snipmate_compatibility = 1
+" }}}
 
+" neocomplcache - Code completion {{{
+inoremap <expr><C-g>     neocomplcache#undo_completion()
+inoremap <expr><C-l>     neocomplcache#complete_common_string()
+
+" Recommended key-mappings.
+" <CR>: close popup and save indent.
+inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+function! s:my_cr_function()
+  return neocomplcache#smart_close_popup() . "\<CR>"
+  " For no inserting <CR> key.
+  "return pumvisible() ? neocomplcache#close_popup() : "\<CR>"
+endfunction
+" <TAB>: completion.
+inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+" <C-h>, <BS>: close popup and delete backword char.
+inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
+inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
+inoremap <expr><C-y>  neocomplcache#close_popup()
+inoremap <expr><C-e>  neocomplcache#cancel_popup()
+" Close popup by <Space>.
+"inoremap <expr><Space> pumvisible() ? neocomplcache#close_popup() : "\<Space>"
+
+" For cursor moving in insert mode(Not recommended)
+"inoremap <expr><Left>  neocomplcache#close_popup() . "\<Left>"
+"inoremap <expr><Right> neocomplcache#close_popup() . "\<Right>"
+"inoremap <expr><Up>    neocomplcache#close_popup() . "\<Up>"
+"inoremap <expr><Down>  neocomplcache#close_popup() . "\<Down>"
+" Or set this.
+"let g:neocomplcache_enable_cursor_hold_i = 1
+" Or set this.
+"let g:neocomplcache_enable_insert_char_pre = 1
+
+" AutoComplPop like behavior.
+"let g:neocomplcache_enable_auto_select = 1
+
+" Shell like behavior(not recommended).
+"set completeopt+=longest
+"let g:neocomplcache_enable_auto_select = 1
+"let g:neocomplcache_disable_auto_complete = 1
+"inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
+
+" Enable heavy omni completion.
+" if !exists('g:neocomplcache_omni_patterns')
+"   let g:neocomplcache_omni_patterns = {}
+" endif
+" let g:neocomplcache_omni_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
+" let g:neocomplcache_omni_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
+" let g:neocomplcache_omni_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+"
+" For perlomni.vim setting.
+" https://github.com/c9s/perlomni.vim
+" let g:neocomplcache_omni_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
+" }}}
 
 " yankround.vim
 " nmap p <Plug>(yankround-p)
