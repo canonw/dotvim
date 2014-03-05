@@ -68,6 +68,11 @@ NeoBundle 'tpope/vim-abolish'
 NeoBundle 'tpope/vim-surround'
 " NeoBundle 'vim-scripts/YankRing.vim'
 
+if !has('win32') && !has('win64') " Windows not supported
+  NeoBundle 'astashov/vim-ruby-debugger'
+endif
+" astashov/debugger-xml'
+
 " filetytpes
 NeoBundleLazy 'tpope/vim-git', {'autoload': { 'filetypes': 'git' }}
 NeoBundleLazy 'tpope/vim-markdown', {'autoload': { 'filetypes': 'markdown' }}
@@ -165,7 +170,7 @@ NeoBundle 'Shougo/context_filetype.vim'
 NeoBundle 'Shougo/neosnippet.vim'
 
 " Custom directory
-let g:neosnippet#snippets_directory='~/.vim/neosnippets'
+let g:neosnippet#snippets_directory='$HOME/.vim/neosnippets'
 " }}}
 
 " neocomplcache {{{
@@ -569,7 +574,6 @@ augroup cline
 augroup END
 
 "?set nostartofline " leave my cursor where it was
-
 
 " }}}
 " Indent, Tab, Spacing and Wrap {{{
