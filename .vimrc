@@ -67,6 +67,7 @@ NeoBundle 'vim-scripts/DrawIt'
 NeoBundle 'tpope/vim-abolish'
 NeoBundle 'tpope/vim-surround'
 NeoBundle 'salsifis/vim-transpose'
+NeoBundle 'roman/golden-ratio'
 
 " NeoBundle 'vim-scripts/YankRing.vim'
 
@@ -1027,15 +1028,16 @@ endfunc
 " Toggle
 nnoremap [toggle] <Nop>
 nmap T [toggle]
-nnoremap <silent> [toggle]s :<C-u>setl spell!<CR>:setl spell?<CR>
-nnoremap <silent> [toggle]l :<C-u>setl list!<CR>:setl list?<CR>
-nnoremap <silent> [toggle]t :<C-u>setl expandtab!<CR>:setl expandtab?<CR>
 nnoremap <silent> [toggle]T :TagbarToggle<CR>
-nnoremap <silent> [toggle]w :<C-u>setl wrap!<CR>:setl wrap?<CR>
-nnoremap <silent> [toggle]m :ShowMarksToggle<CR>
-nnoremap <silent> [toggle]n :call ToggleNumbers()<CR>
 nnoremap <silent> [toggle]c :call NextColorScheme()<CR>:AirlineRefresh<CR>
 nnoremap <silent> [toggle]f :call ToggleFonts()<CR>
+nnoremap <silent> [toggle]g :GoldenRatioToggle<CR>
+nnoremap <silent> [toggle]l :<C-u>setl list!<CR>:setl list?<CR>
+nnoremap <silent> [toggle]m :ShowMarksToggle<CR>
+nnoremap <silent> [toggle]n :call ToggleNumbers()<CR>
+nnoremap <silent> [toggle]s :<C-u>setl spell!<CR>:setl spell?<CR>
+nnoremap <silent> [toggle]t :<C-u>setl expandtab!<CR>:setl expandtab?<CR>
+nnoremap <silent> [toggle]w :<C-u>setl wrap!<CR>:setl wrap?<CR>
 
 " Quick file editing
 nnoremap <leader>ffv :e $MYVIMRC<cr>
@@ -1182,5 +1184,3 @@ inoremap <expr><C-e>  neocomplcache#cancel_popup()
 " nmap <C-n> <Plug>(yankround-next)
 
 " }}}
-
-
