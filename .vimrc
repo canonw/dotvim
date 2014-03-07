@@ -66,6 +66,8 @@ NeoBundle 'mattn/emmet-vim'
 NeoBundle 'vim-scripts/DrawIt'
 NeoBundle 'tpope/vim-abolish'
 NeoBundle 'tpope/vim-surround'
+NeoBundle 'salsifis/vim-transpose'
+
 " NeoBundle 'vim-scripts/YankRing.vim'
 
 if !has('win32') && !has('win64') " Windows not supported
@@ -137,6 +139,21 @@ function! s:hooks.on_source(bundle)
 endfunction
 " }}}
 
+" required by Gist.vim
+NeoBundle 'mattn/webapi-vim'
+
+" Gist.vim {{{
+NeoBundle 'mattn/gist-vim'
+" Detect filetype
+let g:gist_detect_filetype = 1
+" Open browser after the post
+" let g:gist_open_browser_after_post = 0
+" Show your private gists with ":Gist -l"
+let g:gist_show_privates = 1
+" gist to be private by default
+let g:gist_post_private = 1
+" }}}
+
 " required by easytags
 NeoBundle 'xolox/vim-misc'
 
@@ -154,12 +171,11 @@ let g:easytags_events = ['BufWritePost']
 NeoBundle 'majutsushi/tagbar'
 " }}}
 
-" required by SnipMate
-" NeoBundle 'marcweber/vim-addon-mw-utils'
-" NeoBundle 'tomtom/tlib_vim'
+" NeoBundle 'SirVer/ultisnips' " Code Snippet
 
 " SnipMate {{{
-
+" NeoBundle 'marcweber/vim-addon-mw-utils'
+" NeoBundle 'tomtom/tlib_vim'
 " NeoBundle 'garbas/vim-snipmate'
 " }}}
 
@@ -210,7 +226,6 @@ if !has('win32') && !has('win64') " TODO: fix Windows view path
   NeoBundle 'vim-scripts/restore_view.vim' " Remember file cursor and folding position
 endif
 
-" NeoBundle 'SirVer/ultisnips' " Code Snippet
 
 " Git
 NeoBundle 'tpope/vim-fugitive'
