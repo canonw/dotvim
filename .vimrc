@@ -68,6 +68,7 @@ NeoBundle 'tpope/vim-abolish'
 NeoBundle 'tpope/vim-surround'
 NeoBundle 'salsifis/vim-transpose'
 NeoBundle 'roman/golden-ratio'
+NeoBundle 'szw/vim-maximizer'
 
 " NeoBundle 'vim-scripts/YankRing.vim'
 
