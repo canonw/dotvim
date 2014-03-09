@@ -69,8 +69,15 @@ NeoBundle 'tpope/vim-surround'
 NeoBundle 'salsifis/vim-transpose'
 NeoBundle 'roman/golden-ratio'
 NeoBundle 'szw/vim-maximizer'
+NeoBundle 'terryma/vim-multiple-cursors'
 
 " NeoBundle 'vim-scripts/YankRing.vim'
+    " Default mapping
+"     let g:multi_cursor_next_key='<C-s>'
+"     let g:multi_cursor_prev_key='<C-d>'
+"     let g:multi_cursor_skip_key='<C-f>'
+"     let g:multi_cursor_quit_key='<Esc>'
+"
 
 if !has('win32') && !has('win64') " Windows not supported
   NeoBundle 'astashov/vim-ruby-debugger'
@@ -156,16 +163,18 @@ let g:gist_show_privates = 1
 let g:gist_post_private = 1
 " }}}
 
+" Comment out becuase it may freeze VIM after :w
+" easytags.vim - for tagging {{{
 " required by easytags
 NeoBundle 'xolox/vim-misc'
 
-" easytags.vim - for tagging {{{
 NeoBundle 'xolox/vim-easytags'
-
+" Prevent from loading
+let g:loaded_easytags = 1
 " ensure it checks the project specific tags file
-let g:easytags_dynamic_files = 1
+" let g:easytags_dynamic_files = 1
 " configure easytags to run ctags after saving the buffer
-let g:easytags_events = ['BufWritePost']
+" let g:easytags_events = ['BufWritePost']
 
 " }}}
 
@@ -245,18 +254,18 @@ NeoBundleLazy "Shougo/unite.vim", {
 let s:hooks = neobundle#get_hooks("unite.vim")
 function! s:hooks.on_source(bundle)
   " start unite in insert mode
-  let g:unite_enable_start_insert = 1
+  let g:unite_enable_start_insert = 0
   " use vimfiler to open directory
   "  call unite#custom_default_action("source/bookmark/directory", "vimfiler")
   call unite#custom_default_action("directory", "vimfiler")
-  "  call unite#custom_default_action("directory_mru", "vimfiler")
-  "  autocmd MyAutoCmd FileType unite call s:unite_settings()
-  "  function! s:unite_settings()
-  "     imap <buffer> <Esc><Esc> <Plug>(unite_exit)
-  "     nmap <buffer> <Esc> <Plug>(unite_exit)
-  "     nmap <buffer> <C-n> <Plug>(unite_select_next_line)
-  "     nmap <buffer> <C-p> <Plug>(unite_select_previous_line)
-  "   endfunction
+  call unite#custom_default_action("directory_mru", "vimfiler")
+  autocmd MyAutoCmd FileType unite call s:unite_settings()
+  function! s:unite_settings()
+    imap <buffer> <Esc><Esc> <Plug>(unite_exit)
+    nmap <buffer> <Esc> <Plug>(unite_exit)
+    nmap <buffer> <C-n> <Plug>(unite_select_next_line)
+    nmap <buffer> <C-p> <Plug>(unite_select_previous_line)
+  endfunction
 endfunction
 NeoBundleLazy 'h1mesuke/unite-outline', {
       \ "autoload": {
@@ -558,7 +567,8 @@ highlight SpecialKey ctermfg=LightGreen guifg=LightGreen
 " Shortcut to rapidly toggle 'set list'
 " nmap <leader>l :set list!<CR>
 
-set completeopt=longest,menuone,preview " Completion style
+" set completeopt=longest,menuone,preview " Completion style
+set completeopt=menu,menuone,preview " Completion style
 
 " Use grep even in Windows
 if has('win32') || has('win64')
@@ -1185,3 +1195,6 @@ inoremap <expr><C-e>  neocomplcache#cancel_popup()
 " nmap <C-n> <Plug>(yankround-next)
 
 " }}}
+
+
+
