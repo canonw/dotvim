@@ -895,6 +895,13 @@ augroup END
 
 " }}}
 
+" VimFiler {{{
+augroup ft_vimfiler
+  au!
+  au FileType vimfiler setlocal nonumber norelativenumber
+augroup END
+" }}}
+
 " Ruby {{{
 
 augroup ft_ruby
