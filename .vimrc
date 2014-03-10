@@ -51,7 +51,6 @@ NeoBundle 'Shougo/vimproc.vim', {
       \     'unix' : 'make -f make_unix.mak',
       \    },
       \ } " Recommand by NeoBundle
-NeoBundle 'tpope/vim-unimpaired' " Easy key binding movement.
 NeoBundle 'jakar/vim-AnsiEsc' " ANSI color
 " NeoBundle 'vim-scripts/AnsiEsc.vim' " Display ANSI color in log files
 NeoBundle 'flazz/vim-colorschemes' " Tons of color schemes
@@ -64,12 +63,19 @@ NeoBundle 't9md/vim-quickhl'
 NeoBundle 'vim-scripts/Align'
 NeoBundle 'mattn/emmet-vim'
 NeoBundle 'vim-scripts/DrawIt'
-NeoBundle 'tpope/vim-abolish'
-NeoBundle 'tpope/vim-surround'
 NeoBundle 'salsifis/vim-transpose'
-NeoBundle 'roman/golden-ratio'
+" NeoBundle 'roman/golden-ratio'
 NeoBundle 'szw/vim-maximizer'
 NeoBundle 'terryma/vim-multiple-cursors'
+NeoBundle 'tpope/vim-repeat'
+NeoBundle 'tpope/vim-dispatch'
+NeoBundle 'tpope/vim-abolish'
+NeoBundle 'tpope/vim-surround'
+NeoBundle 'tpope/vim-unimpaired' " Easy key binding movement.
+NeoBundle 'tpope/vim-speeddating' " Ctrl-A and Ctrl-X on date
+NeoBundle 'zhaocai/GoldenView.Vim'
+NeoBundle 'Shougo/unite-session'
+NeoBundle 'vim-voom/VOoM'
 
 " NeoBundle 'vim-scripts/YankRing.vim'
     " Default mapping
@@ -233,6 +239,7 @@ endif
 let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
 " }}}
 
+
 if !has('win32') && !has('win64') " TODO: fix Windows view path
   NeoBundle 'vim-scripts/restore_view.vim' " Remember file cursor and folding position
 endif
@@ -240,6 +247,7 @@ endif
 
 " Git
 NeoBundle 'tpope/vim-fugitive'
+NeoBundle 'airblade/vim-gitgutter'
 NeoBundleLazy "gregsexton/gitv", {
       \ "depends": ["tpope/vim-fugitive"],
       \ "autoload": {
@@ -255,6 +263,8 @@ let s:hooks = neobundle#get_hooks("unite.vim")
 function! s:hooks.on_source(bundle)
   " start unite in insert mode
   let g:unite_enable_start_insert = 0
+  let g:unite_source_history_yank_enable = 1
+
   " use vimfiler to open directory
   "  call unite#custom_default_action("source/bookmark/directory", "vimfiler")
   call unite#custom_default_action("directory", "vimfiler")
@@ -823,10 +833,6 @@ set viewoptions=cursor,folds,slash,unix
 
 " }}}
 
-" Unite {{{
-let g:unite_source_history_yank_enable = 1
-" }}}
-
 " ShowMarks {{{
 
 " Prevent from loading
@@ -1102,12 +1108,17 @@ nnoremap [showmarks]h :ShowMarksClearMark<CR>
 " Unite
 nnoremap [unite] <Nop>
 nmap U [unite]
-nnoremap <silent> [unite]f :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
 nnoremap <silent> [unite]b :<C-u>Unite buffer<CR>
-nnoremap <silent> [unite]r :<C-u>Unite register<CR>
+nnoremap <silent> [unite]f :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
+nnoremap <silent> [unite]g :<C-u>Unite grep<CR>
+nnoremap <silent> [unite]j :<C-u>Unite jump<CR>
+nnoremap <silent> [unite]k :<C-u>Unite bookmark<CR>
+nnoremap <silent> [unite]l :<C-u>Unite line<CR>
 nnoremap <silent> [unite]m :<C-u>Unite file_mru<CR>
-nnoremap <silent> [unite]c :<C-u>Unite bookmark<CR>
 nnoremap <silent> [unite]o :<C-u>Unite outline<CR>
+nnoremap <silent> [unite]r :<C-u>Unite register<CR>
+nnoremap <silent> [unite]S :<C-u>Unite session<CR>
+nnoremap <silent> [unite]s :<C-u>Unite source<CR>
 nnoremap <silent> [unite]t :<C-u>Unite tab<CR>
 nnoremap <silent> [unite]w :<C-u>Unite window<CR>
 nnoremap <silent> ugy :<C-u>Unite history/yank<CR>
@@ -1195,6 +1206,4 @@ inoremap <expr><C-e>  neocomplcache#cancel_popup()
 " nmap <C-n> <Plug>(yankround-next)
 
 " }}}
-
-
 
