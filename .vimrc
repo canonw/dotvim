@@ -16,6 +16,7 @@
 "    - Anonymous Pro
 "
 " Give credit where credit is due.
+" https://raw.github.com/hecomi/dotfiles/master/.vimrc
 " https://github.com/mizutomo/dotfiles/blob/master/vimrc
 " http://amix.dk/vim/vimrc.html
 " http://spf13.com/post/perfect-vimrc-vim-config-file
@@ -158,6 +159,11 @@ endfunction
 NeoBundle 'mattn/webapi-vim'
 
 " Gist.vim {{{
+" NeoBundleLazy "mattn/gist-vim", {
+"   \ "depends": ["mattn/webapi-vim"],
+"   \ "autoload": {
+"   \ "commands": ["Gist"],
+"   \ }}
 NeoBundle 'mattn/gist-vim'
 " Detect filetype
 let g:gist_detect_filetype = 1
@@ -239,6 +245,23 @@ endif
 let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
 " }}}
 
+" openbrowser - URL or file browsing {{{
+" NeoBundle 'tyru/open-browser.vim'
+NeoBundleLazy 'tyru/open-browser.vim', {
+\	'autoload' : {
+\		'commands' : 'OpenBrowser',
+\		'mappings' : ['<Plug>(openbrowser-open)', '<Plug>(openbrowser-smart-search)'],
+\	}}
+let s:hooks = neobundle#get_hooks("open-browser.vim")
+function! s:hooks.on_source(bundle)
+" let g:openbrowser_fix_hosts
+" let g:openbrowser_fix_paths
+let g:openbrowser_search_engines = {
+    \   'google': 'https://www.google.com/search?q={query}'
+    \}
+endfunction
+
+" }}}
 
 if !has('win32') && !has('win64') " TODO: fix Windows view path
   NeoBundle 'vim-scripts/restore_view.vim' " Remember file cursor and folding position
@@ -345,12 +368,6 @@ NeoBundle 'chrisbra/NrrwRgn' " Optional for VimOrganizer
 "   \ | silent! execute 'normal! "_da>'
 "   \ | endif
 
-" NeoBundleLazy "mattn/gist-vim", {
-"   \ "depends": ["mattn/webapi-vim"],
-"   \ "autoload": {
-"   \ "commands": ["Gist"],
-"   \ }}
-
 " NeoBundleLazy "sjl/gundo.vim", {
 "   \ "autoload": {
 "   \ "commands": ['GundoToggle'],
@@ -422,7 +439,6 @@ set autoread " Set to auto read when a file is changed from the outside
 " like <leader>w saves the current file
 let mapleader = ";"
 let maplocalleader = "'"
-" let g:mapleader = ","
 
 " Share windows clipboard
 " Reference: http://vimcasts.org/episodes/accessing-the-system-clipboard-from-vim/
@@ -1068,6 +1084,22 @@ nnoremap <silent> [toggle]s :<C-u>setl spell!<CR>:setl spell?<CR>
 nnoremap <silent> [toggle]t :<C-u>setl expandtab!<CR>:setl expandtab?<CR>
 nnoremap <silent> [toggle]w :<C-u>setl wrap!<CR>:setl wrap?<CR>
 
+
+" Defining prefix as my own mnemonic trigger.
+" Idea taken from https://raw.github.com/hecomi/dotfiles/master/.vimrc
+nnoremap [prefix] <Nop>
+nmap ,   [prefix]
+xnoremap [prefix] <nop>
+xmap ,   [prefix]
+
+
+" Open browser using 
+nmap [prefix]bo <Plug>(openbrowser-open)
+vmap [prefix]bo <Plug>(openbrowser-open)
+nmap [prefix]bs <Plug>(openbrowser-smart-search)
+vmap [prefix]bs <Plug>(openbrowser-smart-search)
+
+
 " Quick file editing
 nnoremap <leader>ffv :e $MYVIMRC<cr>
 "nnoremap <leader>ev :vsplit $MYVIMRC<cr>
@@ -1218,5 +1250,4 @@ inoremap <expr><C-e>  neocomplcache#cancel_popup()
 " nmap <C-n> <Plug>(yankround-next)
 
 " }}}
-
 
