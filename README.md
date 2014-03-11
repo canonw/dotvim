@@ -1,5 +1,10 @@
 This is my VIM setup.  It's design to portable to work in both Windows, Linux and Mac.
 
+Command to execute 
+
+git clone https://github.com/canonw/dotvim.git
+git pull && git submodule init && git submodule update && git submodule status
+
 Tools to include
 
 - git
