@@ -594,6 +594,7 @@ if filereadable(expand("~/my.vim"))
   exec "source ~/my.vim"
 endif
 
+let g:xml_syntax_folding=1
 " }}}
 " Quickfix {{{
 augroup QFixToggle
@@ -910,6 +911,17 @@ augroup ft_markdown
 
 augroup END
 " }}}
+
+" XML {{{
+augroup ft_xml
+  au!
+  au FileType xml setlocal foldmethod=syntax
+augroup END
+" }}}
+
+" Disable folder when file opened
+au BufRead * normal zR
+
 " }}}
 " Helper Functions {{{
 
@@ -1112,7 +1124,7 @@ nnoremap <silent> [unite]b :<C-u>Unite buffer<CR>
 nnoremap <silent> [unite]f :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
 nnoremap <silent> [unite]g :<C-u>Unite grep<CR>
 nnoremap <silent> [unite]j :<C-u>Unite jump<CR>
-nnoremap <silent> [unite]k :<C-u>Unite bookmark<CR>
+nnoremap <silent> [unite]k :<C-u>Unite bookmark
 nnoremap <silent> [unite]l :<C-u>Unite line<CR>
 nnoremap <silent> [unite]m :<C-u>Unite file_mru<CR>
 nnoremap <silent> [unite]o :<C-u>Unite outline<CR>
@@ -1206,4 +1218,5 @@ inoremap <expr><C-e>  neocomplcache#cancel_popup()
 " nmap <C-n> <Plug>(yankround-next)
 
 " }}}
+
 
