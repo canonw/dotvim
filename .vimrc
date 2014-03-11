@@ -79,7 +79,7 @@ NeoBundle 'Shougo/unite-session'
 NeoBundle 'vim-voom/VOoM'
 
 " NeoBundle 'vim-scripts/YankRing.vim'
-    " Default mapping
+" Default mapping
 "     let g:multi_cursor_next_key='<C-s>'
 "     let g:multi_cursor_prev_key='<C-d>'
 "     let g:multi_cursor_skip_key='<C-f>'
@@ -155,16 +155,14 @@ function! s:hooks.on_source(bundle)
 endfunction
 " }}}
 
-" required by Gist.vim
-NeoBundle 'mattn/webapi-vim'
-
 " Gist.vim {{{
-" NeoBundleLazy "mattn/gist-vim", {
-"   \ "depends": ["mattn/webapi-vim"],
-"   \ "autoload": {
-"   \ "commands": ["Gist"],
-"   \ }}
-NeoBundle 'mattn/gist-vim'
+NeoBundleLazy "mattn/gist-vim", {
+      \ "depends": ["mattn/webapi-vim"],
+      \ "autoload": {
+      \ "commands": ["Gist"],
+      \ }}
+" NeoBundle 'mattn/webapi-vim'
+" NeoBundle 'mattn/gist-vim'
 " Detect filetype
 let g:gist_detect_filetype = 1
 " Open browser after the post
@@ -233,14 +231,14 @@ let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
 
 " Define dictionary.
 let g:neocomplcache_dictionary_filetype_lists = {
-    \ 'default' : '',
-    \ 'vimshell' : $HOME.'/.vimshell_hist',
-    \ 'scheme' : $HOME.'/.gosh_completions'
-        \ }
+      \ 'default' : '',
+      \ 'vimshell' : $HOME.'/.vimshell_hist',
+      \ 'scheme' : $HOME.'/.gosh_completions'
+      \ }
 
 " Define keyword.
 if !exists('g:neocomplcache_keyword_patterns')
-    let g:neocomplcache_keyword_patterns = {}
+  let g:neocomplcache_keyword_patterns = {}
 endif
 let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
 " }}}
@@ -248,19 +246,18 @@ let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
 " openbrowser - URL or file browsing {{{
 " NeoBundle 'tyru/open-browser.vim'
 NeoBundleLazy 'tyru/open-browser.vim', {
-\	'autoload' : {
-\		'commands' : 'OpenBrowser',
-\		'mappings' : ['<Plug>(openbrowser-open)', '<Plug>(openbrowser-smart-search)'],
-\	}}
+      \	'autoload' : {
+      \		'commands' : 'OpenBrowser',
+      \		'mappings' : ['<Plug>(openbrowser-open)', '<Plug>(openbrowser-smart-search)'],
+      \	}}
 let s:hooks = neobundle#get_hooks("open-browser.vim")
 function! s:hooks.on_source(bundle)
-" let g:openbrowser_fix_hosts
-" let g:openbrowser_fix_paths
-let g:openbrowser_search_engines = {
-    \   'google': 'https://www.google.com/search?q={query}'
-    \}
+  " let g:openbrowser_fix_hosts
+  " let g:openbrowser_fix_paths
+  let g:openbrowser_search_engines = {
+        \   'google': 'https://www.google.com/search?q={query}'
+        \}
 endfunction
-
 " }}}
 
 if !has('win32') && !has('win64') " TODO: fix Windows view path
@@ -268,14 +265,30 @@ if !has('win32') && !has('win64') " TODO: fix Windows view path
 endif
 
 
-" Git
+" Git {{{
 NeoBundle 'tpope/vim-fugitive'
-NeoBundle 'airblade/vim-gitgutter'
+
+NeoBundleLazy 'airblade/vim-gitgutter', {
+      \ "depends": ["tpope/vim-fugitive"],
+      \ "autoload": {
+      \ "commands": ["GitGutterToggle"],
+      \ }}
+let s:hooks = neobundle#get_hooks("vim-gitgutter")
+function! s:hooks.on_source(bundle)
+  let g:gitgutter_map_keys = 0
+  let g:gitgutter_enabled         = 0
+  let g:gitgutter_highlight_lines = 0
+  let g:gitgutter_sign_added      = '+'
+  let g:gitgutter_sign_modified   = '~'
+  let g:gitgutter_sign_removed    = '-'
+endfunction
+
 NeoBundleLazy "gregsexton/gitv", {
       \ "depends": ["tpope/vim-fugitive"],
       \ "autoload": {
       \ "commands": ["Gitv"],
       \ }}
+" }}}
 
 " NeoBundle "Shougo/unite.vim"
 NeoBundleLazy "Shougo/unite.vim", {
@@ -1041,32 +1054,6 @@ if has("win32") || has("win64")
   endfunction
 endif
 
-" Open current file in File Explorer
-" Reference: http://vim.wikia.com/wiki/Open_the_directory_for_the_current_file_in_Windows
-func! OpenCWD()
-  if has("gui_running")
-    if has("win32") || has("win64")
-      let s:stored_shellslash = &shellslash
-      set noshellslash
-      !start explorer.exe %:p:h
-      let &shellslash = s:stored_shellslash
-    elseif has("gui_kde")
-      !konqueror %:p:h &
-    elseif has("gui_gtk") " TODO: test!
-      if len(expand('%')) == 0
-        !nautilus "%:p:h" &
-      else
-        !nautilus "%:p" &
-      endif
-      " !nautilus %:p:h &
-    elseif has("mac") && has("unix") " TODO: test!
-      let s:macpath = expand("%:p:h")
-      let s:macpath = substitute(s:macpath," ","\\\\ ","g")
-      execute '!open ' .s:macpath
-    endif
-  endif
-endfunc
-
 " }}}
 " Key binding {{{
 
@@ -1099,6 +1086,25 @@ vmap [prefix]bo <Plug>(openbrowser-open)
 nmap [prefix]bs <Plug>(openbrowser-smart-search)
 vmap [prefix]bs <Plug>(openbrowser-smart-search)
 
+" vim-gitgutter {{{
+nnoremap [prefix]gg :GitGutterToggle<CR>
+nnoremap [prefix]gn :GitGutterNextHunk<CR>
+nnoremap [prefix]gN :GitGutterPrevHunk<CR>
+" }}}
+
+" vim-fugitive {{{
+nnoremap [prefix]gb :Gblame<CR>
+nnoremap [prefix]gd :Gdiff<CR>
+nnoremap [prefix]gs :Gstatus<CR>
+nnoremap [prefix]gl :Glog<CR>
+nnoremap [prefix]ga :Gwrite<CR>
+nnoremap [prefix]gc :Gread<CR>
+nnoremap [prefix]gC :Gcommit<CR>
+" }}}
+
+" Gitv {{{
+nnoremap [prefix]gv :Gitv<CR>
+" }}}
 
 " Quick file editing
 nnoremap <leader>ffv :e $MYVIMRC<cr>
@@ -1113,9 +1119,6 @@ map <leader>fw :e %%
 map <leader>fs :sp %%
 map <leader>fv :vsp %%
 map <leader>ft :tabe %%
-
-" Open file explorer, etc.
-map <leader>oe :call OpenCWD()<CR><CR>
 
 " Treat long lines as break lines (useful in wrapped text)
 map j gj
