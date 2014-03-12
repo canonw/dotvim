@@ -52,15 +52,40 @@ NeoBundle 'Shougo/vimproc.vim', {
       \     'unix' : 'make -f make_unix.mak',
       \    },
       \ } " Recommand by NeoBundle
+
+" Deferred filetytpes loading  {{{
+NeoBundleLazy 'tpope/vim-git', {'autoload': { 'filetypes': 'git' }}
+NeoBundleLazy 'tpope/vim-markdown', {'autoload': { 'filetypes': 'markdown' }}
+NeoBundleLazy 'groenewege/vim-less.git', {'autoload': { 'filetypes': 'less' }}
+" }}}
+
+" Smarter display to get better information =====
+" quickhl - Give ability to highlight multiple words {{{
+NeoBundle 't9md/vim-quickhl'
+" let g:quickhl_manual_enable_at_startup=1
+" Custom color
+" let g:quickhl_manual_colors = [
+"       \ "gui=bold ctermfg=16  ctermbg=153 guifg=#ffffff guibg=#0a7383",
+"       \ "gui=bold ctermfg=7   ctermbg=1   guibg=#a07040 guifg=#ffffff",
+"       \ "gui=bold ctermfg=7   ctermbg=2   guibg=#4070a0 guifg=#ffffff",
+"       \ "gui=bold ctermfg=7   ctermbg=3   guibg=#40a070 guifg=#ffffff"
+"       \ ]
+" Keyword which is always highlighted.
+" let g:quickhl_manual_keywords = [
+"       \ "finish",
+"       \ {"pattern": '\s\+$', "regexp": 1 },
+"       \ {"pattern": '\d\{1,3}\.\d\{1,3}\.\d\{1,3}\.\d\{1,3}', "regexp": 1 }
+"       \ ]
+" }}}
+
 NeoBundle 'jakar/vim-AnsiEsc' " ANSI color
 " NeoBundle 'vim-scripts/AnsiEsc.vim' " Display ANSI color in log files
 NeoBundle 'flazz/vim-colorschemes' " Tons of color schemes
 NeoBundle 'vim-scripts/changeColorScheme.vim' " Randomize color scheme
 NeoBundle 'vim-scripts/mru.vim.git' " Save file history
-NeoBundle 'bling/vim-airline' " Status line
+NeoBundle 'bling/vim-airline' " Status line display
 NeoBundle 'tomtom/tcomment_vim'
 NeoBundle 'godlygeek/tabular'
-NeoBundle 't9md/vim-quickhl'
 NeoBundle 'vim-scripts/Align'
 NeoBundle 'mattn/emmet-vim'
 NeoBundle 'vim-scripts/DrawIt'
@@ -90,11 +115,6 @@ if !has('win32') && !has('win64') " Windows not supported
   NeoBundle 'astashov/vim-ruby-debugger'
 endif
 " astashov/debugger-xml'
-
-" filetytpes
-NeoBundleLazy 'tpope/vim-git', {'autoload': { 'filetypes': 'git' }}
-NeoBundleLazy 'tpope/vim-markdown', {'autoload': { 'filetypes': 'markdown' }}
-NeoBundleLazy 'groenewege/vim-less.git', {'autoload': { 'filetypes': 'less' }}
 
 " ShowMarks - Display marks {{{
 NeoBundleLazy "vim-scripts/ShowMarks", {
@@ -1074,9 +1094,25 @@ nnoremap <silent> [toggle]g :GoldenRatioToggle<CR>
 nnoremap <silent> [toggle]l :<C-u>setl list!<CR>:setl list?<CR>
 nnoremap <silent> [toggle]m :ShowMarksToggle<CR>
 nnoremap <silent> [toggle]n :call ToggleNumbers()<CR>
+" quickhl
+nnoremap <silent> [toggle]qhl <Plug>(quickhl-manual-reset)<CR>
 nnoremap <silent> [toggle]s :<C-u>setl spell!<CR>:setl spell?<CR>
 nnoremap <silent> [toggle]t :<C-u>setl expandtab!<CR>:setl expandtab?<CR>
 nnoremap <silent> [toggle]w :<C-u>setl wrap!<CR>:setl wrap?<CR>
+
+
+" quickhl
+nmap <Space>m <Plug>(quickhl-manual-this)
+xmap <Space>m <Plug>(quickhl-manual-this)
+
+nmap <Space>M <Plug>(quickhl-manual-reset)
+xmap <Space>M <Plug>(quickhl-manual-reset)
+
+nmap <Space>j <Plug>(quickhl-cword-toggle)
+
+nmap <Space>] <Plug>(quickhl-tag-toggle)
+
+" map H <Plug>(operator-quickhl-manual-this-motion)
 
 
 " Defining prefix as my own mnemonic trigger.
