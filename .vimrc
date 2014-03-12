@@ -78,6 +78,31 @@ NeoBundle 't9md/vim-quickhl'
 "       \ ]
 " }}}
 
+" vim-expand-region - incremental visual selection {{{
+NeoBundle 'vim-expand-region'
+" Containing the text objects for search (NOTE: Remove comments in dictionary before sourcing)
+" let g:expand_region_text_objects = {
+"       \ 'iw'  :0,
+"       \ 'iW'  :1,
+"       \ 'i"'  :0,
+"       \ 'i''' :0,
+"       \ 'i]'  :1,<Down> " Support nesting of square brackets
+"       \ 'ib'  :1, " Support nesting of parentheses
+"       \ 'iB'  :1, " Support nesting of braces
+"       \ 'il'  :0, " Not included in Vim by default. See https://github.com/kana/vim-textobj-line
+"       \ 'ip'  :0,
+"       \ 'ie'  :0  " Not included in Vim by default. See https://github.com/kana/vim-textobj-entire
+"       \}
+" let g:expand_region_text_objects_ruby = {
+"       \ 'im' :0, " 'inner method'. Available through https://github.com/vim-ruby/vim-ruby
+"       \ 'am' :0, " 'around method'. Available through https://github.com/vim-ruby/vim-ruby
+"       \ }
+"call expand_region#custom_text_objects('ruby', {
+"      \ 'im' :0,
+"      \ 'am' :0,
+"      \ })
+" }}}
+
 NeoBundle 'jakar/vim-AnsiEsc' " ANSI color
 " NeoBundle 'vim-scripts/AnsiEsc.vim' " Display ANSI color in log files
 NeoBundle 'flazz/vim-colorschemes' " Tons of color schemes
@@ -1219,6 +1244,11 @@ nnoremap <Leader>e :VimFilerExplorer<CR>
 " memolist.vim
 map <Leader>mn  :MemoNew<CR>
 map <Leader>ml  :MemoList<CR>
+
+" vim-expand-region - Default key binding
+" map + <Plug>(expand_region_expand)
+" map _ <Plug>(expand_region_shrink)
+
 
 " Neosnippet {{{
 imap <C-k>     <Plug>(neosnippet_expand_or_jump)
