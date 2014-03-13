@@ -61,7 +61,12 @@ NeoBundleLazy 'groenewege/vim-less.git', {'autoload': { 'filetypes': 'less' }}
 
 " Smarter display to get better information =====
 " quickhl - Give ability to highlight multiple words {{{
-NeoBundle 't9md/vim-quickhl'
+" NeoBundle 't9md/vim-quickhl'
+NeoBundleLazy 't9md/vim-quickhl', {
+      \ "depends": ["kana/vim-operator-user"],
+      \ "autoload": {
+      \ "commands": ["QuickhlCwordToggle"],
+      \ }}
 " let g:quickhl_manual_enable_at_startup=1
 " Custom color
 " let g:quickhl_manual_colors = [
@@ -76,6 +81,14 @@ NeoBundle 't9md/vim-quickhl'
 "       \ {"pattern": '\s\+$', "regexp": 1 },
 "       \ {"pattern": '\d\{1,3}\.\d\{1,3}\.\d\{1,3}\.\d\{1,3}', "regexp": 1 }
 "       \ ]
+" }}}
+
+" vim-indent-guides {{{
+" NeoBundle 'nathanaelkane/vim-indent-guides'
+NeoBundleLazy "vnathanaelkane/vim-indent-guides", {
+      \ "autoload": {
+      \ "commands": ["IndentGuidesToggle"],
+      \ }}
 " }}}
 
 " Smarter text selection
@@ -141,8 +154,6 @@ let g:dbext_default_DBI_column_delimiter = "\t"
 " }}}
 
 NeoBundle 'vim-scripts/SQLUtilities'
-
-let g:sql_type_default = "sqlserver"
 
 NeoBundle 'jakar/vim-AnsiEsc' " ANSI color
 " NeoBundle 'vim-scripts/AnsiEsc.vim' " Display ANSI color in log files
@@ -1131,33 +1142,20 @@ endif
 
 " Toggle
 nnoremap [toggle] <Nop>
-nmap T [toggle]
+nmap \ [toggle]
 nnoremap <silent> [toggle]T :TagbarToggle<CR>
 nnoremap <silent> [toggle]c :call NextColorScheme()<CR>:AirlineRefresh<CR>
 nnoremap <silent> [toggle]f :call ToggleFonts()<CR>
 nnoremap <silent> [toggle]g :GoldenRatioToggle<CR>
+" visual-indent-guides
+nnoremap <silent> [toggle]i :IndentGuidesToggle<CR>
 nnoremap <silent> [toggle]l :<C-u>setl list!<CR>:setl list?<CR>
 nnoremap <silent> [toggle]m :ShowMarksToggle<CR>
 nnoremap <silent> [toggle]n :call ToggleNumbers()<CR>
-" quickhl
-nnoremap <silent> [toggle]qhl <Plug>(quickhl-manual-reset)<CR>
 nnoremap <silent> [toggle]s :<C-u>setl spell!<CR>:setl spell?<CR>
 nnoremap <silent> [toggle]t :<C-u>setl expandtab!<CR>:setl expandtab?<CR>
 nnoremap <silent> [toggle]w :<C-u>setl wrap!<CR>:setl wrap?<CR>
 
-
-" quickhl
-nmap <Space>m <Plug>(quickhl-manual-this)
-xmap <Space>m <Plug>(quickhl-manual-this)
-
-nmap <Space>M <Plug>(quickhl-manual-reset)
-xmap <Space>M <Plug>(quickhl-manual-reset)
-
-nmap <Space>j <Plug>(quickhl-cword-toggle)
-
-nmap <Space>] <Plug>(quickhl-tag-toggle)
-
-" map H <Plug>(operator-quickhl-manual-this-motion)
 
 
 " Defining prefix as my own mnemonic trigger.
@@ -1193,6 +1191,15 @@ nnoremap [prefix]gC :Gcommit<CR>
 " Gitv {{{
 nnoremap [prefix]gv :Gitv<CR>
 " }}}
+
+" quickhl
+nmap <Space>m <Plug>(quickhl-manual-this)
+xmap <Space>m <Plug>(quickhl-manual-this)
+nmap <Space>M <Plug>(quickhl-manual-reset)
+xmap <Space>M <Plug>(quickhl-manual-reset)
+nmap <Space>j <Plug>(quickhl-cword-toggle)
+nmap <Space>] <Plug>(quickhl-tag-toggle)
+map H <Plug>(operator-quickhl-manual-this-motion)
 
 " Quick file editing
 nnoremap <leader>ffv :e $MYVIMRC<cr>
