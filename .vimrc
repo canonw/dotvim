@@ -93,7 +93,7 @@ NeoBundleLazy "vnathanaelkane/vim-indent-guides", {
 
 " Smarter text selection
 " vim-expand-region - incremental visual selection {{{
-NeoBundle 'vim-expand-region'
+NeoBundle 'terryma/vim-expand-region'
 " Containing the text objects for search (NOTE: Remove comments in dictionary before sourcing)
 " let g:expand_region_text_objects = {
 "       \ 'iw'  :0,
