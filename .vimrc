@@ -78,6 +78,7 @@ NeoBundle 't9md/vim-quickhl'
 "       \ ]
 " }}}
 
+" Smarter text selection
 " vim-expand-region - incremental visual selection {{{
 NeoBundle 'vim-expand-region'
 " Containing the text objects for search (NOTE: Remove comments in dictionary before sourcing)
@@ -102,6 +103,46 @@ NeoBundle 'vim-expand-region'
 "      \ 'am' :0,
 "      \ })
 " }}}
+
+" SQL
+" NeoBundle 'vim-scripts/SQLComplete.vim' " Bundle in VIM
+
+" dbext - interfact to database {{{
+" Reference: https://mutelight.org/dbext-the-last-sql-client-youll-ever-need
+NeoBundle 'vim-scripts/dbext.vim'
+
+" Don't ask input parameters
+let g:dbext_default_prompt_for_parameters = 1
+" Set prefer profile to skip prompting
+let g:dbext_default_profile = 'sqlserver_'
+" Discard temp files
+let g:dbext_default_delete_temp_file = 1
+" Specify history file location.  In Windows, it keeps in system path.
+let g:dbext_default_history_file = $HOME.'/.dbext_sql_history'
+" DBListColumn (by default) will create a column list with an alias
+" n - do not use an alias
+" d - use the default (calculated) alias
+" a - ask to confirm the alias name
+let g:dbext_default_use_tbl_alias='a'
+" Result sets returned by the database as columns or rows
+let g:dbext_default_DBI_orientation = 'v'
+" let g:dbext_default_DBI_orientation=''
+" Column delimiter
+let g:dbext_default_DBI_column_delimiter = "\t"
+
+" Example configuration
+" SQLite
+" let g:dbext_default_profile_sqlite_for_rails = 'type=SQLITE:dbname=/path/to/my/sqlite.db'
+" Microsoft SQL Server
+" let g:dbext_default_profile_sqlserver_mydb = 'type=SQLSRV:host=localhost:dbname=mydb:integratedlogin=1'
+" @ask will prompt for password
+" let g:dbext_default_profile_sqlserver_mydb = 'type=SQLSRV:host=localhost:dbname=mydb:user=sa:passwd=@ask'
+
+" }}}
+
+NeoBundle 'vim-scripts/SQLUtilities'
+
+let g:sql_type_default = "sqlserver"
 
 NeoBundle 'jakar/vim-AnsiEsc' " ANSI color
 " NeoBundle 'vim-scripts/AnsiEsc.vim' " Display ANSI color in log files
@@ -395,11 +436,6 @@ function! s:hooks.on_source(bundle)
 endfunction
 NeoBundle 'scrooloose/nerdtree' " Bookmark well on directories
 
-" SQL
-NeoBundle 'vim-scripts/SQLComplete.vim'
-NeoBundle 'vim-scripts/dbext.vim'
-NeoBundle 'vim-scripts/SQLUtilities'
-
 " Ruby/Rails
 " http://www.vimninjas.com/2012/08/28/vim-for-rubyists-part-1/
 NeoBundle 'vim-ruby/vim-ruby'
@@ -603,7 +639,6 @@ set autochdir " always switch to the current file directory
 "     autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 "     autocmd FileType php set omnifunc=phpcomplete#CompletePHP
 "     autocmd FileType c set omnifunc=ccomplete#Complete
-"     "?autocmd FileType sql set omnifunc=sqlcomplete#Complete
 "     autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
 "     autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
 
@@ -850,31 +885,6 @@ let g:UltiSnipsSnippetDirectories=["UltiSnips", "mysnippets"]
 let NERDTreeShowBookmarks = 1
 " }}}
 
-" SQLComplete {{{
-" }}}
-
-" dbext {{{
-" Reference: https://mutelight.org/dbext-the-last-sql-client-youll-ever-need
-
-" Don't ask input parameters
-let g:dbext_default_prompt_for_parameters = 1
-" Set prefer profile to skip prompting
-let g:dbext_default_profile = 'sqlserver_'
-" Discard temp files
-let g:dbext_default_delete_temp_file = 1
-" Specify history file location.  In Windows, it keeps in system path.
-let g:dbext_default_history_file = $HOME.'/.dbext_sql_history'
-"
-" Example configuration
-" SQLite
-" let g:dbext_default_profile_sqlite_for_rails = 'type=SQLITE:dbname=/path/to/my/sqlite.db'
-" Microsoft SQL Server
-" let g:dbext_default_profile_sqlserver_mydb = 'type=SQLSRV:host=localhost:dbname=mydb:integratedlogin=1'
-" @ask will prompt for password
-" let g:dbext_default_profile_sqlserver_mydb = 'type=SQLSRV:host=localhost:dbname=mydb:user=sa:passwd=@ask'
-
-" }}}
-
 " SQLUtilities {{{
 " Delimit comma as seperate line
 let g:sqlutil_align_comma = 1
@@ -974,6 +984,16 @@ augroup ft_css
   "au Filetype less,css setlocal omnifunc=csscomplete#CompleteCSS
   "au Filetype less,css setlocal iskeyword+=-
 
+augroup END
+" }}}
+
+" SQL {{{
+augroup ft_sql
+  au!
+
+  " Not working well
+  " au BufNewFile,BufRead *.sql* setlocal filetype=syntax foldlevel=1
+  " autocmd FileType sql set omnifunc=sqlcomplete#Complete
 augroup END
 " }}}
 
