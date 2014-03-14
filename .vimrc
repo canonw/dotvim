@@ -59,7 +59,16 @@ NeoBundleLazy 'tpope/vim-markdown', {'autoload': { 'filetypes': 'markdown' }}
 NeoBundleLazy 'groenewege/vim-less.git', {'autoload': { 'filetypes': 'less' }}
 " }}}
 
-" Smarter display to get better information =====
+
+" Super charge VIM setting
+" xolox/vim-session - enhance :mksessions - Replaced by Unite {{{
+" NeoBundle 'xolox/vim-session'
+" " Sessions script location
+" let g:session_directory='~/.vim/sessions'
+" let g:session_autoload='no'
+" }}}
+
+" Smarter display to get better information
 " quickhl - Give ability to highlight multiple words {{{
 " NeoBundle 't9md/vim-quickhl'
 NeoBundleLazy 't9md/vim-quickhl', {
@@ -82,8 +91,6 @@ NeoBundleLazy 't9md/vim-quickhl', {
 "       \ {"pattern": '\d\{1,3}\.\d\{1,3}\.\d\{1,3}\.\d\{1,3}', "regexp": 1 }
 "       \ ]
 " }}}
-
-" Smarter text selection
 " vim-indent-guides {{{
 " NeoBundle 'nathanaelkane/vim-indent-guides'
 NeoBundleLazy "nathanaelkane/vim-indent-guides", {
@@ -91,6 +98,7 @@ NeoBundleLazy "nathanaelkane/vim-indent-guides", {
       \ "commands": ["IndentGuidesToggle"],
       \ }}
 " }}}
+
 
 " Smarter text selection
 " vim-expand-region - incremental visual selection {{{
@@ -118,9 +126,9 @@ NeoBundle 'terryma/vim-expand-region'
 "      \ })
 " }}}
 
+
 " SQL
 " NeoBundle 'vim-scripts/SQLComplete.vim' " Bundle in VIM
-
 " dbext - interfact to database {{{
 " Reference: https://mutelight.org/dbext-the-last-sql-client-youll-ever-need
 NeoBundle 'vim-scripts/dbext.vim'
@@ -153,8 +161,6 @@ let g:dbext_default_DBI_column_delimiter = "\t"
 " let g:dbext_default_profile_sqlserver_mydb = 'type=SQLSRV:host=localhost:dbname=mydb:user=sa:passwd=@ask'
 
 " }}}
-
-
 " SQLUtilities {{{
 NeoBundle 'vim-scripts/SQLUtilities'
 " Delimit comma as seperate line
@@ -1191,17 +1197,28 @@ nnoremap [prefix]gN :GitGutterPrevHunk<CR>
 " }}}
 
 " vim-fugitive {{{
-nnoremap [prefix]gb :Gblame<CR>
-nnoremap [prefix]gd :Gdiff<CR>
-nnoremap [prefix]gs :Gstatus<CR>
-nnoremap [prefix]gl :Glog<CR>
-nnoremap [prefix]ga :Gwrite<CR>
-nnoremap [prefix]gc :Gread<CR>
-nnoremap [prefix]gC :Gcommit<CR>
+nmap [prefix]gb :Gblame<CR>
+nmap [prefix]gd :Gdiff<CR>
+nmap [prefix]gs :Gstatus<CR>
+nmap [prefix]gl :Glog<CR>
+nmap [prefix]ga :Gwrite<CR>
+nmap [prefix]gc :Gread<CR>
+nmap [prefix]gC :Gcommit<CR>
 " }}}
 
 " Gitv {{{
-nnoremap [prefix]gv :Gitv<CR>
+nmap [prefix]gv :Gitv<CR>
+" }}}
+
+" ShowMarks {{{
+nmap [prefix]mm :ShowMarksPlaceMark<CR>
+nmap [prefix]mt :ShowMarksToggle<CR>
+nmap [prefix]ma :ShowMarksClearAll<CR>
+nmap [prefix]mh :ShowMarksClearMark<CR>
+" }}}
+
+" Unite Session {{{
+nmap [prefix]ss :UniteSessionSave<SPACE>
 " }}}
 
 " quickhl
@@ -1249,15 +1266,6 @@ nmap <leader>x <ESC>:.,+1!xmllint --format --recover - 2>/dev/null<Home><Right>
 
 " Sort properties
 au BufNewFile,BufRead *.less,*.css nnoremap <buffer> <localleader>S ?{<CR>jV/\v^\s*\}?$<CR>k:sort<CR>:noh<CR>
-
-" ShowMarks {{{
-nnoremap [showmarks] <Nop>
-nmap M [showmarks]
-nnoremap [showmarks]m :ShowMarksPlaceMark<CR>
-nnoremap [showmarks]t :ShowMarksToggle<CR>
-nnoremap [showmarks]a :ShowMarksClearAll<CR>
-nnoremap [showmarks]h :ShowMarksClearMark<CR>
-" }}}
 
 " Unite
 nnoremap [unite] <Nop>
