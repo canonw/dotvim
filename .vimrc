@@ -120,7 +120,12 @@ endfunction
 
 " Smarter text selection
 " vim-expand-region - incremental visual selection {{{
-NeoBundle 'terryma/vim-expand-region'
+" NeoBundle 'terryma/vim-expand-region'
+NeoBundleLazy 'terryma/vim-expand-region', {
+      \ "depends": ["kana/vim-operator-user"],
+      \ "autoload": {
+      \ 'mappings' : ['<Plug>(expand_region_expand)', '<Plug>(expand_region_shrink)' ],
+      \ }}
 " Containing the text objects for search (NOTE: Remove comments in dictionary before sourcing)
 " let g:expand_region_text_objects = {
 "       \ 'iw'  :0,
@@ -1286,6 +1291,10 @@ nnoremap <silent> [unite]jfn :<C-u>Unite junkfile/new<CR>
 nnoremap <silent> [unite]k :<C-u>Unite bookmark
 nnoremap <silent> [unite]l :<C-u>Unite line<CR>
 nnoremap <silent> [unite]m :<C-u>Unite file_mru<CR>
+nnoremap [unite]ni :Unite neobundle/install<CR>
+nnoremap [unite]nl :Unite neobundle/log<CR>
+nnoremap [unite]ns :Unite neobundle/search<CR>
+nnoremap [unite]nu :Unite neobundle/update<CR>
 nnoremap <silent> [unite]o :<C-u>Unite outline<CR>
 nnoremap <silent> [unite]r :<C-u>Unite register<CR>
 nnoremap <silent> [unite]S :<C-u>Unite session<CR>
@@ -1301,9 +1310,9 @@ nnoremap <Leader>e :VimFilerExplorer<CR>
 map <Leader>mn  :MemoNew<CR>
 map <Leader>ml  :MemoList<CR>
 
-" vim-expand-region - Default key binding
-" map + <Plug>(expand_region_expand)
-" map _ <Plug>(expand_region_shrink)
+" vim-expand-region
+map K <Plug>(expand_region_expand)
+map J <Plug>(expand_region_shrink)
 
 
 " Neosnippet {{{
