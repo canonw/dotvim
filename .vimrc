@@ -75,7 +75,11 @@ NeoBundleLazy 't9md/vim-quickhl', {
       \ "depends": ["kana/vim-operator-user"],
       \ "autoload": {
       \ "commands": ["QuickhlCwordToggle"],
+      \ 'mappings' : ['<Plug>(quickhl-manual-this)', '<Plug>(quickhl-manual-reset)', 
+      \               '<Plug>(quickhl-cword-toggle)', '<Plug>(operator-quickhl-manual-this-motion)' ],
       \ }}
+" let s:hooks = neobundle#get_hooks("vim-quickhl")
+" function! s:hooks.on_source(bundle)
 " let g:quickhl_manual_enable_at_startup=1
 " Custom color
 " let g:quickhl_manual_colors = [
@@ -90,6 +94,7 @@ NeoBundleLazy 't9md/vim-quickhl', {
 "       \ {"pattern": '\s\+$', "regexp": 1 },
 "       \ {"pattern": '\d\{1,3}\.\d\{1,3}\.\d\{1,3}\.\d\{1,3}', "regexp": 1 }
 "       \ ]
+" endfunction
 " }}}
 " vim-indent-guides {{{
 " NeoBundle 'nathanaelkane/vim-indent-guides'
@@ -97,6 +102,18 @@ NeoBundleLazy "nathanaelkane/vim-indent-guides", {
       \ "autoload": {
       \ "commands": ["IndentGuidesToggle"],
       \ }}
+" }}}
+" ShowMarks - Display marks {{{
+NeoBundleLazy "vim-scripts/ShowMarks", {
+      \ "autoload": {
+      \ "commands": ["ShowMarksPlaceMark", "ShowMarksToggle", "ShowMarksClearAll", "ShowMarksClearMark"],
+      \ }}
+let s:hooks = neobundle#get_hooks("ShowMarks")
+function! s:hooks.on_source(bundle)
+  " ignore ShowMarks on buffer type of
+  " Help, Non-modifiable, Preview, Quickfix
+  let showmarks_ignore_type = 'hmpq'
+endfunction
 " }}}
 
 
@@ -176,7 +193,7 @@ NeoBundle 'jakar/vim-AnsiEsc' " ANSI color
 " NeoBundle 'vim-scripts/AnsiEsc.vim' " Display ANSI color in log files
 NeoBundle 'flazz/vim-colorschemes' " Tons of color schemes
 NeoBundle 'vim-scripts/changeColorScheme.vim' " Randomize color scheme
-NeoBundle 'vim-scripts/mru.vim.git' " Save file history
+"NeoBundle 'vim-scripts/mru.vim.git' " Save file history.  Replaced by neomru.vim
 NeoBundle 'bling/vim-airline' " Status line display
 NeoBundle 'tomtom/tcomment_vim'
 NeoBundle 'godlygeek/tabular'
@@ -194,7 +211,6 @@ NeoBundle 'tpope/vim-surround'
 NeoBundle 'tpope/vim-unimpaired' " Easy key binding movement.
 NeoBundle 'tpope/vim-speeddating' " Ctrl-A and Ctrl-X on date
 NeoBundle 'zhaocai/GoldenView.Vim'
-NeoBundle 'Shougo/unite-session'
 NeoBundle 'vim-voom/VOoM'
 
 " NeoBundle 'vim-scripts/YankRing.vim'
@@ -209,19 +225,6 @@ if !has('win32') && !has('win64') " Windows not supported
   NeoBundle 'astashov/vim-ruby-debugger'
 endif
 " astashov/debugger-xml'
-
-" ShowMarks - Display marks {{{
-NeoBundleLazy "vim-scripts/ShowMarks", {
-      \ "autoload": {
-      \ "commands": ["ShowMarksPlaceMark", "ShowMarksToggle"],
-      \ }}
-let s:hooks = neobundle#get_hooks("ShowMarks")
-function! s:hooks.on_source(bundle)
-  " ignore ShowMarks on buffer type of
-  " Help, Non-modifiable, Preview, Quickfix
-  let showmarks_ignore_type = 'hmpq'
-endfunction
-" }}}
 
 " memolist.vim - Jog down thought and idea {{{
 NeoBundleLazy "glidenote/memolist.vim", {
@@ -307,7 +310,6 @@ NeoBundle 'majutsushi/tagbar'
 " }}}
 
 " NeoBundle 'SirVer/ultisnips' " Code Snippet
-
 " SnipMate {{{
 " NeoBundle 'marcweber/vim-addon-mw-utils'
 " NeoBundle 'tomtom/tlib_vim'
@@ -433,6 +435,7 @@ NeoBundleLazy 'h1mesuke/unite-outline', {
       \ }}
 NeoBundle 'Shougo/neomru.vim' " Prefer integration with unite
 NeoBundle 'moznion/unite-git-conflict.vim'
+NeoBundle 'Shougo/unite-session'
 
 " File Explorer
 NeoBundleLazy "Shougo/vimfiler", {
@@ -473,7 +476,6 @@ NeoBundle 'tpope/vim-cucumber'
 NeoBundle 'tpope/vim-haml'
 NeoBundle 'groenewege/vim-less'
 
-" NeoBundle 'vim-scripts/DrawIt' 
 NeoBundle 'hsitz/VimOrganizer' " For note taking
 NeoBundle 'mattn/calendar-vim' " Required by VimOrganizer
 NeoBundle 'vim-scripts/utl.vim' " Optional for VimOrganizer
@@ -896,13 +898,6 @@ set wildignore+=*.orig                           " Merge resolution files
 
 " }}}
 
-" VimFiler {{{
-
-" Replace netrw
-let g:vimfiler_as_default_explorer = 1
-
-" }}}
-
 " UltiSnips {{{
 " Add my own snippet directory
 let g:UltiSnipsSnippetDirectories=["UltiSnips", "mysnippets"]
@@ -934,13 +929,6 @@ let NERDTreeShowBookmarks = 1
 
 set viewoptions=cursor,folds,slash,unix
 " let g:skipview_files = ['*\.vim']
-
-" }}}
-
-" ShowMarks {{{
-
-" Prevent from loading
-" let loaded_showmarks = 1
 
 " }}}
 
