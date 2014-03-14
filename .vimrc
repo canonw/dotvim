@@ -159,6 +159,13 @@ function! s:hooks.on_source(bundle)
 "   let g:gundo_preview_bottom = 1
 endfunction
 " }}}
+" junkfile.vim - scratch pad {{{
+NeoBundleLazy 'Shougo/junkfile.vim', {
+\ 'autoload' : {
+\  'commands'     : 'JunkfileOpen',
+\  'unite_sources': ['junkfile', 'junkfile/new'],
+\ }}
+" }}}
 
 " SQL
 " NeoBundle 'vim-scripts/SQLComplete.vim' " Bundle in VIM
@@ -1274,6 +1281,8 @@ nnoremap <silent> [unite]b :<C-u>Unite buffer<CR>
 nnoremap <silent> [unite]f :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
 nnoremap <silent> [unite]g :<C-u>Unite grep<CR>
 nnoremap <silent> [unite]j :<C-u>Unite jump<CR>
+nnoremap <silent> [unite]jf :<C-u>Unite junkfile<CR>
+nnoremap <silent> [unite]jfn :<C-u>Unite junkfile/new<CR>
 nnoremap <silent> [unite]k :<C-u>Unite bookmark
 nnoremap <silent> [unite]l :<C-u>Unite line<CR>
 nnoremap <silent> [unite]m :<C-u>Unite file_mru<CR>
