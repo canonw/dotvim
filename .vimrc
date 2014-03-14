@@ -68,6 +68,7 @@ NeoBundleLazy 'groenewege/vim-less.git', {'autoload': { 'filetypes': 'less' }}
 " let g:session_autoload='no'
 " }}}
 
+
 " Smarter display to get better information
 " quickhl - Give ability to highlight multiple words {{{
 " NeoBundle 't9md/vim-quickhl'
@@ -143,6 +144,21 @@ NeoBundle 'terryma/vim-expand-region'
 "      \ })
 " }}}
 
+
+" Smart file editing
+" gundo - track undo tree {{{
+NeoBundleLazy "sjl/gundo.vim", {
+   \ "autoload": {
+   \ "commands": ['GundoToggle'],
+   \}}
+let s:hooks = neobundle#get_hooks("gundo.vim")
+function! s:hooks.on_source(bundle)
+"   let g:gundo_width = 60
+"   let g:gundo_preview_height = 40
+"   let g:gundo_right = 1
+"   let g:gundo_preview_bottom = 1
+endfunction
+" }}}
 
 " SQL
 " NeoBundle 'vim-scripts/SQLComplete.vim' " Bundle in VIM
@@ -491,12 +507,6 @@ NeoBundle 'chrisbra/NrrwRgn' " Optional for VimOrganizer
 "   \ if search('<+CURSOR+>')
 "   \ | silent! execute 'normal! "_da>'
 "   \ | endif
-
-" NeoBundleLazy "sjl/gundo.vim", {
-"   \ "autoload": {
-"   \ "commands": ['GundoToggle'],
-"   \}}
-" nnoremap <Leader>g :GundoToggle<CR>
 
 " vim-quickrun
 " NeoBundleLazy "thinca/vim-quickrun", {
@@ -1160,6 +1170,8 @@ nnoremap <silent> [toggle]m :ShowMarksToggle<CR>
 nnoremap <silent> [toggle]n :call ToggleNumbers()<CR>
 nnoremap <silent> [toggle]s :<C-u>setl spell!<CR>:setl spell?<CR>
 nnoremap <silent> [toggle]t :<C-u>setl expandtab!<CR>:setl expandtab?<CR>
+" sjl/gundo.vim
+nnoremap <silent> [toggle]u :GundoToggle<CR>
 nnoremap <silent> [toggle]w :<C-u>setl wrap!<CR>:setl wrap?<CR>
 
 
