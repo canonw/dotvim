@@ -22,6 +22,7 @@
 " http://spf13.com/post/perfect-vimrc-vim-config-file
 " https://bitbucket.org/sjl/dotfiles/src/tip/vim/vimrc
 " http://www.pythonclub.org/vim/gui-font
+" http://wyw.dcweb.cn/vim/_vimrc.html
 "
 " Snippet respository
 " https://github.com/Shougo/neosnippet-snippets
@@ -118,7 +119,24 @@ endfunction
 " }}}
 
 
-" Smarter text selection
+" Smart text format
+" NeoBundle 'godlygeek/tabular' " Replace by vim-easy-align
+" NeoBundle 'vim-scripts/Align' " Replace by vim-easy-align
+" vim-easy-align - align text block {{{
+" NeoBundle 'junegunn/vim-easy-align'
+NeoBundleLazy 'junegunn/vim-easy-align', {
+      \ "autoload": {
+      \ "commands": ["EasyAlign"],
+      \ 'mappings': ['<Plug>(EasyAlign)', '<Plug>(LiveEasyAlign)'],
+      \ }}
+let s:hooks = neobundle#get_hooks("vim-easy-align")
+function! s:hooks.on_source(bundle)
+  " let g:easy_align_delimiters=
+endfunction
+" }}}
+
+
+" Smart text selection
 " vim-expand-region - incremental visual selection {{{
 " NeoBundle 'terryma/vim-expand-region'
 NeoBundleLazy 'terryma/vim-expand-region', {
@@ -172,6 +190,7 @@ NeoBundleLazy 'Shougo/junkfile.vim', {
 \ }}
 " }}}
 
+
 " SQL
 " NeoBundle 'vim-scripts/SQLComplete.vim' " Bundle in VIM
 " dbext - interfact to database {{{
@@ -224,14 +243,12 @@ NeoBundle 'vim-scripts/changeColorScheme.vim' " Randomize color scheme
 "NeoBundle 'vim-scripts/mru.vim.git' " Save file history.  Replaced by neomru.vim
 NeoBundle 'bling/vim-airline' " Status line display
 NeoBundle 'tomtom/tcomment_vim'
-NeoBundle 'godlygeek/tabular'
 NeoBundle 'mattn/emmet-vim'
 NeoBundle 'vim-scripts/DrawIt'
 NeoBundle 'salsifis/vim-transpose'
 " NeoBundle 'roman/golden-ratio'
 NeoBundle 'szw/vim-maximizer'
 NeoBundle 'terryma/vim-multiple-cursors'
-NeoBundle 'vim-scripts/Align'
 NeoBundle 'tpope/vim-repeat'
 NeoBundle 'tpope/vim-dispatch'
 NeoBundle 'tpope/vim-abolish'
@@ -1241,6 +1258,12 @@ xmap <Space>M <Plug>(quickhl-manual-reset)
 nmap <Space>j <Plug>(quickhl-cword-toggle)
 nmap <Space>] <Plug>(quickhl-tag-toggle)
 map H <Plug>(operator-quickhl-manual-this-motion)
+
+" vim-easy-align
+vmap <Enter>           <Plug>(EasyAlign)
+nmap <Leader>a         <Plug>(EasyAlign)
+vmap <Leader><Enter>   <Plug>(LiveEasyAlign)
+nmap <Leader><Leader>a <Plug>(LiveEasyAlign)
 
 " Quick file editing
 nnoremap <leader>ffv :e $MYVIMRC<cr>
