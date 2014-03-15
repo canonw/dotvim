@@ -171,23 +171,23 @@ NeoBundleLazy 'terryma/vim-expand-region', {
 " Smart file editing
 " gundo - track undo tree {{{
 NeoBundleLazy "sjl/gundo.vim", {
-   \ "autoload": {
-   \ "commands": ['GundoToggle'],
-   \}}
+      \ "autoload": {
+      \ "commands": ['GundoToggle'],
+      \}}
 let s:hooks = neobundle#get_hooks("gundo.vim")
 function! s:hooks.on_source(bundle)
-"   let g:gundo_width = 60
-"   let g:gundo_preview_height = 40
-"   let g:gundo_right = 1
-"   let g:gundo_preview_bottom = 1
+  "   let g:gundo_width = 60
+  "   let g:gundo_preview_height = 40
+  "   let g:gundo_right = 1
+  "   let g:gundo_preview_bottom = 1
 endfunction
 " }}}
 " junkfile.vim - scratch pad {{{
 NeoBundleLazy 'Shougo/junkfile.vim', {
-\ 'autoload' : {
-\  'commands'     : 'JunkfileOpen',
-\  'unite_sources': ['junkfile', 'junkfile/new'],
-\ }}
+      \ 'autoload' : {
+      \  'commands'     : 'JunkfileOpen',
+      \  'unite_sources': ['junkfile', 'junkfile/new'],
+      \ }}
 " }}}
 
 
@@ -236,6 +236,36 @@ let g:sqlutil_cmd_terminator = "\ngo\n"
 let g:sqlutil_keyword_case = '\U'
 " }}}
 
+
+" Extend Text Object {{{
+" https://github.com/kana/vim-textobj-user/wiki
+NeoBundle 'kana/vim-textobj-user'
+NeoBundle 'Julian/vim-textobj-brace' "aj ij
+NeoBundle 'Julian/vim-textobj-variable-segment'
+NeoBundle 'jceb/vim-textobj-uri' " iu au
+NeoBundle 'kana/vim-textobj-datetime' " ada ida
+NeoBundle 'kana/vim-textobj-diff' " adh idh
+NeoBundle 'kana/vim-textobj-entire' " ae ie
+NeoBundle 'kana/vim-textobj-line' " al il
+NeoBundle 'kana/vim-textobj-syntax'
+" NeoBundle 'mattn/vim-textobj-url'
+NeoBundle 'michaeljsmith/vim-indent-object'
+NeoBundle 'osyo-manga/vim-textobj-multiblock'
+NeoBundle 'osyo-manga/vim-textobj-multitextobj'
+NeoBundle 'rhysd/vim-textobj-word-column'
+NeoBundle 'thinca/vim-textobj-between' " af{char} if{char}
+NeoBundle 'reedes/vim-textobj-quote'
+" NeoBundleLazy 'thinca/vim-textobj-plugins', {
+"       \	'depends'  : ['kana/vim-textobj-function'],
+"       \	'autoload' : {
+"       \		'filetypes' : ['html', 'javascript', 'perl'],
+"       \	},
+"       \ }
+" " nelstrom/vim-textobj-rubyblock
+" NeoBundleLazyByFileTypes 'kana/vim-textobj-function'
+"       \ 	['c', 'vim']
+" }}}
+
 NeoBundle 'jakar/vim-AnsiEsc' " ANSI color
 " NeoBundle 'vim-scripts/AnsiEsc.vim' " Display ANSI color in log files
 NeoBundle 'flazz/vim-colorschemes' " Tons of color schemes
@@ -265,11 +295,6 @@ NeoBundle 'vim-voom/VOoM'
 "     let g:multi_cursor_skip_key='<C-f>'
 "     let g:multi_cursor_quit_key='<Esc>'
 "
-
-if !has('win32') && !has('win64') " Windows not supported
-  NeoBundle 'astashov/vim-ruby-debugger'
-endif
-" astashov/debugger-xml'
 
 " memolist.vim - Jog down thought and idea {{{
 NeoBundleLazy "glidenote/memolist.vim", {
@@ -520,6 +545,12 @@ NeoBundle 'ecomba/vim-ruby-refactoring'
 NeoBundle 'tpope/vim-cucumber'
 NeoBundle 'tpope/vim-haml'
 NeoBundle 'groenewege/vim-less'
+" NeoBundle 'mileszs/apidock.vim'
+NeoBundle 'lucapette/vim-ruby-doc'
+if !has('win32') && !has('win64') " Windows not supported
+  NeoBundle 'astashov/vim-ruby-debugger'
+endif
+" astashov/debugger-xml'
 
 NeoBundle 'hsitz/VimOrganizer' " For note taking
 NeoBundle 'mattn/calendar-vim' " Required by VimOrganizer
@@ -1334,8 +1365,8 @@ map <Leader>mn  :MemoNew<CR>
 map <Leader>ml  :MemoList<CR>
 
 " vim-expand-region
-map K <Plug>(expand_region_expand)
-map J <Plug>(expand_region_shrink)
+map + <Plug>(expand_region_expand)
+map _ <Plug>(expand_region_shrink)
 
 
 " Neosnippet {{{
