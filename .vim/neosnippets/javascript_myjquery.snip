@@ -1,0 +1,17 @@
+##########################
+# Document ready         #
+##########################
+# http://learn.jquery.com/using-jquery-core/document-ready/
+snippet drn
+abbr    jQuery Document ready as named function (js)
+options word
+  function ${1:foo}(jQuery) {
+    ${0:console.log( "ready!" );}
+  }
+  jQuery(document).ready( ${1:readyFn} );
+
+snippet dr
+abbr jQuery Document ready as anonymous function (js)
+  jQuery(document).ready(function($){
+    ${0:console.log( "ready!" );}
+  });

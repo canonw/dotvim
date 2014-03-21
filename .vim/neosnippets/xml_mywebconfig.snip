@@ -1,0 +1,51 @@
+###########################################################################
+#                              web.config                                 #
+###########################################################################
+
+##########################
+#    Network Tracing     #
+##########################
+snippet cnt
+abbr    Configure Network Tracing
+options head
+  <!-- Reference: http://msdn.microsoft.com/en-us/library/ty48b824.aspx -->
+  <!-- To do check list: 
+  1.  Place system.diagnostics under \configuration element
+  2.  No duplicate system.diagnostics element
+  3.  Update attribute initializeData to legal file path
+  4.  Remove unwanted comment
+  -->
+  <!-- <configuration> -->
+    <system.diagnostics>
+      <sources>
+        <source name="System.Net" tracemode="includehex" maxdatasize="1024">
+          <listeners>
+            <add name="System.Net"/>
+          </listeners>
+        </source>
+        <source name="System.Net.Sockets">
+          <listeners>
+            <add name="System.Net"/>
+          </listeners>
+        </source>
+        <source name="System.Net.Cache">
+          <listeners>
+            <add name="System.Net"/>
+          </listeners>
+        </source>
+      </sources>
+      <switches>
+        <add name="System.Net" value="Verbose"/>
+        <add name="System.Net.Sockets" value="Verbose"/>
+        <add name="System.Net.Cache" value="Verbose"/>
+        <add name="System.Net.HttpListener" value="Verbose"/>
+      </switches>
+      <sharedListeners>
+        <add name="System.Net"
+          type="System.Diagnostics.TextWriterTraceListener"
+          initializeData="${1:CHANGE_ME.log}"
+        />
+      </sharedListeners>
+      <trace autoflush="true"/>
+    </system.diagnostics>
+  <!-- </configuration> -->
