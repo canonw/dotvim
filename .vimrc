@@ -68,9 +68,28 @@ NeoBundleLazy 'groenewege/vim-less.git', {'autoload': { 'filetypes': 'less' }}
 " let g:session_directory='~/.vim/sessions'
 " let g:session_autoload='no'
 " }}}
+" vim-quickrun {{{
+NeoBundleLazy "thinca/vim-quickrun", {
+      \ "autoload": {
+      \ "commands": ["QuickRun"],
+      \ "mappings": [['nxo', '<Plug>(quickrun)']]
+      \ }}
+let s:hooks = neobundle#get_hooks("vim-quickrun")
+function! s:hooks.on_source(bundle)
+  let g:quickrun_no_default_key_mappings = 1
+  let g:quickrun_config = {
+        \ "*": {"runmode": "async:remote:vimproc"},
+        \ "_": {"runner": "vimproc", "runner/vimproc/updatetime": 60},
+        \ }
+  let g:quickrun_config['markdown'] = {
+        \ 'outputter': 'browser',
+        \ }
+endfunction
+" }}}
 
 
-" Smarter display to get better information
+
+" Smart display to get better information
 " quickhl - Give ability to highlight multiple words {{{
 " NeoBundle 't9md/vim-quickhl'
 NeoBundleLazy 't9md/vim-quickhl', {
@@ -567,31 +586,6 @@ NeoBundle 'chrisbra/NrrwRgn' " Optional for VimOrganizer
 "   \ if search('<+CURSOR+>')
 "   \ | silent! execute 'normal! "_da>'
 "   \ | endif
-
-" vim-quickrun
-" NeoBundleLazy "thinca/vim-quickrun", {
-"   \ "autoload": {
-"   \ "mappings": [['nxo', '<Plug>(quickrun)']]
-"   \ }}
-" nmap <Leader>r <Plug>(quickrun)
-" let s:hooks = neobundle#get_hooks("vim-quickrun")
-" function! s:hooks.on_source(bundle)
-"   let g:quickrun_config = {
-"     \ "*": {"runmode": "async:remote:vimproc"},
-"     \ "_": {"runner": "vimproc", "runner/vimproc/updatetime": 60},
-"     \ }
-"   let g:quickrun_config['markdown'] = {
-"     \ 'outputter': 'browser',
-"     \ }
-" " Syntax Check
-"   let g:quickrun_config['syntax/mast'] = {
-"         \ 'runner': 'vimproc',
-"         \ 'command': 'mast',
-"         \ 'cmdopt': '-c',
-"         \ 'exec': '%c %o %s:p',
-"         \}
-"   autocmd MyAutoCmd BufWritePost *.sin QuickRun -outputer quickfix -type syntax/mast
-" endfunction
 
 " NeoBundle "scrooloose/syntastic", {
 "   \ "build": {
@@ -1104,6 +1098,7 @@ augroup END
 augroup ft_xml
   au!
   au FileType xml setlocal foldmethod=syntax
+  au FileType xml setlocal equalprg=xmllint\ --format\ --recover\ -\ 2>/dev/null
 augroup END
 " }}}
 
@@ -1368,6 +1363,8 @@ map <Leader>ml  :MemoList<CR>
 map + <Plug>(expand_region_expand)
 map _ <Plug>(expand_region_shrink)
 
+" QuickRun
+nmap <Leader>r <Plug>(quickrun)
 
 " Neosnippet {{{
 imap <C-k>     <Plug>(neosnippet_expand_or_jump)
