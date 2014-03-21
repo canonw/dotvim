@@ -90,9 +90,12 @@ function! s:hooks.on_source(bundle)
   let g:quickrun_config['markdown'] = {
         \ 'outputter': 'browser',
         \ }
+  "let g:quickrun_config['ruby.rspec']  = {'command': 'rspec', 'cmdopt': '-f d'}
+  " http://qiita.com/Qureana/items/b057c934733554e05427
+  let g:quickrun_config['ruby.rspec'] = {'command': 'rspec', 'cmdopt': "-l %{line('.')}", 'exec': ['bundle exec %c %o %s %a']}
 endfunction
 " }}}
-
+ autocmd BufWinEnter,BufNewFile *_spec.rb setlocal filetype=ruby.rspec
 
 
 " Smart display to get better information
@@ -582,7 +585,32 @@ NeoBundle 'tpope/vim-rails'
 NeoBundle 'ecomba/vim-ruby-refactoring'
 NeoBundle 'tpope/vim-cucumber'
 NeoBundle 'tpope/vim-haml'
-NeoBundle 'groenewege/vim-less'
+" NeoBundle 'thoughtbot/vim-rspec'
+" " let g:rspec_command = "!rspec --drb {spec}"
+" " let g:rspec_command = "dispatch rspec {spec}"
+" " RSpec.vim mappings
+" map <Leader>t :call RunCurrentSpecFile()<CR>
+" map <Leader>s :call RunNearestSpec()<CR>
+" map <Leader>l :call RunLastSpec()<CR>
+" map <Leader>a :call RunAllSpecs()<CR>
+
+
+" NeoBundle 'duskhacker/sweet-rspec-vim'
+"
+" map <Leader>t :SweetVimRspecRunFile<CR>
+" map <Leader>f :SweetVimRspecRunFocused<CR> "(SHIFT-CMD-r)
+" map <Leader>l :SweetVimRspecRunPrevious<CR> "(OPT-CMD-r)
+
+" NeoBundle 'janx/vim-rubytest'
+" let g:rubytest_in_quickfix = 1
+" let g:rubytest_cmd_test = "ruby %p"
+" let g:rubytest_cmd_testcase = "ruby %p -n '/%c/'"
+" let g:rubytest_cmd_spec = "spec -f specdoc %p"
+" let g:rubytest_cmd_example = "spec -f specdoc %p -e '%c'"
+" let g:rubytest_cmd_feature = "cucumber %p"
+" let g:rubytest_cmd_story = "cucumber %p -n '%c'"
+
+NeoBundle 'heavenshell/vim-quickrun-hook-unittest'
 " NeoBundle 'mileszs/apidock.vim'
 NeoBundle 'lucapette/vim-ruby-doc'
 if !has('win32') && !has('win64') " Windows not supported
@@ -823,6 +851,17 @@ augroup QFixToggle
   "  autocmd!
   autocmd BufWinEnter quickfix setlocal norelativenumber
 augroup END
+" }}}
+" QuickRun {{
+" augroup QuickRunUnitTest
+"   autocmd!
+"   "autocmd BufWinEnter,BufNewFile *test.php setlocal filetype=php.unit
+"   " Choose UnitTest or py.test.
+"   "autocmd BufWinEnter,BufNewFile test_*.py setlocal filetype=python.unit
+"   "autocmd BufWinEnter,BufNewFile test_*.py setlocal filetype=python.pytest
+"   "autocmd BufWinEnter,BufNewFile *.t setlocal filetype=perl.unit
+"   autocmd BufWinEnter,BufNewFile *_spec.rb setlocal filetype=ruby.rspec
+" augroup END
 " }}}
 " Cursors {{{
 
