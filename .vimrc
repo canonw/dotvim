@@ -16,6 +16,7 @@
 "    - Anonymous Pro
 "
 " Give credit where credit is due.
+" https://github.com/tony/vim-config/blob/master/bundles.vim
 " https://raw.github.com/hecomi/dotfiles/master/.vimrc
 " https://github.com/mizutomo/dotfiles/blob/master/vimrc
 " http://amix.dk/vim/vimrc.html
@@ -55,9 +56,14 @@ NeoBundle 'Shougo/vimproc.vim', {
       \ } " Recommand by NeoBundle
 
 " Deferred filetytpes loading  {{{
-NeoBundleLazy 'tpope/vim-git', {'autoload': { 'filetypes': 'git' }}
-NeoBundleLazy 'tpope/vim-markdown', {'autoload': { 'filetypes': 'markdown' }}
-NeoBundleLazy 'groenewege/vim-less.git', {'autoload': { 'filetypes': 'less' }}
+NeoBundleLazy 'tpope/vim-git',                 { 'autoload': { 'filetypes': 'git' }}
+NeoBundleLazy 'tpope/vim-markdown',            { 'autoload': { 'filetypes': 'markdown' }}
+NeoBundleLazy 'nelstrom/vim-markdown-folding', { 'autoload': { 'filetypes': ['markdown'] }}
+NeoBundleLazy 'groenewege/vim-less.git',       { 'autoload': { 'filetypes': 'less' }}
+NeoBundleLazy 'othree/html5.vim',              { 'autoload': { 'filetypes': 'html' }}
+NeoBundleLazy 'pangloss/vim-javascript',       { 'autoload': { 'filetypes': 'javascript' }}
+NeoBundleLazy 'elzr/vim-json',                 { 'autoload': { 'filetypes': 'javascript' }}
+NeoBundleLazy 'hail2u/vim-css3-syntax',        { 'autoload': { 'filetypes': ['css', 'less'] }}
 " }}}
 
 
@@ -124,6 +130,14 @@ NeoBundleLazy "nathanaelkane/vim-indent-guides", {
       \ "commands": ["IndentGuidesToggle"],
       \ }}
 " }}}
+" indentLine {{{
+if has('conceal')
+  NeoBundleLazy 'Yggdroot/indentLine', {
+      \ "autoload": {
+      \ "commands": ["IndentLinesToggle"],
+      \ }}
+endif
+" }}}
 " ShowMarks - Display marks {{{
 NeoBundleLazy "vim-scripts/ShowMarks", {
       \ "autoload": {
@@ -153,7 +167,13 @@ function! s:hooks.on_source(bundle)
   " let g:easy_align_delimiters=
 endfunction
 " }}}
+" vim-transpose - Transpose columns to rows {{{
+NeoBundleLazy 'salsifis/vim-transpose', {
+      \ "autoload": {
+      \ "commands": ["Transpose"],
+      \ }}
 
+" }}}
 
 " Smart text selection
 " vim-expand-region - incremental visual selection {{{
@@ -294,7 +314,6 @@ NeoBundle 'bling/vim-airline' " Status line display
 NeoBundle 'tomtom/tcomment_vim'
 NeoBundle 'mattn/emmet-vim'
 NeoBundle 'vim-scripts/DrawIt'
-NeoBundle 'salsifis/vim-transpose'
 " NeoBundle 'roman/golden-ratio'
 NeoBundle 'szw/vim-maximizer'
 NeoBundle 'terryma/vim-multiple-cursors'
@@ -1218,8 +1237,13 @@ nnoremap <silent> [toggle]T :TagbarToggle<CR>
 nnoremap <silent> [toggle]c :call NextColorScheme()<CR>:AirlineRefresh<CR>
 nnoremap <silent> [toggle]f :call ToggleFonts()<CR>
 nnoremap <silent> [toggle]g :GoldenRatioToggle<CR>
-" visual-indent-guides
-nnoremap <silent> [toggle]i :IndentGuidesToggle<CR>
+if has('conceal')
+  " indentLine
+  nnoremap <silent> [toggle]i :IndentLinesToggle<CR>
+else
+  " visual-indent-guides
+  nnoremap <silent> [toggle]i :IndentGuidesToggle<CR>
+endif
 nnoremap <silent> [toggle]l :<C-u>setl list!<CR>:setl list?<CR>
 nnoremap <silent> [toggle]m :ShowMarksToggle<CR>
 nnoremap <silent> [toggle]n :call ToggleNumbers()<CR>
