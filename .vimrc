@@ -16,6 +16,7 @@
 "    - Anonymous Pro
 "
 " Give credit where credit is due.
+" https://github.com/tony/vim-config/blob/master/bundles.vim
 " https://raw.github.com/hecomi/dotfiles/master/.vimrc
 " https://github.com/mizutomo/dotfiles/blob/master/vimrc
 " http://amix.dk/vim/vimrc.html
@@ -55,9 +56,14 @@ NeoBundle 'Shougo/vimproc.vim', {
       \ } " Recommand by NeoBundle
 
 " Deferred filetytpes loading  {{{
-NeoBundleLazy 'tpope/vim-git', {'autoload': { 'filetypes': 'git' }}
-NeoBundleLazy 'tpope/vim-markdown', {'autoload': { 'filetypes': 'markdown' }}
-NeoBundleLazy 'groenewege/vim-less.git', {'autoload': { 'filetypes': 'less' }}
+NeoBundleLazy 'tpope/vim-git',                 { 'autoload': { 'filetypes': 'git' }}
+NeoBundleLazy 'tpope/vim-markdown',            { 'autoload': { 'filetypes': 'markdown' }}
+NeoBundleLazy 'nelstrom/vim-markdown-folding', { 'autoload': { 'filetypes': ['markdown'] }}
+NeoBundleLazy 'groenewege/vim-less.git',       { 'autoload': { 'filetypes': 'less' }}
+NeoBundleLazy 'othree/html5.vim',              { 'autoload': { 'filetypes': 'html' }}
+NeoBundleLazy 'pangloss/vim-javascript',       { 'autoload': { 'filetypes': 'javascript' }}
+NeoBundleLazy 'elzr/vim-json',                 { 'autoload': { 'filetypes': 'javascript' }}
+NeoBundleLazy 'hail2u/vim-css3-syntax',        { 'autoload': { 'filetypes': ['css', 'less'] }}
 " }}}
 
 
@@ -68,9 +74,31 @@ NeoBundleLazy 'groenewege/vim-less.git', {'autoload': { 'filetypes': 'less' }}
 " let g:session_directory='~/.vim/sessions'
 " let g:session_autoload='no'
 " }}}
+" vim-quickrun {{{
+NeoBundleLazy "thinca/vim-quickrun", {
+      \ "autoload": {
+      \ "commands": ["QuickRun"],
+      \ "mappings": [['nxo', '<Plug>(quickrun)']]
+      \ }}
+let s:hooks = neobundle#get_hooks("vim-quickrun")
+function! s:hooks.on_source(bundle)
+  let g:quickrun_no_default_key_mappings = 1
+  let g:quickrun_config = {
+        \ "*": {"runmode": "async:remote:vimproc"},
+        \ "_": {"runner": "vimproc", "runner/vimproc/updatetime": 60},
+        \ }
+  let g:quickrun_config['markdown'] = {
+        \ 'outputter': 'browser',
+        \ }
+  "let g:quickrun_config['ruby.rspec']  = {'command': 'rspec', 'cmdopt': '-f d'}
+  " http://qiita.com/Qureana/items/b057c934733554e05427
+  let g:quickrun_config['ruby.rspec'] = {'command': 'rspec', 'cmdopt': "-l %{line('.')}", 'exec': ['bundle exec %c %o %s %a']}
+endfunction
+" }}}
+ autocmd BufWinEnter,BufNewFile *_spec.rb setlocal filetype=ruby.rspec
 
 
-" Smarter display to get better information
+" Smart display to get better information
 " quickhl - Give ability to highlight multiple words {{{
 " NeoBundle 't9md/vim-quickhl'
 NeoBundleLazy 't9md/vim-quickhl', {
@@ -105,6 +133,14 @@ NeoBundleLazy "nathanaelkane/vim-indent-guides", {
       \ "commands": ["IndentGuidesToggle"],
       \ }}
 " }}}
+" indentLine {{{
+if has('conceal')
+  NeoBundleLazy 'Yggdroot/indentLine', {
+      \ "autoload": {
+      \ "commands": ["IndentLinesToggle"],
+      \ }}
+endif
+" }}}
 " ShowMarks - Display marks {{{
 NeoBundleLazy "vim-scripts/ShowMarks", {
       \ "autoload": {
@@ -134,7 +170,13 @@ function! s:hooks.on_source(bundle)
   " let g:easy_align_delimiters=
 endfunction
 " }}}
+" vim-transpose - Transpose columns to rows {{{
+NeoBundleLazy 'salsifis/vim-transpose', {
+      \ "autoload": {
+      \ "commands": ["Transpose"],
+      \ }}
 
+" }}}
 
 " Smart text selection
 " vim-expand-region - incremental visual selection {{{
@@ -275,7 +317,6 @@ NeoBundle 'bling/vim-airline' " Status line display
 NeoBundle 'tomtom/tcomment_vim'
 NeoBundle 'mattn/emmet-vim'
 NeoBundle 'vim-scripts/DrawIt'
-NeoBundle 'salsifis/vim-transpose'
 " NeoBundle 'roman/golden-ratio'
 NeoBundle 'szw/vim-maximizer'
 NeoBundle 'terryma/vim-multiple-cursors'
@@ -544,7 +585,32 @@ NeoBundle 'tpope/vim-rails'
 NeoBundle 'ecomba/vim-ruby-refactoring'
 NeoBundle 'tpope/vim-cucumber'
 NeoBundle 'tpope/vim-haml'
-NeoBundle 'groenewege/vim-less'
+" NeoBundle 'thoughtbot/vim-rspec'
+" " let g:rspec_command = "!rspec --drb {spec}"
+" " let g:rspec_command = "dispatch rspec {spec}"
+" " RSpec.vim mappings
+" map <Leader>t :call RunCurrentSpecFile()<CR>
+" map <Leader>s :call RunNearestSpec()<CR>
+" map <Leader>l :call RunLastSpec()<CR>
+" map <Leader>a :call RunAllSpecs()<CR>
+
+
+" NeoBundle 'duskhacker/sweet-rspec-vim'
+"
+" map <Leader>t :SweetVimRspecRunFile<CR>
+" map <Leader>f :SweetVimRspecRunFocused<CR> "(SHIFT-CMD-r)
+" map <Leader>l :SweetVimRspecRunPrevious<CR> "(OPT-CMD-r)
+
+" NeoBundle 'janx/vim-rubytest'
+" let g:rubytest_in_quickfix = 1
+" let g:rubytest_cmd_test = "ruby %p"
+" let g:rubytest_cmd_testcase = "ruby %p -n '/%c/'"
+" let g:rubytest_cmd_spec = "spec -f specdoc %p"
+" let g:rubytest_cmd_example = "spec -f specdoc %p -e '%c'"
+" let g:rubytest_cmd_feature = "cucumber %p"
+" let g:rubytest_cmd_story = "cucumber %p -n '%c'"
+
+NeoBundle 'heavenshell/vim-quickrun-hook-unittest'
 " NeoBundle 'mileszs/apidock.vim'
 NeoBundle 'lucapette/vim-ruby-doc'
 if !has('win32') && !has('win64') " Windows not supported
@@ -567,31 +633,6 @@ NeoBundle 'chrisbra/NrrwRgn' " Optional for VimOrganizer
 "   \ if search('<+CURSOR+>')
 "   \ | silent! execute 'normal! "_da>'
 "   \ | endif
-
-" vim-quickrun
-" NeoBundleLazy "thinca/vim-quickrun", {
-"   \ "autoload": {
-"   \ "mappings": [['nxo', '<Plug>(quickrun)']]
-"   \ }}
-" nmap <Leader>r <Plug>(quickrun)
-" let s:hooks = neobundle#get_hooks("vim-quickrun")
-" function! s:hooks.on_source(bundle)
-"   let g:quickrun_config = {
-"     \ "*": {"runmode": "async:remote:vimproc"},
-"     \ "_": {"runner": "vimproc", "runner/vimproc/updatetime": 60},
-"     \ }
-"   let g:quickrun_config['markdown'] = {
-"     \ 'outputter': 'browser',
-"     \ }
-" " Syntax Check
-"   let g:quickrun_config['syntax/mast'] = {
-"         \ 'runner': 'vimproc',
-"         \ 'command': 'mast',
-"         \ 'cmdopt': '-c',
-"         \ 'exec': '%c %o %s:p',
-"         \}
-"   autocmd MyAutoCmd BufWritePost *.sin QuickRun -outputer quickfix -type syntax/mast
-" endfunction
 
 " NeoBundle "scrooloose/syntastic", {
 "   \ "build": {
@@ -814,6 +855,17 @@ augroup QFixToggle
   "  autocmd!
   autocmd BufWinEnter quickfix setlocal norelativenumber
 augroup END
+" }}}
+" QuickRun {{
+" augroup QuickRunUnitTest
+"   autocmd!
+"   "autocmd BufWinEnter,BufNewFile *test.php setlocal filetype=php.unit
+"   " Choose UnitTest or py.test.
+"   "autocmd BufWinEnter,BufNewFile test_*.py setlocal filetype=python.unit
+"   "autocmd BufWinEnter,BufNewFile test_*.py setlocal filetype=python.pytest
+"   "autocmd BufWinEnter,BufNewFile *.t setlocal filetype=perl.unit
+"   autocmd BufWinEnter,BufNewFile *_spec.rb setlocal filetype=ruby.rspec
+" augroup END
 " }}}
 " Cursors {{{
 
@@ -1108,6 +1160,7 @@ augroup END
 augroup ft_xml
   au!
   au FileType xml setlocal foldmethod=syntax
+  au FileType xml setlocal equalprg=xmllint\ --format\ --recover\ -\ 2>/dev/null
 augroup END
 " }}}
 
@@ -1227,8 +1280,13 @@ nnoremap <silent> [toggle]T :TagbarToggle<CR>
 nnoremap <silent> [toggle]c :call NextColorScheme()<CR>:AirlineRefresh<CR>
 nnoremap <silent> [toggle]f :call ToggleFonts()<CR>
 nnoremap <silent> [toggle]g :GoldenRatioToggle<CR>
-" visual-indent-guides
-nnoremap <silent> [toggle]i :IndentGuidesToggle<CR>
+if has('conceal')
+  " indentLine
+  nnoremap <silent> [toggle]i :IndentLinesToggle<CR>
+else
+  " visual-indent-guides
+  nnoremap <silent> [toggle]i :IndentGuidesToggle<CR>
+endif
 nnoremap <silent> [toggle]l :<C-u>setl list!<CR>:setl list?<CR>
 nnoremap <silent> [toggle]m :ShowMarksToggle<CR>
 nnoremap <silent> [toggle]n :call ToggleNumbers()<CR>
@@ -1372,6 +1430,8 @@ map <Leader>ml  :MemoList<CR>
 map + <Plug>(expand_region_expand)
 map _ <Plug>(expand_region_shrink)
 
+" QuickRun
+nmap <Leader>r <Plug>(quickrun)
 
 " Neosnippet {{{
 imap <C-k>     <Plug>(neosnippet_expand_or_jump)
