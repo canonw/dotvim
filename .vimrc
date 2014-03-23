@@ -664,6 +664,10 @@ set hidden " A buffer becomes hidden when it is abandoned
 set backspace=eol,start,indent
 set whichwrap+=<,>,h,l
 
+" Wrap around words
+" Reference: http://vimcasts.org/episodes/soft-wrapping-text/
+command! -nargs=* Wrap set wrap linebreak nolist
+
 " Ignore case when searching
 set ignorecase
 
