@@ -153,7 +153,12 @@ function! s:hooks.on_source(bundle)
   let showmarks_ignore_type = 'hmpq'
 endfunction
 " }}}
-
+" vim-AnsiEsc - ANSI color {{{
+NeoBundleLazy "jakar/vim-AnsiEsc", {
+      \ "autoload": {
+      \ "commands": ["AnsiEsc"],
+      \ }}
+" }}}
 
 " Smart text format
 " NeoBundle 'godlygeek/tabular' " Replace by vim-easy-align
@@ -175,7 +180,6 @@ NeoBundleLazy 'salsifis/vim-transpose', {
       \ "autoload": {
       \ "commands": ["Transpose"],
       \ }}
-
 " }}}
 
 " Smart text selection
@@ -308,8 +312,6 @@ NeoBundle 'reedes/vim-textobj-quote'
 "       \ 	['c', 'vim']
 " }}}
 
-NeoBundle 'jakar/vim-AnsiEsc' " ANSI color
-" NeoBundle 'vim-scripts/AnsiEsc.vim' " Display ANSI color in log files
 NeoBundle 'flazz/vim-colorschemes' " Tons of color schemes
 NeoBundle 'vim-scripts/changeColorScheme.vim' " Randomize color scheme
 "NeoBundle 'vim-scripts/mru.vim.git' " Save file history.  Replaced by neomru.vim
@@ -622,6 +624,10 @@ NeoBundle 'hsitz/VimOrganizer' " For note taking
 NeoBundle 'mattn/calendar-vim' " Required by VimOrganizer
 NeoBundle 'vim-scripts/utl.vim' " Optional for VimOrganizer
 NeoBundle 'chrisbra/NrrwRgn' " Optional for VimOrganizer
+
+" TODO list manager
+" NeoBundle 'codegram/vim-todo' " Doesn't seems to work
+NeoBundle 'mivok/vimtodo'
 
 " NeoBundle "thinca/vim-template"
 " autocmd MyAutoCmd User plugin-template-loaded call s:template_keywords()
@@ -1161,6 +1167,13 @@ augroup ft_xml
   au!
   au FileType xml setlocal foldmethod=syntax
   au FileType xml setlocal equalprg=xmllint\ --format\ --recover\ -\ 2>/dev/null
+augroup END
+" }}}
+
+" TODO {{{
+augroup ft_todo
+  au!
+  au BufRead,BufNewFile *.todo,TODO setfiletype todo
 augroup END
 " }}}
 
