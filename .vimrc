@@ -62,7 +62,7 @@ NeoBundleLazy 'nelstrom/vim-markdown-folding', { 'autoload': { 'filetypes': ['ma
 NeoBundleLazy 'groenewege/vim-less.git',       { 'autoload': { 'filetypes': 'less' }}
 NeoBundleLazy 'othree/html5.vim',              { 'autoload': { 'filetypes': 'html' }}
 NeoBundleLazy 'pangloss/vim-javascript',       { 'autoload': { 'filetypes': 'javascript' }}
-NeoBundleLazy 'elzr/vim-json',                 { 'autoload': { 'filetypes': 'javascript' }}
+NeoBundleLazy 'elzr/vim-json',                 { 'autoload': { 'filetypes': ['javascript', 'json'] }}
 NeoBundleLazy 'hail2u/vim-css3-syntax',        { 'autoload': { 'filetypes': ['css', 'less'] }}
 " }}}
 
@@ -1170,10 +1170,18 @@ augroup ft_xml
 augroup END
 " }}}
 
-" TODO {{{
+" todo {{{
 augroup ft_todo
   au!
   au BufRead,BufNewFile *.todo,TODO setfiletype todo
+augroup END
+" }}}
+
+" json {{{
+augroup ft_json
+  au!
+  au FileType json setlocal equalprg=python\ -m\ json.tool
+  " au FileType json setlocal ts=2 sts=2 sw=2 expandtab equalprg=python\ -m\ json.tool
 augroup END
 " }}}
 
