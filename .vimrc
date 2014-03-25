@@ -1402,6 +1402,10 @@ map <leader>to :tabonly<cr>
 map <leader>tc :tabclose<cr>
 map <leader>tm :tabmove<Space>
 
+" Yank file name buffer
+nmap cf :let @+ = expand("%")<CR>
+nmap cp :let @+ = expand("%:p")<CR>
+
 " Beauty XML
 nmap <leader>x <ESC>:.,+1!xmllint --format --recover - 2>/dev/null<Home><Right>
 
