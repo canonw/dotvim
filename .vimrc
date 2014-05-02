@@ -159,6 +159,12 @@ NeoBundleLazy "jakar/vim-AnsiEsc", {
       \ "commands": ["AnsiEsc"],
       \ }}
 " }}}
+" vim-airline {{{
+NeoBundle 'bling/vim-airline' " Status line display
+" Set theme
+" let g:airline_theme="molokai"
+" }}}
+
 
 " Smart text format
 " NeoBundle 'godlygeek/tabular' " Replace by vim-easy-align
@@ -181,6 +187,18 @@ NeoBundleLazy 'salsifis/vim-transpose', {
       \ "commands": ["Transpose"],
       \ }}
 " }}}
+" tComment {{{
+NeoBundle 'tomtom/tcomment_vim'
+" g:tcommentMapLeader1 should be a shortcut that can be used with map, imap, vmap.
+" let g:tcommentMapLeader1 = '<c-_>'
+" g:tcommentMapLeader2 should be a shortcut that can be used with  map, xmap.
+" let g:tcommentMapLeader2 = '<Leader>_'
+" See |tcomment-operator|.
+" let g:tcommentMapLeaderOp1 = 'gc'
+" See |tcomment-operator|.
+" let g:tcommentMapLeaderOp2 = 'gC'
+" }}}
+
 
 " Smart text selection
 " vim-expand-region - incremental visual selection {{{
@@ -315,8 +333,6 @@ NeoBundle 'reedes/vim-textobj-quote'
 NeoBundle 'flazz/vim-colorschemes' " Tons of color schemes
 NeoBundle 'vim-scripts/changeColorScheme.vim' " Randomize color scheme
 "NeoBundle 'vim-scripts/mru.vim.git' " Save file history.  Replaced by neomru.vim
-NeoBundle 'bling/vim-airline' " Status line display
-NeoBundle 'tomtom/tcomment_vim'
 NeoBundle 'mattn/emmet-vim'
 NeoBundle 'vim-scripts/DrawIt'
 " NeoBundle 'roman/golden-ratio'
@@ -862,7 +878,7 @@ augroup QFixToggle
   autocmd BufWinEnter quickfix setlocal norelativenumber
 augroup END
 " }}}
-" QuickRun {{
+" QuickRun {{{
 " augroup QuickRunUnitTest
 "   autocmd!
 "   "autocmd BufWinEnter,BufNewFile *test.php setlocal filetype=php.unit
@@ -1023,13 +1039,6 @@ set wildignore+=*.orig                           " Merge resolution files
 " let MRU_Exclude_Files = '^c:\\temp\\.*'           " For MS-Windows
 " }}}
 
-" vim-airline {{{
-
-" Set theme
-" let g:airline_theme="molokai"
-
-" }}}
-
 " UltiSnips {{{
 " Add my own snippet directory
 let g:UltiSnipsSnippetDirectories=["UltiSnips", "mysnippets"]
@@ -1038,22 +1047,6 @@ let g:UltiSnipsSnippetDirectories=["UltiSnips", "mysnippets"]
 " NERDTree {{{
 " Display bookmark in NERD tree
 let NERDTreeShowBookmarks = 1
-" }}}
-
-" tComment {{{
-
-" g:tcommentMapLeader1 should be a shortcut that can be used with map, imap, vmap.
-" let g:tcommentMapLeader1 = '<c-_>'
-
-" g:tcommentMapLeader2 should be a shortcut that can be used with  map, xmap.
-" let g:tcommentMapLeader2 = '<Leader>_'
-
-" See |tcomment-operator|.
-" let g:tcommentMapLeaderOp1 = 'gc'
-
-" See |tcomment-operator|.
-" let g:tcommentMapLeaderOp2 = 'gC'
-
 " }}}
 
 " restore-view {{{
@@ -1150,7 +1143,7 @@ augroup END
 augroup ft_markdown
   au!
 
-  au BufNewFile,BufRead *.m*down setlocal filetype=markdown foldlevel=1
+  au BufNewFile,BufRead *.m*down setlocal fileformat=unix filetype=markdown foldlevel=1
   au! BufWritePre *.m*down :call s:timestamp()
 
   " Use <localleader>1/2/3 to add headings.
