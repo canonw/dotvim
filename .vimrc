@@ -88,15 +88,70 @@ function! s:hooks.on_source(bundle)
         \ "_": {"runner": "vimproc", "runner/vimproc/updatetime": 60},
         \ }
   let g:quickrun_config['markdown'] = {
+        \ 'type': 'markdown/kramdown',
         \ 'outputter': 'browser',
         \ }
   "let g:quickrun_config['ruby.rspec']  = {'command': 'rspec', 'cmdopt': '-f d'}
   " http://qiita.com/Qureana/items/b057c934733554e05427
-  let g:quickrun_config['ruby.rspec'] = {'command': 'rspec', 'cmdopt': "-l %{line('.')}", 'exec': ['bundle exec %c %o %s %a']}
-endfunction
-" }}}
- autocmd BufWinEnter,BufNewFile *_spec.rb setlocal filetype=ruby.rspec
+  " https://github.com/muryoimpl/dotfiles/blob/master/.vim/vimrc_plugins_quickrun
+  " let g:quickrun_config['ruby.rspec'] = {
+  "       \ 'command': 'rspec',
+  "       \ 'cmdopt': "-l %{line('.')}",
+  "       \ 'exec': ['bundle exec %c %o %s %a']
+  "       \ }
 
+  let g:quickrun_config['ruby.spec'] = {
+        \ 'type' : 'ruby',
+        \ 'command' : 'rspec',
+        \ 'exec' : 'bundle exec %c %o --color --tty %s'
+        \ }
+  let g:quickrun_config['ruby'] = {
+        \ 'type' : 'ruby',
+        \ 'command' : 'ruby',
+        \ 'exec' : '%c %o %s'
+        \ }
+
+  let g:my_outputter = quickrun#outputter#multi#new()
+  let g:my_outputter.config.targets = ["buffer", "quickfix"]
+
+  function! my_outputter.init(session)
+    :cclose
+    call call(quickrun#outputter#multi#new().init, [a:session], self)
+  endfunction
+
+  function! my_outputter.finish(session)
+    call call(quickrun#outputter#multi#new().finish, [a:session], self)
+    bwipeout quickrun
+    :HierUpdate
+    :QuickfixStatusEnable
+  endfunction
+
+  call quickrun#register_outputter("my_outputter", my_outputter)
+  nmap <silent> <leader>r :QuickRun -outputter my_outputter<CR>
+  nmap <silent> <leader>m :QuickRun<CR>
+
+endfunction
+" NeoBundle 'ujihisa/quicklearn'
+NeoBundle 'jceb/vim-hier'
+" let g:hier_enabled = 1
+" 	let g:hier_highlight_group_qf   = 'SpellBad'
+" 	let g:hier_highlight_group_qfw  = 'SpellLocal'
+" 	let g:hier_highlight_group_qfi  = 'SpellRare'
+"
+" 	let g:hier_highlight_group_loc  = 'SpellBad'
+" 	let g:hier_highlight_group_locw = 'SpellLocal'
+" 	let g:hier_highlight_group_loci = 'SpellRare'
+
+" }}}
+augroup RSpec
+  au!
+  au BufWinEnter,BufNewFile *_spec.rb set filetype=ruby.spec
+augroup END
+
+NeoBundle "skwp/vim-rspec.git"
+" let g:RspecKeyma,=0
+nnoremap <silent> ,rs :RunSpec<CR>
+nnoremap <silent> ,rl :RunSpecLine<CR>
 
 " Smart display to get better information
 " quickhl - Give ability to highlight multiple words {{{
@@ -136,9 +191,9 @@ NeoBundleLazy "nathanaelkane/vim-indent-guides", {
 " indentLine {{{
 if has('conceal')
   NeoBundleLazy 'Yggdroot/indentLine', {
-      \ "autoload": {
-      \ "commands": ["IndentLinesToggle"],
-      \ }}
+        \ "autoload": {
+        \ "commands": ["IndentLinesToggle"],
+        \ }}
 endif
 " }}}
 " ShowMarks - Display marks {{{
@@ -1159,6 +1214,7 @@ augroup END
 augroup ft_xml
   au!
   au FileType xml setlocal foldmethod=syntax
+  " http://ku1ik.com/2011/09/08/formatting-xml-in-vim-with-indent-command.html
   au FileType xml setlocal equalprg=xmllint\ --format\ --recover\ -\ 2>/dev/null
 augroup END
 " }}}
