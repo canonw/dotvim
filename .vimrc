@@ -1199,6 +1199,7 @@ augroup ft_markdown
   au!
 
   au BufNewFile,BufRead *.m*down setlocal fileformat=unix filetype=markdown foldlevel=1
+  au! BufWritePre *.md :call s:timestamp()
   au! BufWritePre *.m*down :call s:timestamp()
 
   " Use <localleader>1/2/3 to add headings.
@@ -1294,9 +1295,9 @@ endfunction
 " auto-update "Last update: " if present whenever saving file
 " to update timestamp when saving if its in the first 5 lines of a file
 function! s:timestamp()
-  let pat = '\(updated_at:\s*\).*'
+  let pat = '\(\(updated_at\|modified\):\s*\).*'
   let rep = '\1' . strftime("%Y-%m-%d %H:%M:%S %Z")
-  call s:subst(1, 5, pat, rep)
+  call s:subst(1, 8, pat, rep)
 endfunction
 " subst taken from timestamp.vim
 " subst( start, end, pat, rep): substitute on range start - end.
