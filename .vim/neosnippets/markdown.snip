@@ -71,3 +71,22 @@ options head
     \`\`\`${1:#:language}
     ${2:#:code }
     \`\`\`
+
+snippet jekyll
+abbr Jekyll header template
+  ---
+  layout: page
+  title: "${1:title}"
+  description: "${2:description}"
+  category: ${3:category/}
+  created: `strftime("%Y-%m-%d %H:%M:%S %Z")`
+  modified: `strftime("%Y-%m-%d %H:%M:%S %Z")`
+  tags: [${4:tag,}]
+  # image:
+  #   feature: my.png
+  #   credit: Ken Wong
+  #   creditlink: http://kenwong.org
+  comments: true
+  share: true
+  ---
+
