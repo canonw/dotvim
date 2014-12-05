@@ -21,9 +21,9 @@ Here's bash command in Linux
 
 ~~~
 # Goto local repository root
-ln -Ffs .vim $HOME/.vim
-ln -fs .vimrc $HOME/.vimrc
-ln -fs .gvimrc $HOME/.gvimrc
+ln -Ffs ${PWD}/.vim $HOME/.vim
+ln -fs ${PWD}/.vimrc $HOME/.vimrc
+ln -fs ${PWD}/.gvimrc $HOME/.gvimrc
 ~~~
 
 Here's Windows command
